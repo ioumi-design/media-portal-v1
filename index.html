@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Accor Media Portal</title>
+  <meta name="viewport" content="width=1440" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design tokens (from Figma) ─────────────────────────────── */
+    :root {
+      /* Colors */
+      --color-surface:              #ffffff;
+      --color-surface-container-low:#ffffff;
+      --color-surface-container-mid:#f7f9fb;
+      --color-surface-container:    #f4f5f7;
+      --color-on-surface-hi:        #252339;
+      --color-on-surface-mid:       #3e3d48;  /* all theme */
+      --color-on-surface-low:       #6f6e77;
+      --color-on-surface-placeholder:#6f6e77;
+      --color-outline-low:          #dadadd;
+      --color-outline-mid:          #dadadd;
+      --color-outline-hi:           #8b8a93;  /* all theme */
+      --color-accent:               #068484;
+      --color-primary:              #1e1852;  /* all theme */
+      --color-primary-alt:          #1e1852;
+      --color-search-btn:           #068484;
+      --color-on-accent:            #ffffff;
+      --color-on-primary:           #f9f9ff;
+      --color-card-image-bg:        #e8e4f0;
+      --color-danger-container-low: #ffecec;
+
+      /* Typography */
+      --font-display:    'Montserrat', sans-serif;
+      --font-body:       'Roboto', sans-serif;
+      --font-label:      'Roboto', sans-serif;
+      --font-title:      'Roboto', sans-serif;
+
+      /* Font sizes */
+      --fs-display-sm:  26px;
+      --fs-display-md:  32px;
+      --fs-title-md:    20px;
+      --fs-title-sm:    18px;
+      --fs-label-lg:    16px;
+      --fs-body-md:     16px;
+      --fs-body-sm:     14px;
+      --fs-input:       16px;
+
+      /* Line heights */
+      --lh-display-sm:  32px;
+      --lh-display-md:  40px;
+      --lh-title-md:    24px;
+      --lh-label-lg:    24px;
+      --lh-body-md:     24px;
+      --lh-body-sm:     20px;
+      --lh-input:       24px;
+
+      /* Letter spacing */
+      --ls-display-condensed: 0.5px;
+
+      /* Border radius */
+      --br-surface:     6px;
+      --br-element-full: 100px;
+      --br-input:       6px;
+
+      /* Spacing */
+      --grid-margin: 64px;
+      --inset-md: 16px;
+      --inset-sm: 12px;
+      --inline-xl: 28px;
+      --inline-lg: 20px;
+      --inline-md: 16px;
+      --inline-sm: 12px;
+      --inline-xs: 8px;
+      --stack-lg: 20px;
+      --stack-xs: 8px;
+      --squish-md-h: 16px;
+      --squish-md-v: 12px;
+      --squish-sm-h: 12px;
+      --squish-sm-v: 8px;
+      --border-width: 1px;
+      --border-active-width: 4px;
+    }
+
+    /* ── Reset ────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+    }
+    body {
+      font-family: var(--font-body);
+      background: var(--color-surface-container);
+      color: var(--color-on-surface-hi);
+      min-width: 1440px;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    ul, ol { list-style: none; }
+
+    /* ── Page wrapper ─────────────────────────────────────────────── */
+    .page {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;              /* 画面全体に固定 */
+      overflow: hidden;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       HEADER / NAVIGATION BAR
+    ══════════════════════════════════════════════════════════════ */
+    .site-header {
+      background: var(--color-surface);
+      border-bottom: var(--border-width) solid var(--color-outline-low);
+      height: 80px;
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-header__inner {
+      width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--grid-margin);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    /* Logo + wordmark */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--inline-md);
+    }
+    .brand__logo {
+      width: 56px;
+      height: 46px;
+      flex-shrink: 0;
+    }
+    .brand__name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--fs-display-md);
+      line-height: var(--lh-display-md);
+      letter-spacing: var(--ls-display-condensed);
+      color: var(--color-on-surface-hi);
+      white-space: nowrap;
+    }
+
+    /* Right side of header */
+    .site-header__right {
+      display: flex;
+      align-items: center;
+      gap: var(--inline-xl);
+      height: 100%;
+    }
+
+    /* Tabs */
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--inline-lg);
+      height: 100%;
+    }
+    .site-nav__tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--inline-xs);
+      height: 100%;
+      padding: var(--squish-md-v) 0;
+      border: none;
+      border-bottom: var(--border-active-width) solid transparent;
+      background: none;
+      font-family: var(--font-label);
+      font-size: var(--fs-label-lg);
+      font-weight: 500;
+      line-height: var(--lh-label-lg);
+      color: var(--color-on-surface-hi);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .site-nav__tab--active {
+      border-bottom-color: var(--color-accent);
+    }
+
+    /* Language selector */
+    .lang-select {
+      display: flex;
+      align-items: center;
+      gap: var(--inline-xs);
+      padding: var(--squish-md-v) 0;
+      background: none;
+      border: none;
+      font-family: var(--font-label);
+      font-size: var(--fs-label-lg);
+      line-height: var(--lh-label-lg);
+      color: var(--color-on-surface-hi);
+    }
+    .lang-select__flag {
+      width: 24px;
+      height: 16px;
+      border-radius: 2px;
+      object-fit: cover;
+    }
+    .lang-select__chevron {
+      width: 18px;
+      height: 18px;
+      opacity: 0.6;
+    }
+
+    /* Header icon buttons (heart, cart, user) */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--inline-lg);
+    }
+    .header-icon-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      border-radius: var(--br-element-full);
+      color: var(--color-on-surface-hi);
+      position: relative;
+    }
+    .header-icon-btn:hover { background: #1e1852; color: #f9f9ff; }
+    .header-icon-btn:hover svg path,
+    .header-icon-btn:hover svg circle,
+    .header-icon-btn:hover svg rect { stroke: #f9f9ff; }
+    .header-icon-btn svg { display: block; }
+
+    /* Cart badge */
+    .cart-badge {
+      position: absolute;
+      top: -2px;
+      right: -4px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      background: var(--color-accent);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 18px;
+      text-align: center;
+      border-radius: var(--br-element-full);
+      border: 2px solid white;
+    }
+
+    /* User info */
+    .header-user {
+      display: flex;
+      align-items: center;
+      gap: var(--inline-xs);
+      background: none;
+      border: none;
+      font-family: var(--font-label);
+      font-size: var(--fs-label-lg);
+      font-weight: 400;
+      line-height: var(--lh-label-lg);
+      color: var(--color-on-surface-hi);
+    }
+    .header-user__avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-surface-container);
+      border: 2px solid var(--color-primary-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: visible;
+      flex-shrink: 0;
+    }
+    .header-user__avatar-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      border: 2px solid white;
+      bottom: -2px;
+      right: -2px;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       MAIN LAYOUT
+    ══════════════════════════════════════════════════════════════ */
+    .page-body {
+      display: flex;
+      width: 1440px;
+      margin: 0 auto;
+      flex: 1;
+      min-height: 0;              /* flex子要素がスクロールできるよう高さを縮める */
+    }
+
+    /* Left content column — 独立スクロール */
+    .content-area {
+      flex: 0 0 1065px;
+      width: 1065px;
+      padding: 36px var(--grid-margin) 48px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      height: 100%;
+    }
+
+    /* Right filter panel */
+    /* .filter-panel layout moved to the FILTER PANEL section below */
+
+    /* ══════════════════════════════════════════════════════════════
+       HEADING + SEARCH AREA
+    ══════════════════════════════════════════════════════════════ */
+    .heading-search {
+      display: flex;
+      flex-direction: column;
+      gap: var(--stack-lg);
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--fs-display-sm);
+      line-height: var(--lh-display-sm);
+      letter-spacing: var(--ls-display-condensed);
+      color: var(--color-on-surface-hi);
+    }
+
+    /* Search row */
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: var(--inline-xs);
+      width: 100%;
+    }
+    .search-input-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: var(--inline-xs);
+      background: var(--color-surface-container-low);
+      border: var(--border-width) solid var(--color-outline-hi);
+      border-radius: var(--br-input);
+      padding: var(--squish-md-v) var(--squish-md-h);
+      height: 48px;
+    }
+    .search-input-wrap:focus-within {
+      border-color: var(--color-accent);
+      outline: 2px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+    }
+    .search-input-wrap svg { flex-shrink: 0; color: var(--color-on-surface-low); }
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: var(--fs-input);
+      line-height: var(--lh-input);
+      color: var(--color-on-surface-placeholder);
+      background: transparent;
+    }
+    .btn-search {
+      background: var(--color-search-btn);
+      border: none;
+      border-radius: var(--br-element-full);
+      height: 48px;
+      padding: var(--squish-md-v) var(--squish-md-h);
+      font-family: var(--font-label);
+      font-size: var(--fs-label-lg);
+      line-height: var(--lh-label-lg);
+      color: var(--color-on-accent);
+      white-space: nowrap;
+    }
+    .btn-search:hover { filter: brightness(1.1); }
+
+    /* View mode buttons */
+    .viewmode-group {
+      display: flex;
+      align-items: center;
+    }
+    .viewmode-btn {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      border-radius: var(--br-element-full);
+      color: var(--color-primary-alt);
+    }
+    .viewmode-btn--selected { color: var(--color-accent); }
+    .viewmode-btn:hover { background: #1e1852; color: #f9f9ff; }
+    .viewmode-btn:hover svg path,
+    .viewmode-btn:hover svg rect { stroke: #f9f9ff; }
+    .viewmode-btn svg { display: block; }
+
+    /* Results bar */
+    .results-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .results-count {
+      font-family: var(--font-body);
+      font-size: var(--fs-body-sm);
+      line-height: var(--lh-body-sm);
+      color: var(--color-on-surface-low);
+    }
+    .sort-label {
+      display: flex;
+      align-items: center;
+      gap: var(--inline-xs);
+      font-family: var(--font-label);
+      font-size: var(--fs-label-lg);
+      line-height: var(--lh-label-lg);
+      color: var(--color-primary);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       ASSET CARDS GRID
+    ══════════════════════════════════════════════════════════════ */
+    .cards-section { flex: 1; }
+
+    /* ---- GRID VIEW ---- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .asset-card {
+      background: var(--color-surface);
+      border-radius: var(--br-surface);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .asset-card__image {
+      position: relative;
+      aspect-ratio: 296 / 197;
+      background: var(--color-card-image-bg);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .asset-card__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* placeholder mountains SVG when no image */
+    .asset-card__image-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* favorite button overlay */
+    .asset-card__fav {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--br-element-full);
+      background: var(--color-surface-container-low);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-on-surface-hi);
+      box-shadow: 0 1px 4px rgba(0,0,0,.12);
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+    }
+    /* icon visibility: show outline by default, filled when added */
+    .asset-card__fav .fav-icon-outline { display: block; }
+    .asset-card__fav .fav-icon-filled  { display: none; }
+    .asset-card__fav.is-added .fav-icon-outline { display: none; }
+    .asset-card__fav.is-added .fav-icon-filled  { display: block; }
+    /* hover — dark navy bg, white icon (currentColor cascades to SVG) */
+    .asset-card__fav:hover {
+      background: #1e1852;
+      color: #f9f9ff;
+    }
+    /* pressed / active */
+    .asset-card__fav:active {
+      background: #524f81;
+      color: #f9f9ff;
+    }
+
+    /* card body */
+    .asset-card__body {
+      display: flex;
+      flex-direction: column;
+      gap: var(--inline-md);
+      padding: var(--inset-md);
+    }
+
+    .asset-card__title {
+      font-family: var(--font-title);
+      font-weight: 500;
+      font-size: var(--fs-title-md);
+      line-height: var(--lh-title-md);
+      color: var(--color-on-surface-hi);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* detail list */
+    .asset-card__details {
+      background: var(--color-surface-container-mid);
+      border-radius: var(--br-surface);
+      padding: var(--inset-sm) var(--inset-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--stack-xs);
+    }
+    .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-body);
+      font-size: var(--fs-body-md);
+      line-height: var(--lh-body-md);
+      white-space: nowrap;
+    }
+    .detail-row__label { font-weight: 500; color: var(--color-on-surface-hi); }
+    .detail-row__value { font-weight: 400; color: var(--color-on-surface-mid); }
+    .detail-sep {
+      height: 1px;
+      background: var(--color-outline-mid);
+    }
+
+    /* action row */
+    .asset-card__actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--inline-xs);
+    }
+    .btn-icon-outline {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--br-element-full);
+      border: var(--border-width) solid var(--color-primary);
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+    .btn-icon-outline:hover { background: #1e1852; color: #f9f9ff; border-color: #1e1852; }
+    .btn-icon-outline:hover svg path,
+    .btn-icon-outline:hover svg circle,
+    .btn-icon-outline:hover svg rect { stroke: #f9f9ff; }
+    .btn-add {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--inline-xs);
+      background: var(--color-primary);
+      border: none;
+      border-radius: var(--br-element-full);
+      padding: var(--squish-sm-v) var(--squish-sm-h);
+      font-family: var(--font-label);
+      font-size: var(--fs-label-lg);
+      font-weight: 400;
+      line-height: var(--lh-label-lg);
+      color: var(--color-on-primary);
+      white-space: nowrap;
+    }
+    .btn-add:hover { background: #1a0060; }
+
+    /* ---- LIST VIEW ---- */
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .asset-row {
+      background: var(--color-surface);
+      border-radius: var(--br-surface);
+      display: grid;
+      grid-template-columns: 120px minmax(0,1fr) auto;
+      gap: var(--inline-md);
+      align-items: center;
+      padding: var(--inline-sm);
+      border: var(--border-width) solid var(--color-outline-low);
+    }
+    .asset-row__thumb {
+      height: 80px;
+      border-radius: var(--br-surface);
+      background: var(--color-card-image-bg);
+      overflow: hidden;
+    }
+    .asset-row__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .asset-row__title {
+      font-family: var(--font-title);
+      font-size: var(--fs-title-sm);
+      font-weight: 500;
+      color: var(--color-on-surface-hi);
+      margin-bottom: 4px;
+    }
+    .asset-row__meta {
+      font-size: var(--fs-body-sm);
+      color: var(--color-on-surface-low);
+    }
+    .asset-row__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--inline-xs);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       FILTER PANEL (RIGHT) — Figma 実測値に完全準拠
+       node: 6804:17885 (🧩 mp.panel-right)
+    ══════════════════════════════════════════════════════════════ */
+
+    /* Panel outer — 独立スクロール */
+    .filter-panel {
+      flex: 0 0 375px;
+      width: 375px;
+      border-left: 1px solid #dadadd;
+      background: #ffffff;
+      padding: 0 0 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      overflow-y: auto;
+      height: 100%;
+    }
+
+    /* ── Side heading (user info + cart) ── */
+    .fp-side-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      height: 80px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #dadadd;
+      flex-shrink: 0;
+    }
+    .fp-side-heading__left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      min-width: 0;
+    }
+    .fp-avatar {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 100px;
+      background: #6f6e77;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .fp-user-name {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      color: #252339;
+    }
+    .fp-cart {
+      flex-shrink: 0;
+      width: 58px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .fp-cart__badge {
+      position: absolute;
+      top: 12px;
+      right: 8px;
+      background: #068484;
+      border-radius: 100px;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 16px;
+      color: #ffffff;
+    }
+
+    /* ── Inner content wrapper (gap-16px between sections) ── */
+    .fp-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px 20px 0;
+      flex: 1;
+    }
+
+    /* ── Top header: "Filters" + Reset ── */
+    .fp-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .fp-title {
+      font-family: var(--font-title);
+      font-weight: 500;
+      font-size: 20px;            /* title/md */
+      line-height: 24px;
+      color: #252339;
+    }
+    .fp-reset {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: #ffffff;
+      border: none;
+      border-radius: 100px;
+      padding: 8px 12px;          /* squish/sm */
+      font-family: var(--font-label);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #1e1852;             /* primary */
+      opacity: 0.38;              /* Figma: disabled/ghosted state */
+      cursor: pointer;
+    }
+    .fp-reset:hover { opacity: 1; background: #1e1852; color: #f9f9ff; }
+    .fp-reset:hover svg path { stroke: #f9f9ff; }
+
+    /* ── Save filters button ── */
+    .fp-save {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: #ffffff;
+      border: 1px solid #1e1852;  /* tertiary border */
+      border-radius: 100px;
+      padding: 12px 16px;         /* squish/md */
+      font-family: var(--font-label);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #1e1852;
+      cursor: pointer;
+    }
+    .fp-save:hover { background: #1e1852; color: #f9f9ff; border-color: #1e1852; }
+    .fp-save:hover svg path { stroke: #f9f9ff; }
+
+    /* ── Filters section wrapper ── */
+    .fp-filters {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 1px;
+    }
+
+    /* ── Outer accordion: "Brands" ── */
+    .fp-brands {
+      border-bottom: 1px solid #dadadd;
+      padding: 16px 0;            /* pinchVertical/md */
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: -1px;
+    }
+    .fp-brands-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      width: 100%;
+      text-align: left;
+    }
+    .fp-brands-label {
+      flex: 1;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 18px;            /* custom: Figma value */
+      line-height: 24px;
+      color: #252339;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    /* Minus / Plus chevron for Brands */
+    .fp-brands-chevron {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      position: relative;
+    }
+    .fp-brands-chevron::before {
+      content: '';
+      position: absolute;
+      top: 45.83%;
+      left: 16.67%;
+      right: 16.67%;
+      bottom: 47.92%;
+      background: #1e1852;
+      border-radius: 50px;
+    }
+    /* When collapsed: also show vertical bar = plus */
+    .fp-brands-chevron.is-plus::after {
+      content: '';
+      position: absolute;
+      left: 45.83%;
+      top: 16.67%;
+      right: 47.92%;
+      bottom: 16.67%;
+      background: #1e1852;
+      border-radius: 50px;
+    }
+
+    /* Slot inside Brands (indented) */
+    .fp-brands-slot {
+      padding-left: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .fp-brands-slot.is-collapsed { display: none; }
+
+    /* ── Sub-accordion rows (ALL / Economy / Midscale / Premium) ── */
+    .fp-acc {
+      border-top: 1px solid #dadadd;
+      width: 100%;
+    }
+    .fp-acc-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 0;            /* pinchVertical/md */
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+    }
+    .fp-acc-label {
+      flex: 1;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      color: #252339;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .fp-acc-chevron {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.2s;
+    }
+    .fp-acc-chevron.is-down { transform: rotate(180deg); }
+
+    /* Expanded content */
+    .fp-acc-body {
+      padding-right: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .fp-acc-body.is-collapsed { display: none; }
+
+    /* ── Checkbox row ── */
+    .fp-cb {
+      display: flex;
+      align-items: center;
+      gap: 8px;                   /* inline/xs */
+    }
+    /* "Select all" has pb-16px as visual separator */
+    .fp-cb--select-all { padding-bottom: 16px; }
+
+    .fp-cb__box {
+      appearance: none;
+      -webkit-appearance: none;
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border: 1px solid #8b8a93;  /* outline-hi */
+      border-radius: 2px;         /* checkbox/radius */
+      background: #ffffff;
+      cursor: pointer;
+      position: relative;
+    }
+    .fp-cb__box:checked {
+      background: #1e1852;
+      border-color: #1e1852;
+    }
+    .fp-cb__box:checked::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 1px;
+      width: 5px;
+      height: 9px;
+      border: 2px solid #ffffff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+    .fp-cb__box:focus-visible { outline: 2px solid #1e1852; outline-offset: 2px; }
+
+    .fp-cb label {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #3e3d48;             /* on-surface-mid (all theme) */
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* ── Top-level collapsed accordion (Rights / General information) ── */
+    /* These are mp.accordion-filter with just header, no slot (collapsed) */
+    .fp-top-acc {
+      border-top: 1px solid #dadadd;
+      border-bottom: 1px solid #dadadd;
+      padding: 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: -1px;
+    }
+    .fp-top-acc--no-bottom {
+      border-bottom: none;
+    }
+    .fp-top-acc__btn {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      padding: 0;
+      text-align: left;
+    }
+    .fp-top-acc__label {
+      flex: 1;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 24px;
+      color: #252339;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .fp-top-acc__chevron {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.2s;
+    }
+    .fp-top-acc__body {
+      display: none;
+      flex-direction: column;
+      gap: 0;
+    }
+    .fp-top-acc__body.is-open {
+      display: flex;
+    }
+
+    /* Sub-accordions inside Rights / General information */
+    .fp-top-acc__body {
+      padding-left: 12px;          /* same indent as fp-brands-slot */
+    }
+    .fp-top-acc__body .fp-acc {
+      border-top: 1px solid #dadadd;
+      width: 100%;
+    }
+    .fp-top-acc__body .fp-acc-header {
+      padding: 16px 0;
+    }
+    .fp-top-acc__body .fp-acc-body {
+      padding-right: 32px;
+    }
+
+    /* ── Form inputs (Location, date fields, image width) ── */
+    .fp-input-wrap {
+      padding: 0 0 12px;
+      width: 100%;
+    }
+    .fp-input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #dadadd;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #252339;
+      background: #ffffff;
+      outline: none;
+    }
+    .fp-input::placeholder { color: #6f6e77; }
+    .fp-input:focus { border-color: #1e1852; }
+
+    /* Date input with calendar icon */
+    .fp-date-row {
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 8px;
+    }
+    .fp-date-row:last-child { margin-bottom: 12px; }
+    .fp-date-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #6f6e77;
+    }
+    .fp-date-row input[type="text"],
+    .fp-date-row input[type="date"] {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #dadadd;
+      border-radius: 6px;
+      padding: 10px 12px 10px 40px;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #252339;
+      background: #ffffff;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .fp-date-row input::placeholder { color: #6f6e77; }
+    .fp-date-row input:focus { border-color: #1e1852; }
+
+    /* ══════════════════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════════════════ */
+    .site-footer {
+      flex-shrink: 0;             /* フッターを常に最下部に固定 */
+      background: var(--color-surface);
+      border-top: var(--border-width) solid var(--color-outline-low);
+      padding: 12px var(--grid-margin);
+    }
+    .site-footer__inner {
+      width: 1440px;
+      margin: 0 auto;
+      font-family: var(--font-body);
+      font-size: var(--fs-body-sm);
+      color: var(--color-on-surface-low);
+    }
+  </style>
+</head>
+<body class="page">
+
+  <!-- ══ HEADER ══════════════════════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="site-header__inner">
+
+      <!-- Left: Logo + wordmark -->
+      <div class="brand">
+        <!-- Accor "A" logo mark (SVG approximation) -->
+        <svg class="brand__logo" viewBox="0 0 56 46" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Accor">
+          <path d="M28 4L4 42h10l14-24 14 24h10L28 4z" fill="#0C1A8E"/>
+          <path d="M18 34h20l-4-7H22l-4 7z" fill="#0C1A8E" opacity=".4"/>
+        </svg>
+        <span class="brand__name">Media portal</span>
+      </div>
+
+      <!-- Right: tabs + language + actions -->
+      <div class="site-header__right">
+
+        <!-- Tab nav -->
+        <nav class="site-nav" aria-label="Main navigation">
+          <button class="site-nav__tab site-nav__tab--active" type="button">Home</button>
+        </nav>
+
+        <!-- Language selector -->
+        <button class="lang-select" type="button" aria-label="Language">
+          <!-- GB flag approximation -->
+          <svg class="lang-select__flag" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="16" rx="2" fill="#012169"/>
+            <path d="M0 0l24 16M24 0L0 16" stroke="white" stroke-width="3"/>
+            <path d="M0 0l24 16M24 0L0 16" stroke="#C8102E" stroke-width="1.5"/>
+            <path d="M12 0v16M0 8h24" stroke="white" stroke-width="4"/>
+            <path d="M12 0v16M0 8h24" stroke="#C8102E" stroke-width="2.5"/>
+          </svg>
+          <span>EN</span>
+          <svg class="lang-select__chevron" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <!-- Icon actions -->
+        <div class="header-actions">
+          <!-- Favorites (heart outline) -->
+          <button class="header-icon-btn" type="button" aria-label="Favorites">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <!-- Cart with badge -->
+          <button class="header-icon-btn" type="button" aria-label="Cart (99)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 6h18" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 10a4 4 0 01-8 0" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="cart-badge" aria-label="99 items">99</span>
+          </button>
+
+          <!-- User -->
+          <button class="header-user" type="button" aria-label="User menu">
+            <span>Steven PICARD</span>
+            <div class="header-user__avatar" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="8" r="4" stroke="#1e1852" stroke-width="1.5"/>
+                <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" stroke="#1e1852" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="header-user__avatar-dot"></span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ PAGE BODY ════════════════════════════════════════════════════ -->
+  <div class="page-body">
+
+    <!-- ── Content area (left) ──────────────────────────────────────── -->
+    <main class="content-area" id="main">
+
+      <!-- Heading + search -->
+      <div class="heading-search">
+        <h1 class="page-title">Welcome to the Accor Media Portal</h1>
+
+        <!-- Search row -->
+        <div class="search-row">
+          <!-- Input -->
+          <div class="search-input-wrap" style="flex:1;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" stroke="#6f6e77" stroke-width="1.5"/>
+              <path d="M20 20l-4-4" stroke="#6f6e77" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input class="search-input" type="text" placeholder="What are you looking for ?" aria-label="Search" />
+          </div>
+
+          <!-- Search button -->
+          <button class="btn-search" type="button">Search</button>
+
+          <!-- View mode: grid (selected) -->
+          <div class="viewmode-group" role="group" aria-label="View mode">
+            <button class="viewmode-btn viewmode-btn--selected" type="button" id="btn-grid" aria-pressed="true" aria-label="Grid view" onclick="setView('grid')">
+              <!-- 4-square grid icon -->
+              <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3.25" y="3.25" width="8.45" height="8.45" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="14.3" y="3.25" width="8.45" height="8.45" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="3.25" y="14.3" width="8.45" height="8.45" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="14.3" y="14.3" width="8.45" height="8.45" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <!-- View mode: list (default) -->
+            <button class="viewmode-btn" type="button" id="btn-list" aria-pressed="false" aria-label="List view" onclick="setView('list')">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Results bar -->
+        <div class="results-bar">
+          <span class="results-count">56 results</span>
+          <div class="sort-label">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3 6h18M7 12h10M11 18h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Sorted by relevance
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Cards ──────────────────────────────────────────────────── -->
+      <div class="cards-section">
+
+        <!-- GRID VIEW -->
+        <div class="card-grid" id="view-grid">
+          <!-- Card 1 -->
+          <article class="asset-card">
+            <div class="asset-card__image">
+              <div class="asset-card__image-placeholder">
+                <svg width="80" height="60" viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="32" cy="16" r="8" fill="#c4b8e8"/>
+                  <polygon points="0,60 44,16 80,60" fill="#8b7fc4"/>
+                  <polygon points="36,60 56,30 76,60" fill="#4a3f8c"/>
+                </svg>
+              </div>
+              <button class="asset-card__fav" type="button" aria-label="Add to favorites" onclick="toggleFav(this)">
+                <svg class="fav-icon-outline" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <svg class="fav-icon-filled" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </button>
+            </div>
+            <div class="asset-card__body">
+              <div class="asset-card__title">Sofitel New York</div>
+              <div class="asset-card__details">
+                <div class="detail-row">
+                  <span class="detail-row__label">Size</span>
+                  <span class="detail-row__value">7.1 M</span>
+                </div>
+                <div class="detail-sep"></div>
+                <div class="detail-row">
+                  <span class="detail-row__label">Type</span>
+                  <span class="detail-row__value">Image</span>
+                </div>
+                <div class="detail-sep"></div>
+                <div class="detail-row">
+                  <span class="detail-row__label">Res.</span>
+                  <span class="detail-row__value">3700 x 2081</span>
+                </div>
+              </div>
+              <div class="asset-card__actions">
+                <button class="btn-icon-outline" type="button" aria-label="Share">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                </button>
+                <button class="btn-icon-outline" type="button" aria-label="Email">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                </button>
+                <button class="btn-add" type="button">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M3 6h18M12 11v6M9 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                  Add
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="asset-card">
+            <div class="asset-card__image">
+              <div class="asset-card__image-placeholder">
+                <svg width="80" height="60" viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="32" cy="16" r="8" fill="#c4b8e8"/>
+                  <polygon points="0,60 44,16 80,60" fill="#8b7fc4"/>
+                  <polygon points="36,60 56,30 76,60" fill="#4a3f8c"/>
+                </svg>
+              </div>
+              <button class="asset-card__fav" type="button" aria-label="Add to favorites" onclick="toggleFav(this)">
+                <svg class="fav-icon-outline" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <svg class="fav-icon-filled" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </button>
+            </div>
+            <div class="asset-card__body">
+              <div class="asset-card__title">Sofitel New York</div>
+              <div class="asset-card__details">
+                <div class="detail-row"><span class="detail-row__label">Size</span><span class="detail-row__value">7.1 M</span></div>
+                <div class="detail-sep"></div>
+                <div class="detail-row"><span class="detail-row__label">Type</span><span class="detail-row__value">Image</span></div>
+                <div class="detail-sep"></div>
+                <div class="detail-row"><span class="detail-row__label">Res.</span><span class="detail-row__value">3700 x 2081</span></div>
+              </div>
+              <div class="asset-card__actions">
+                <button class="btn-icon-outline" type="button" aria-label="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                <button class="btn-icon-outline" type="button" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                <button class="btn-add" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.5"/><path d="M3 6h18M12 11v6M9 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Add</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="asset-card">
+            <div class="asset-card__image">
+              <div class="asset-card__image-placeholder">
+                <svg width="80" height="60" viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="32" cy="16" r="8" fill="#c4b8e8"/>
+                  <polygon points="0,60 44,16 80,60" fill="#8b7fc4"/>
+                  <polygon points="36,60 56,30 76,60" fill="#4a3f8c"/>
+                </svg>
+              </div>
+              <button class="asset-card__fav" type="button" aria-label="Add to favorites" onclick="toggleFav(this)">
+                <svg class="fav-icon-outline" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <svg class="fav-icon-filled" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </button>
+            </div>
+            <div class="asset-card__body">
+              <div class="asset-card__title">Sofitel New York</div>
+              <div class="asset-card__details">
+                <div class="detail-row"><span class="detail-row__label">Size</span><span class="detail-row__value">7.1 M</span></div>
+                <div class="detail-sep"></div>
+                <div class="detail-row"><span class="detail-row__label">Type</span><span class="detail-row__value">Image</span></div>
+                <div class="detail-sep"></div>
+                <div class="detail-row"><span class="detail-row__label">Res.</span><span class="detail-row__value">3700 x 2081</span></div>
+              </div>
+              <div class="asset-card__actions">
+                <button class="btn-icon-outline" type="button" aria-label="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                <button class="btn-icon-outline" type="button" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                <button class="btn-add" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.5"/><path d="M3 6h18M12 11v6M9 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Add</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Row 2: cards 4–6 (same structure) -->
+          <article class="asset-card">
+            <div class="asset-card__image"><div class="asset-card__image-placeholder"><svg width="80" height="60" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="#c4b8e8"/><polygon points="0,60 44,16 80,60" fill="#8b7fc4"/><polygon points="36,60 56,30 76,60" fill="#4a3f8c"/></svg></div><button class="asset-card__fav" type="button" aria-label="Add to favorites" onclick="toggleFav(this)"><svg class="fav-icon-outline" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/></svg><svg class="fav-icon-filled" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/></svg></button></div>
+            <div class="asset-card__body"><div class="asset-card__title">Sofitel New York</div><div class="asset-card__details"><div class="detail-row"><span class="detail-row__label">Size</span><span class="detail-row__value">7.1 M</span></div><div class="detail-sep"></div><div class="detail-row"><span class="detail-row__label">Type</span><span class="detail-row__value">Image</span></div><div class="detail-sep"></div><div class="detail-row"><span class="detail-row__label">Res.</span><span class="detail-row__value">3700 x 2081</span></div></div><div class="asset-card__actions"><button class="btn-icon-outline" type="button" aria-label="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="1.5"/></svg></button><button class="btn-icon-outline" type="button" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg></button><button class="btn-add" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.5"/><path d="M3 6h18M12 11v6M9 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Add</button></div></div>
+          </article>
+          <article class="asset-card">
+            <div class="asset-card__image"><div class="asset-card__image-placeholder"><svg width="80" height="60" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="#c4b8e8"/><polygon points="0,60 44,16 80,60" fill="#8b7fc4"/><polygon points="36,60 56,30 76,60" fill="#4a3f8c"/></svg></div><button class="asset-card__fav" type="button" aria-label="Add to favorites" onclick="toggleFav(this)"><svg class="fav-icon-outline" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/></svg><svg class="fav-icon-filled" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/></svg></button></div>
+            <div class="asset-card__body"><div class="asset-card__title">Sofitel New York</div><div class="asset-card__details"><div class="detail-row"><span class="detail-row__label">Size</span><span class="detail-row__value">7.1 M</span></div><div class="detail-sep"></div><div class="detail-row"><span class="detail-row__label">Type</span><span class="detail-row__value">Image</span></div><div class="detail-sep"></div><div class="detail-row"><span class="detail-row__label">Res.</span><span class="detail-row__value">3700 x 2081</span></div></div><div class="asset-card__actions"><button class="btn-icon-outline" type="button" aria-label="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="1.5"/></svg></button><button class="btn-icon-outline" type="button" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg></button><button class="btn-add" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.5"/><path d="M3 6h18M12 11v6M9 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Add</button></div></div>
+          </article>
+          <article class="asset-card">
+            <div class="asset-card__image"><div class="asset-card__image-placeholder"><svg width="80" height="60" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="#c4b8e8"/><polygon points="0,60 44,16 80,60" fill="#8b7fc4"/><polygon points="36,60 56,30 76,60" fill="#4a3f8c"/></svg></div><button class="asset-card__fav" type="button" aria-label="Add to favorites" onclick="toggleFav(this)"><svg class="fav-icon-outline" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/></svg><svg class="fav-icon-filled" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/></svg></button></div>
+            <div class="asset-card__body"><div class="asset-card__title">Sofitel New York</div><div class="asset-card__details"><div class="detail-row"><span class="detail-row__label">Size</span><span class="detail-row__value">7.1 M</span></div><div class="detail-sep"></div><div class="detail-row"><span class="detail-row__label">Type</span><span class="detail-row__value">Image</span></div><div class="detail-sep"></div><div class="detail-row"><span class="detail-row__label">Res.</span><span class="detail-row__value">3700 x 2081</span></div></div><div class="asset-card__actions"><button class="btn-icon-outline" type="button" aria-label="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="1.5"/></svg></button><button class="btn-icon-outline" type="button" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg></button><button class="btn-add" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.5"/><path d="M3 6h18M12 11v6M9 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Add</button></div></div>
+          </article>
+        </div>
+
+        <!-- LIST VIEW (hidden by default) -->
+        <div class="card-list" id="view-list" style="display:none;">
+          <article class="asset-row">
+            <div class="asset-row__thumb"><div style="width:100%;height:100%;background:var(--color-card-image-bg);display:flex;align-items:center;justify-content:center;"><svg width="50" height="38" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="#c4b8e8"/><polygon points="0,60 44,16 80,60" fill="#8b7fc4"/><polygon points="36,60 56,30 76,60" fill="#4a3f8c"/></svg></div></div>
+            <div>
+              <div class="asset-row__title">Sofitel New York</div>
+              <div class="asset-row__meta">Image · 7.1 M · 3700 x 2081</div>
+            </div>
+            <div class="asset-row__actions">
+              <button class="btn-icon-outline" type="button" aria-label="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="1.5"/></svg></button>
+              <button class="btn-icon-outline" type="button" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg></button>
+              <button class="btn-add" style="flex:none;padding:8px 16px;" type="button">Add</button>
+            </div>
+          </article>
+          <article class="asset-row">
+            <div class="asset-row__thumb"><div style="width:100%;height:100%;background:var(--color-card-image-bg);display:flex;align-items:center;justify-content:center;"><svg width="50" height="38" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="#c4b8e8"/><polygon points="0,60 44,16 80,60" fill="#8b7fc4"/><polygon points="36,60 56,30 76,60" fill="#4a3f8c"/></svg></div></div>
+            <div>
+              <div class="asset-row__title">Sofitel New York</div>
+              <div class="asset-row__meta">Image · 7.1 M · 3700 x 2081</div>
+            </div>
+            <div class="asset-row__actions">
+              <button class="btn-icon-outline" type="button" aria-label="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="1.5"/></svg></button>
+              <button class="btn-icon-outline" type="button" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg></button>
+              <button class="btn-add" style="flex:none;padding:8px 16px;" type="button">Add</button>
+            </div>
+          </article>
+          <article class="asset-row">
+            <div class="asset-row__thumb"><div style="width:100%;height:100%;background:var(--color-card-image-bg);display:flex;align-items:center;justify-content:center;"><svg width="50" height="38" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="#c4b8e8"/><polygon points="0,60 44,16 80,60" fill="#8b7fc4"/><polygon points="36,60 56,30 76,60" fill="#4a3f8c"/></svg></div></div>
+            <div>
+              <div class="asset-row__title">Sofitel New York</div>
+              <div class="asset-row__meta">Image · 7.1 M · 3700 x 2081</div>
+            </div>
+            <div class="asset-row__actions">
+              <button class="btn-icon-outline" type="button" aria-label="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" stroke="currentColor" stroke-width="1.5"/></svg></button>
+              <button class="btn-icon-outline" type="button" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5"/></svg></button>
+              <button class="btn-add" style="flex:none;padding:8px 16px;" type="button">Add</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </main>
+
+    <!-- ── Filter panel (right) ──────────────────────────────────────── -->
+    <aside class="filter-panel" aria-label="Filters">
+
+      <!-- ── Main filter content area ── -->
+      <div class="fp-inner">
+
+        <!-- Header: "Filters" + Reset -->
+        <div class="fp-header">
+          <span class="fp-title">Filters</span>
+          <button class="fp-reset" type="button" aria-label="Reset filters">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 7h16" stroke="#1e1852" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M10 11v6M14 11v6" stroke="#1e1852" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M5 7l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12" stroke="#1e1852" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2" stroke="#1e1852" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Reset
+          </button>
+        </div>
+
+        <!-- Save filters button -->
+        <button class="fp-save" type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="#1e1852" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17 21v-8H7v8" stroke="#1e1852" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 3v5h8" stroke="#1e1852" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Save filters
+        </button>
+
+        <!-- ── Filters accordion area ── -->
+        <div class="fp-filters">
+
+          <!-- ======= BRANDS (outer accordion, expanded, minus icon) ======= -->
+          <div class="fp-brands">
+            <button class="fp-brands-header" type="button"
+                    onclick="toggleBrands(this)" aria-expanded="true">
+              <span class="fp-brands-label">Brands</span>
+              <span class="fp-brands-chevron" aria-hidden="true"></span>
+            </button>
+
+            <div class="fp-brands-slot" id="fp-brands-slot">
+
+              <!-- ALL -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">ALL</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-all"><label for="f-all">ALL</label></div>
+                </div>
+              </div>
+
+              <!-- Economy -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Economy</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb fp-cb--select-all"><input class="fp-cb__box" type="checkbox" id="f-select-eco"><label for="f-select-eco">Select all</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-adagio-access"><label for="f-adagio-access">Adagio Access</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-all-seasons"><label for="f-all-seasons">All Seasons</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-breakfree"><label for="f-breakfree">Breakfree</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-greet"><label for="f-greet">Greet</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-hotel-f1"><label for="f-hotel-f1">Hotel F1</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-ibis-budget"><label for="f-ibis-budget">Ibis Budget</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-ibis-hotels"><label for="f-ibis-hotels">Ibis Hotels</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-ibis-styles"><label for="f-ibis-styles">Ibis Styles</label></div>
+                </div>
+              </div>
+
+              <!-- Midscale -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Midscale</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb fp-cb--select-all"><input class="fp-cb__box" type="checkbox" id="f-select-mid"><label for="f-select-mid">Select all</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-adagio-original"><label for="f-adagio-original">Adagio Original</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-by-mercure"><label for="f-by-mercure">By Mercure</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-cassia"><label for="f-cassia">Cassia</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-dhawa"><label for="f-dhawa">Dhawa</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-folio"><label for="f-folio">Folio</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-handwritten"><label for="f-handwritten">Handwritten Collection</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-homm"><label for="f-homm">Homm</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-mantra"><label for="f-mantra">Mantra</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-mercure"><label for="f-mercure">Mercure</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-neqta"><label for="f-neqta">Neqta</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-novotel"><label for="f-novotel">Novotel</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-thalassa"><label for="f-thalassa">Thalassa</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-tribe"><label for="f-tribe">Tribe</label></div>
+                </div>
+              </div>
+
+              <!-- Premium -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Premium</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb fp-cb--select-all"><input class="fp-cb__box" type="checkbox" id="f-select-prem"><label for="f-select-prem">Select all</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-adagio-premium"><label for="f-adagio-premium">Adagio Premium</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-angsana"><label for="f-angsana">Angsana</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-art-series"><label for="f-art-series">Art Series</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-grand-mercure"><label for="f-grand-mercure">Grand Mercure</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-mantis"><label for="f-mantis">Mantis</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-mercure-living"><label for="f-mercure-living">Mercure Living</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-movenpick"><label for="f-movenpick">Mövenpick</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-movenpick-living"><label for="f-movenpick-living">Mövenpick Living</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-novotel-living"><label for="f-novotel-living">Novotel Living</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-peppers"><label for="f-peppers">Peppers</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-pullman"><label for="f-pullman">Pullman</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-swissotel"><label for="f-swissotel">Swissôtel</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-swissotel-living"><label for="f-swissotel-living">Swissôtel Living</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-the-sebel"><label for="f-the-sebel">The Sebel</label></div>
+                </div>
+              </div>
+
+              <!-- Luxury -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Luxury</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb fp-cb--select-all"><input class="fp-cb__box" type="checkbox" id="f-select-lux"><label for="f-select-lux">Select all</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-banyan-tree"><label for="f-banyan-tree">Banyan Tree</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-emblems"><label for="f-emblems">Emblems Collection</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-fairmont"><label for="f-fairmont">Fairmont</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-mgallery"><label for="f-mgallery">Mgallery</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-mgallery-sofitel"><label for="f-mgallery-sofitel">Mgallery by Sofitel</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-onefinestay"><label for="f-onefinestay">Onefinestay</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-orient-express"><label for="f-orient-express">Orient Express</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-raffles"><label for="f-raffles">Raffles</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-rixos"><label for="f-rixos">Rixos</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-sofitel"><label for="f-sofitel">Sofitel</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-sofitel-legend"><label for="f-sofitel-legend">Sofitel Legend</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-the-purist"><label for="f-the-purist">The Purist</label></div>
+                </div>
+              </div>
+
+              <!-- Lifestyle by Ennismore -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Lifestyle by Ennismore</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb fp-cb--select-all"><input class="fp-cb__box" type="checkbox" id="f-select-enn"><label for="f-select-enn">Select all</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-21c"><label for="f-21c">21C</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-25hours"><label for="f-25hours">25 Hours</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-delano"><label for="f-delano">Delano</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-hyde"><label for="f-hyde">Hyde</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-jo-joe"><label for="f-jo-joe">Jo &amp; Joe</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-mama-shelter"><label for="f-mama-shelter">Mama Shelter</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-mondrian"><label for="f-mondrian">Mondrian</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-redbury"><label for="f-redbury">Redbury Hotels</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-sls"><label for="f-sls">SLS</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-so"><label for="f-so">SO/</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-hoxton"><label for="f-hoxton">The Hoxton</label></div>
+                </div>
+              </div>
+
+            </div><!-- /fp-brands-slot -->
+          </div><!-- /fp-brands -->
+
+          <!-- ======= RIGHTS (expanded, minus icon) ======= -->
+          <div class="fp-top-acc">
+            <button class="fp-top-acc__btn" type="button" onclick="toggleTopAcc(this)" aria-expanded="true">
+              <span class="fp-top-acc__label">Rights</span>
+              <svg class="fp-top-acc__chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14" stroke="#252339" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="fp-top-acc__body is-open">
+
+              <!-- Type of IP rights -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Type of IP rights</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-assignment"><label for="f-assignment">Assignment</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-license"><label for="f-license">License</label></div>
+                </div>
+              </div>
+
+              <!-- Warranty -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Warranty</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-warranty-granted"><label for="f-warranty-granted">IP Warranty granted</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-warranty-not-granted"><label for="f-warranty-not-granted">IP Warranty not granted</label></div>
+                </div>
+              </div>
+
+              <!-- Transferability -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Transferability</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-sub-licenseable"><label for="f-sub-licenseable">Sub-licenseable</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-only-for-brand"><label for="f-only-for-brand">Only for (select a brand)</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-transferable"><label for="f-transferable">Transferable</label></div>
+                </div>
+              </div>
+
+              <!-- Geographical scope -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Geographical scope</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-worldwide"><label for="f-worldwide">Worldwide</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-restricted"><label for="f-restricted">Restricted</label></div>
+                </div>
+              </div>
+
+              <!-- Geographical limitation -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Geographical limitation</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-africa"><label for="f-africa">Africa</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-asia-middle-east"><label for="f-asia-middle-east">Asia And Middle East</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-americas"><label for="f-americas">Americas</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-europe"><label for="f-europe">Europe</label></div>
+                </div>
+              </div>
+
+
+            </div><!-- /Rights body -->
+          </div>
+
+          <!-- ======= GENERAL INFORMATION (expanded, minus icon) ======= -->
+          <div class="fp-top-acc fp-top-acc--no-bottom">
+            <button class="fp-top-acc__btn" type="button" onclick="toggleTopAcc(this)" aria-expanded="true">
+              <span class="fp-top-acc__label">General information</span>
+              <svg class="fp-top-acc__chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14" stroke="#252339" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="fp-top-acc__body is-open">
+
+              <!-- Asset format -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Asset format</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-fmt-image"><label for="f-fmt-image">Image</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-fmt-logo"><label for="f-fmt-logo">Logo</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-fmt-document"><label for="f-fmt-document">Document</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-fmt-video"><label for="f-fmt-video">Video</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-fmt-presentation"><label for="f-fmt-presentation">Presentation</label></div>
+                </div>
+              </div>
+
+              <!-- Asset type -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Asset type</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-business-logo"><label for="f-type-business-logo">Business Logo</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-corporate"><label for="f-type-corporate">Corporate</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-destination"><label for="f-type-destination">Destination</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-development"><label for="f-type-development">Development</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-digital"><label for="f-type-digital">Digital</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-distribution"><label for="f-type-distribution">Distribution</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-event"><label for="f-type-event">Event</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-finance"><label for="f-type-finance">Finance</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-hotel"><label for="f-type-hotel">Hotel</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-loyalty"><label for="f-type-loyalty">Loyalty</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-marketing"><label for="f-type-marketing">Marketing</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-sales"><label for="f-type-sales">Sales</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-sustainability"><label for="f-type-sustainability">Sustainability</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-talent"><label for="f-type-talent">Talent &amp; Culture</label></div>
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-type-training"><label for="f-type-training">Training</label></div>
+                </div>
+              </div>
+
+              <!-- Location -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Location</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-input-wrap">
+                    <input class="fp-input" type="text" placeholder="Type a location (region, country, city...)">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Shooting date -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Shooting date</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-date-row">
+                    <span class="fp-date-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#6f6e77" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="#6f6e77" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </span>
+                    <input type="text" placeholder="From">
+                  </div>
+                  <div class="fp-date-row">
+                    <span class="fp-date-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#6f6e77" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="#6f6e77" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </span>
+                    <input type="text" placeholder="Till">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Expiration date -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Expiration date</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-date-row">
+                    <span class="fp-date-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#6f6e77" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="#6f6e77" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </span>
+                    <input type="text" placeholder="Choose a date">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Image width -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Image width</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-input-wrap">
+                    <input class="fp-input" type="text" placeholder="Type a width in pixels (e.g. 640)">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Talents -->
+              <div class="fp-acc">
+                <button class="fp-acc-header" type="button" onclick="toggleAcc(this)" aria-expanded="true">
+                  <span class="fp-acc-label">Talents</span>
+                  <svg class="fp-acc-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 15l6-6 6 6" stroke="#252339" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="fp-acc-body">
+                  <div class="fp-cb"><input class="fp-cb__box" type="checkbox" id="f-recognizable-talent"><label for="f-recognizable-talent">Recognizable Talent</label></div>
+                </div>
+              </div>
+
+            </div><!-- /General information body -->
+          </div>
+
+        </div><!-- /fp-filters -->
+      </div><!-- /fp-inner -->
+
+    </aside>
+  </div>
+
+  <!-- ══ FOOTER ══════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">© 2026 Accor Media Portal</div>
+  </footer>
+
+  <script>
+    /* ── View mode toggle ─────────────────────────────────────────── */
+    function setView(mode) {
+      const gridBtn  = document.getElementById('btn-grid');
+      const listBtn  = document.getElementById('btn-list');
+      const gridView = document.getElementById('view-grid');
+      const listView = document.getElementById('view-list');
+
+      if (mode === 'grid') {
+        gridView.style.display = 'grid';
+        listView.style.display = 'none';
+        gridBtn.classList.add('viewmode-btn--selected');
+        listBtn.classList.remove('viewmode-btn--selected');
+        gridBtn.setAttribute('aria-pressed', 'true');
+        listBtn.setAttribute('aria-pressed', 'false');
+      } else {
+        gridView.style.display = 'none';
+        listView.style.display = 'flex';
+        listBtn.classList.add('viewmode-btn--selected');
+        gridBtn.classList.remove('viewmode-btn--selected');
+        listBtn.setAttribute('aria-pressed', 'true');
+        gridBtn.setAttribute('aria-pressed', 'false');
+      }
+    }
+
+    /* ── Filter accordion (top-level) ─────────────────────────────── */
+    /* ── Brands outer accordion (minus ↔ plus chevron) ─────────── */
+    /* ── Favorite (heart) button toggle ─────────────────────────── */
+    function toggleFav(btn) {
+      const added = btn.classList.toggle('is-added');
+      btn.setAttribute('aria-label', added ? 'Remove from favorites' : 'Add to favorites');
+    }
+
+    function toggleBrands(btn) {
+      const slot    = document.getElementById('fp-brands-slot');
+      const chevron = btn.querySelector('.fp-brands-chevron');
+      const isOpen  = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      slot.classList.toggle('is-collapsed', isOpen);
+      chevron.classList.toggle('is-plus', isOpen);
+    }
+
+    /* ── Sub-accordion (ALL / Economy / Midscale / Premium / etc.) ─ */
+    function toggleAcc(btn) {
+      const body    = btn.nextElementSibling;
+      const chevron = btn.querySelector('.fp-acc-chevron');
+      const isOpen  = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      body.classList.toggle('is-collapsed', isOpen);
+      /* chevron starts pointing UP (expanded). When collapsed, rotate 180° = pointing down */
+      chevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+
+    /* ── Top-level accordion (Rights / General information) ────────── */
+    /* These start collapsed (plus icon). Click toggles open/close. */
+    function toggleTopAcc(btn) {
+      const body    = btn.nextElementSibling;
+      const icon    = btn.querySelector('.fp-top-acc__chevron path');
+      const isOpen  = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      body.classList.toggle('is-open', !isOpen);
+      /* plus ↔ minus icon */
+      if (isOpen) {
+        icon.setAttribute('d', 'M12 5v14M5 12h14'); /* back to plus */
+      } else {
+        icon.setAttribute('d', 'M5 12h14');          /* minus */
+      }
+    }
+  </script>
+</body>
+</html>
