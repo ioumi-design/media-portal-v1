@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sofitel Paris Baltimore Tour Eiffel – Accor Media Portal</title>
+  <meta name="viewport" content="width=1440" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design tokens ──────────────────────────────────────────────── */
+    :root {
+      --color-surface:              #ffffff;
+      --color-surface-container-low:#ffffff;
+      --color-surface-container-mid:#f4f4f5;
+      --color-surface-container:    #f4f5f7;
+      --color-on-surface-hi:        #252339;
+      --color-on-surface-mid:       #3e3d48;
+      --color-on-surface-low:       #6f6e77;
+      --color-outline-low:          #dadadd;
+      --color-outline-hi:           #8b8a93;
+      --color-accent:               #068484;
+      --color-primary:              #1e1852;
+      --color-on-primary:           #f9f9ff;
+      --color-link:                 #1264a3;
+      --font-display:   'Montserrat', sans-serif;
+      --font-body:      'Roboto', sans-serif;
+      --font-label:     'Roboto', sans-serif;
+      --font-title:     'Roboto', sans-serif;
+      --fs-display-sm:  26px;
+      --fs-display-md:  32px;
+      --fs-title-sm:    18px;
+      --fs-label-lg:    16px;
+      --fs-body-md:     16px;
+      --fs-body-sm:     14px;
+      --lh-display-sm:  32px;
+      --lh-display-md:  40px;
+      --lh-title-sm:    24px;
+      --lh-label-lg:    24px;
+      --lh-body-md:     24px;
+      --lh-body-sm:     20px;
+      --ls-display:     0.5px;
+      --br-surface:     6px;
+      --br-full:        100px;
+      --grid-margin:    64px;
+      --panel-width:    375px;
+    }
+
+    /* ── Reset ──────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font-body);
+      background: var(--color-surface-container-mid);
+      color: var(--color-on-surface-hi);
+      min-width: 1440px;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+
+    /* ── Page shell ─────────────────────────────────────────────────── */
+    .page {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════
+       HEADER
+    ══════════════════════════════════════════════════════════════════ */
+    .site-header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-outline-low);
+      height: 80px;
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+    .site-header__inner {
+      width: 100%;
+      padding: 0 var(--grid-margin);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+    .brand { display: flex; align-items: center; gap: 16px; }
+    .brand__logo { width: 56px; height: 46px; flex-shrink: 0; position: relative; }
+    .brand__logo svg { position: absolute; }
+    .brand__monogramme { top: 5.85px; left: 17.12px; width: 22.15px; height: 22.91px; }
+    .brand__typogramme { top: 34.27px; left: 6.11px; width: 43.78px; height: 5.88px; }
+    .brand__name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--fs-display-md);
+      line-height: var(--lh-display-md);
+      letter-spacing: var(--ls-display);
+      color: var(--color-primary);
+      white-space: nowrap;
+    }
+    .site-header__right { display: flex; align-items: center; gap: 16px; height: 100%; }
+    .site-nav { display: flex; align-items: center; gap: 20px; height: 100%; }
+    .site-nav__tab {
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      height: 100%; padding: 12px 0;
+      border: none; border-bottom: 4px solid transparent;
+      background: none;
+      font-family: var(--font-label); font-size: var(--fs-label-lg);
+      font-weight: 500; line-height: var(--lh-label-lg);
+      color: var(--color-on-surface-hi); white-space: nowrap; cursor: pointer;
+    }
+    .site-nav__tab--active { border-bottom-color: var(--color-accent); }
+
+    /* Header icon buttons */
+    .header-icon-btn {
+      width: 48px; height: 80px; border: none; background: none;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--color-on-surface-hi); border-radius: var(--br-full);
+      transition: background 120ms ease;
+    }
+    .header-icon-btn:hover { background: var(--color-primary); color: #f9f9ff; }
+    .header-icon-btn:hover svg path { fill: #f9f9ff; }
+
+    /* Cart button */
+    .header-cart-btn {
+      width: 58px; height: 80px; border: none; background: none;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--color-on-surface-hi); cursor: pointer;
+      position: relative; transition: background 120ms ease;
+    }
+    .header-cart-btn:hover { background: var(--color-primary); color: #f9f9ff; }
+    .header-cart-btn:hover svg path { fill: #f9f9ff; }
+    .cart-badge {
+      position: absolute; top: 12px; right: 8px;
+      background: var(--color-accent); color: #fff;
+      font-size: 12px; font-weight: 500; line-height: 16px;
+      min-width: 18px; height: 18px; border-radius: var(--br-full);
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 3px; pointer-events: none;
+    }
+
+    /* Account / user button */
+    .header-user {
+      display: flex; align-items: center; gap: 4px;
+      padding: 12px 24px 12px 20px; border: none; background: none;
+      border-radius: 60px; cursor: pointer;
+      font-size: var(--fs-label-lg); line-height: var(--lh-label-lg);
+      color: var(--color-on-surface-hi); transition: background 120ms ease;
+      white-space: nowrap;
+    }
+    .header-user:hover { background: var(--color-surface-container); }
+    .header-user__avatar {
+      width: 24px; height: 24px; flex-shrink: 0; position: relative;
+    }
+    .header-user__avatar-dot {
+      position: absolute; top: 0; right: 0;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--color-accent); border: 2px solid #fff;
+    }
+
+    /* ── Account popover ─────────────────────────────────────────── */
+    .account-popover {
+      position: absolute; top: 80px; right: 64px;
+      width: 264px; z-index: 200;
+      background: var(--color-surface);
+      border-radius: var(--br-surface);
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+    .account-popover[hidden] { display: none; }
+    .accp__inner { padding: 8px 12px 16px; }
+    .accp__close-row { display: flex; justify-content: flex-end; padding-bottom: 4px; }
+    .accp__close {
+      border: none; background: none; padding: 4px; cursor: pointer;
+      color: var(--color-on-surface-hi); border-radius: 4px;
+    }
+    .accp__close:hover { background: var(--color-surface-container); }
+    .accp__greeting { font-size: 14px; color: var(--color-on-surface-low); line-height: 20px; }
+    .accp__name {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: 18px; line-height: 24px; color: var(--color-primary);
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .accp__sep { height: 1px; background: var(--color-outline-low); margin: 12px -12px; }
+    .accp__list { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
+    .accp__item {
+      display: flex; align-items: center; gap: 8px;
+      height: 24px; cursor: pointer; color: #232136;
+      text-decoration: none; font-family: var(--font-body);
+      font-size: var(--fs-body-md); line-height: var(--lh-body-md);
+    }
+    .accp__item:hover { text-decoration: underline; color: #232136; }
+    .accp__item svg { flex-shrink: 0; }
+    .accp__actions { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
+    .accp__link {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: none; padding: 0;
+      font-family: var(--font-body); font-size: 14px; line-height: 20px;
+      color: #232136; text-decoration: none; cursor: pointer; text-align: left;
+    }
+    .accp__link:hover { text-decoration: underline; color: #232136; }
+    .accp__link:hover svg path { fill: #232136; }
+
+    /* ══════════════════════════════════════════════════════════════════
+       PAGE BODY
+    ══════════════════════════════════════════════════════════════════ */
+    .page-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Left: main detail content ──────────────────────────────── */
+    .detail-main {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--color-surface-container-mid);
+      padding: 36px var(--grid-margin);
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      min-width: 0;
+    }
+
+    /* Title bar */
+    .detail-title-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-back {
+      width: 48px; height: 48px;
+      flex-shrink: 0;
+      background: var(--color-surface);
+      border: none;
+      border-radius: var(--br-full);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--color-on-surface-hi);
+      transition: background 120ms ease, color 120ms ease;
+    }
+    .btn-back:hover { background: var(--color-primary); color: #f9f9ff; }
+    .btn-back:hover svg path { stroke: #f9f9ff; }
+    .detail-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--fs-display-sm);
+      line-height: var(--lh-display-sm);
+      letter-spacing: var(--ls-display);
+      color: var(--color-on-surface-hi);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Preview zone */
+    .detail-preview {
+      width: 100%;
+      height: 550px;
+      background: var(--color-surface);
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .detail-preview__placeholder {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 62px;
+      line-height: 76px;
+      letter-spacing: 1px;
+      color: var(--color-on-surface-low);
+      user-select: none;
+    }
+
+    /* Bottom section: renditions + actions */
+    .detail-bottom {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+
+    /* Renditions column */
+    .detail-renditions {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .detail-section-title {
+      font-family: var(--font-title);
+      font-weight: 500;
+      font-size: var(--fs-title-sm);
+      line-height: var(--lh-title-sm);
+      color: var(--color-on-surface-hi);
+    }
+    .detail-separator {
+      height: 1px;
+      background: var(--color-outline-low);
+      width: 100%;
+    }
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--color-outline-hi);
+      border-radius: var(--br-full);
+      padding: 8px 12px;
+      font-family: var(--font-body);
+      font-size: var(--fs-body-sm);
+      line-height: var(--lh-body-sm);
+      color: var(--color-primary);
+      background: none;
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+      white-space: nowrap;
+    }
+    .chip:hover {
+      background: var(--color-primary);
+      color: #f9f9ff;
+      border-color: var(--color-primary);
+    }
+    .chip.chip--active {
+      background: var(--color-primary);
+      color: #f9f9ff;
+      border-color: var(--color-primary);
+    }
+
+    /* Actions column */
+    .detail-actions {
+      width: 420px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Icon-only action buttons */
+    /* All icon action buttons use btn/tertiary/light tokens from Supernova:
+       bg-color: surface-container-low (transparent), fg/border: primary (#1E1852)
+       hover bg: primary, hover fg: on-primary (#FFFFFF) */
+    .btn-action {
+      width: 40px; height: 40px;
+      flex-shrink: 0;
+      border-radius: var(--br-full);
+      background: transparent;
+      border: 1px solid var(--color-primary);
+      color: var(--color-primary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+      position: relative;
+    }
+    .btn-action:hover {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+    }
+    .btn-action--primary { /* same tertiary default, saved state handled separately */ }
+    .btn-action--secondary { /* same tertiary default */ }
+
+    /* Tooltip on action buttons */
+    .btn-action .tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-surface);
+      color: var(--color-on-surface-mid);
+      font-size: 14px; line-height: 20px;
+      padding: 8px 12px;
+      border-radius: var(--br-surface);
+      box-shadow: 0 8px 16px rgba(0,0,0,.05), 0 2px 6px rgba(0,0,0,.08);
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 120ms ease;
+      transition-delay: 0s;
+      z-index: 10;
+    }
+    .btn-action .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%; left: 50%; transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--color-surface);
+    }
+    .btn-action:hover .tooltip { opacity: 1; transition-delay: 0.5s; }
+
+    /* Heart toggle: saved state = primary bg (like hover "locked in") */
+    .btn-collect .collect-icon-outline { display: block; }
+    .btn-collect .collect-icon-filled  { display: none; }
+    .btn-collect.is-saved {
+      background: var(--color-primary);
+      color: #FFFFFF;
+    }
+    .btn-collect.is-saved:hover { background: #3a2d80; }
+    .btn-collect.is-saved .collect-icon-outline { display: none; }
+    .btn-collect.is-saved .collect-icon-filled  { display: block; }
+
+    /* Download button (primary with text) */
+    .btn-download {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      gap: 4px;
+      background: var(--color-primary);
+      color: var(--color-on-primary);
+      border: none;
+      border-radius: var(--br-full);
+      padding: 8px 12px;
+      font-family: var(--font-label);
+      font-size: var(--fs-label-lg);
+      line-height: var(--lh-label-lg);
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .btn-download:hover { background: #4a3f8c; }
+
+    /* ── Right: asset metadata panel ─────────────────────────────── */
+    .detail-panel {
+      width: var(--panel-width);
+      flex-shrink: 0;
+      background: var(--color-surface);
+      border-left: 1px solid var(--color-outline-low);
+      overflow-y: auto;
+      padding: 16px 20px 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Metadata field */
+    .dp-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dp-field--tags { gap: 8px; }
+    .dp-label {
+      font-family: var(--font-title);
+      font-weight: 500;
+      font-size: var(--fs-title-sm);
+      line-height: var(--lh-title-sm);
+      color: var(--color-on-surface-hi);
+    }
+    .dp-value {
+      font-family: var(--font-body);
+      font-size: var(--fs-body-md);
+      line-height: var(--lh-body-md);
+      color: var(--color-on-surface-mid);
+    }
+    .dp-link {
+      font-family: var(--font-body);
+      font-size: var(--fs-body-md);
+      line-height: var(--lh-body-md);
+      color: var(--color-link);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .dp-link:hover { opacity: .8; }
+
+    /* Rights text box */
+    .dp-rights-box {
+      background: var(--color-surface-container-mid);
+      border: 1px solid var(--color-outline-low);
+      border-radius: var(--br-surface);
+      padding: 16px;
+      font-family: var(--font-body);
+      font-size: var(--fs-body-sm);
+      line-height: var(--lh-body-sm);
+      color: var(--color-on-surface-mid);
+    }
+
+    /* Tag links (smart tags / descriptors) */
+    .dp-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .dp-tag {
+      font-family: var(--font-body);
+      font-size: var(--fs-body-md);
+      line-height: var(--lh-body-md);
+      color: var(--color-link);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .dp-tag:hover { opacity: .8; }
+
+    /* ── Save-to-collection modal ────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7,5,24,.7);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .modal-overlay[hidden] { display: none; }
+    .modal {
+      background: var(--color-surface);
+      border-radius: var(--br-surface);
+      width: 640px;
+      max-width: 100%;
+      max-height: calc(100vh - 40px);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .modal[hidden] { display: none; }
+    .modal__header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+    .modal__close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-on-surface-hi);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border-radius: 50%;
+      width: 28px; height: 28px;
+      transition: background 120ms;
+    }
+    .modal__close-btn:hover { background: rgba(30,24,82,.06); }
+    .modal__title {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 28px;
+      color: var(--color-on-surface-hi);
+      margin-bottom: 16px;
+    }
+    .modal__body {
+      border: 1px solid var(--color-outline-low);
+      border-radius: var(--br-surface);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+    }
+    .modal__preview {
+      width: 320px;
+      border-radius: 6px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .modal__preview svg { display: block; width: 100%; height: auto; }
+    .modal__create-card {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      width: 100%;
+      padding: 20px;
+      background: var(--color-surface-container-low);
+      border: 1px dashed var(--color-outline-low);
+      border-radius: var(--br-surface);
+      cursor: pointer;
+      text-align: left;
+      transition: background 120ms;
+    }
+    .modal__create-card:hover { background: rgba(30,24,82,.04); }
+    .modal__create-card__label {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 24px;
+      color: var(--color-on-surface-hi);
+    }
+    .modal__footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      padding-top: 20px;
+      flex-shrink: 0;
+    }
+    .modal__btn-close {
+      padding: 12px 16px;
+      background: none;
+      border: 1px solid var(--color-primary);
+      border-radius: 100px;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-primary);
+      cursor: pointer;
+      transition: background 120ms;
+    }
+    .modal__btn-close:hover { background: rgba(30,24,82,.06); }
+    .modal__btn-validate {
+      padding: 12px 16px;
+      background: var(--color-primary);
+      border: 1px solid var(--color-primary);
+      border-radius: 100px;
+      font-size: 16px; line-height: 24px;
+      color: #f9f9ff; cursor: pointer; transition: background 120ms;
+    }
+    .modal__btn-validate:hover { background: #3a2d80; }
+
+    /* ── Snackbar ────────────────────────────────────────────────── */
+    .snackbar {
+      position: fixed;
+      top: 94px;
+      left: calc((100vw - 375px) / 2);
+      transform: translateX(-50%);
+      z-index: 3000;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #E6F3EB;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(7,5,24,.05);
+      width: 442px;
+      opacity: 0;
+      transition: opacity 300ms ease;
+    }
+    .snackbar[hidden] { display: none; }
+    .snackbar.is-visible { opacity: 1; }
+    .snackbar__icon { flex-shrink: 0; margin-top: 2px; }
+    .snackbar__content {
+      flex: 1;
+      min-width: 0;
+      font-size: 16px;
+      line-height: 24px;
+      color: #117846;
+    }
+    .snackbar__link {
+      flex-shrink: 0;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-link);
+      text-decoration: underline;
+      white-space: nowrap;
+      align-self: center;
+    }
+    .snackbar__link:hover { opacity: .75; }
+    .snackbar__close {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #117846;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      margin-top: 2px;
+      border-radius: 4px;
+      transition: background 120ms;
+    }
+    .snackbar__close:hover { background: rgba(17,120,70,.1); }
+    .modal__error {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; box-sizing: border-box;
+      padding: 10px 14px;
+      background: #FFF0EF;
+      border-radius: 8px;
+      font-size: 14px; line-height: 20px;
+      color: #BA1F1A;
+    }
+    .modal__error[hidden] { display: none; }
+    .modal__form { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+    .modal__field { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+    .modal__field-label { font-size: 14px; line-height: 20px; color: var(--color-on-surface-hi); font-weight: 500; }
+    .modal__field-label--opt { font-weight: 400; color: var(--color-on-surface-low); }
+    .modal__input-wrap { position: relative; width: 100%; }
+    .modal__input {
+      width: 100%; padding: 10px 40px 10px 12px;
+      border: 1px solid var(--color-outline-low); border-radius: 6px;
+      font-family: var(--font-body); font-size: 16px; line-height: 24px;
+      color: var(--color-on-surface-hi); background: var(--color-surface);
+      outline: none; transition: border-color 120ms;
+    }
+    .modal__input::placeholder { color: var(--color-on-surface-low); }
+    .modal__input:focus { border-color: var(--color-primary); }
+    .modal__input-clear {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      background: var(--color-on-surface-mid); border: none; border-radius: 50%;
+      width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+      color: #fff; cursor: pointer; opacity: 0; transition: opacity 120ms; pointer-events: none;
+    }
+    .modal__input-clear.is-visible { opacity: 1; pointer-events: auto; }
+    .modal__textarea {
+      width: 100%; min-height: 90px; padding: 10px 12px;
+      border: 1px solid var(--color-outline-low); border-radius: 6px;
+      font-family: var(--font-body); font-size: 16px; line-height: 24px;
+      color: var(--color-on-surface-hi); background: var(--color-surface);
+      outline: none; resize: vertical; transition: border-color 120ms;
+    }
+    .modal__textarea::placeholder { color: var(--color-on-surface-low); }
+    .modal__textarea:focus { border-color: var(--color-primary); }
+    .modal__coll-list {
+      display: flex; flex-direction: column;
+      width: 100%; overflow: hidden;
+      border: 1px solid #DADADD; border-radius: 6px;
+    }
+    .modal__coll-item {
+      display: flex; align-items: center; gap: 20px;
+      width: 100%; padding: 16px; box-sizing: border-box;
+      background: #fff;
+      border: none; border-bottom: 1px solid #DADADD;
+      cursor: pointer; text-align: left; transition: background 120ms;
+    }
+    .modal__coll-list > :last-child { border-bottom: none; }
+    .modal__coll-item:not(.modal__coll-item--selected):not(.modal__coll-item--already):not(.modal__coll-item--full):hover { background: #F5F5F6; }
+    .modal__coll-item .modal__coll-item__check--empty { visibility: hidden; }
+    .modal__coll-item:hover .modal__coll-item__check--empty { visibility: visible; }
+    .modal__coll-item--selected { background: #EFF8F8; }
+    .modal__coll-item--selected:hover { background: #e0f2f2; }
+    .modal__coll-item--already,
+    .modal__coll-item--full { cursor: default; }
+    .modal__coll-item--already:hover,
+    .modal__coll-item--full:hover { background: #F5F5F6; }
+    .modal__coll-item--already .modal__coll-badge,
+    .modal__coll-item--full   .modal__coll-badge { display: flex; }
+    .modal__coll-item--already .modal__coll-see,
+    .modal__coll-item--full   .modal__coll-see   { display: none; }
+    .modal__coll-item--already:hover .modal__coll-badge,
+    .modal__coll-item--full:hover   .modal__coll-badge { display: none; }
+    .modal__coll-item--already:hover .modal__coll-see,
+    .modal__coll-item--full:hover   .modal__coll-see   { display: flex; }
+    .modal__coll-item__thumb {
+      width: 60px; height: 60px; flex-shrink: 0;
+      background: #6F6E77; border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; border: 1px solid #DADADD;
+    }
+    .modal__coll-item__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .modal__coll-item__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .modal__coll-item__name {
+      font-size: 18px; font-weight: 500; line-height: 24px; letter-spacing: 0;
+      color: #252339; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .modal__coll-item__count { font-size: 14px; line-height: 20px; color: #6F6E77; }
+    .modal__coll-item__check {
+      width: 18px; height: 18px; flex-shrink: 0;
+      background: var(--color-accent); border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal__coll-item__check--empty {
+      width: 18px; height: 18px; flex-shrink: 0;
+      border: 1.5px solid #6F6E77; border-radius: 3px; box-sizing: border-box;
+    }
+    .modal__coll-badge {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; line-height: 16px; white-space: nowrap; flex-shrink: 0;
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .modal__coll-badge--added { color: #117846; background: #E6F3EB; }
+    .modal__coll-badge--full  { color: #C66000; background: #FFF3E0; }
+    .modal__coll-see {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 14px; line-height: 20px; white-space: nowrap; flex-shrink: 0;
+      color: var(--color-accent); text-decoration: none;
+    }
+
+    /* ── Footer ──────────────────────────────────────────────────── */
+    .site-footer {
+      background: var(--color-surface);
+      height: 48px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 var(--grid-margin);
+      box-shadow: 0 -2px 6px 0 rgba(7,5,24,.05);
+    }
+    .site-footer__copy {
+      font-family: var(--font-label);
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--color-on-surface-low);
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ HEADER ════════════════════════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="site-header__inner">
+
+      <!-- Left: Accor logo + wordmark (link to homepage) -->
+      <a href="index.html" class="brand" style="text-decoration:none;">
+        <div class="brand__logo" aria-label="Accor" role="img">
+          <svg class="brand__monogramme" viewBox="0 0 22.1544 22.9087" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.1544 22.5631H16.6763L12.6522 14.5159C10.4492 15.6575 9.20085 18.3211 6.98317 20.0686C5.8523 20.9565 4.51582 21.7598 2.87092 22.2953C2.12191 22.5349 0.844171 22.8591 0.374199 22.9013C0.168587 22.9154 0.0364077 22.9154 0.00703446 22.845C-0.0223387 22.7886 0.0364083 22.7463 0.256707 22.6477C0.50638 22.5349 1.50507 22.1403 2.13659 21.7175C2.92967 21.1961 3.37027 20.6183 3.41433 20.1814C3.19403 19.4485 1.65193 17.8278 3.23809 14.8542C3.79618 13.7831 4.29552 13.0221 4.648 12.2469C5.04454 11.3591 5.33827 10.1048 5.42639 9.17463C5.42639 9.11826 5.44108 9.11826 5.47045 9.14645C6.23415 9.89338 9.21553 12.8248 8.77493 15.742C9.75894 15.3756 11.4773 14.2763 12.2703 13.6844C13.1075 13.0643 13.6509 12.4161 14.5321 12.402C15.3252 12.3879 15.3986 12.7543 16.0154 12.8388C16.177 12.8529 16.3973 12.8248 16.5148 12.7684C16.5588 12.7402 16.5441 12.6979 16.4854 12.6838C15.6189 12.4865 15.4133 11.8101 14.3118 11.8101C13.3131 11.8101 12.52 12.6838 11.9472 13.0502L9.1421 7.42708C7.96717 5.07353 8.31965 3.36826 10.9045 0L22.1544 22.5631Z" fill="#1E1852"/>
+          </svg>
+          <svg class="brand__typogramme" viewBox="0 0 43.7808 5.87684" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M43.7808 5.70772L41.8715 3.52329C42.8849 3.2978 43.487 2.74816 43.487 1.77574C43.487 0.690565 42.5177 0.140931 41.2987 0.140931H37.4802V5.70772H38.4936V3.60784H40.77L42.5177 5.70772H43.7808ZM38.4936 1.01471H41.3281C42.033 1.01471 42.4443 1.32475 42.4443 1.86029C42.4443 2.39583 42.0037 2.74816 41.3281 2.74816H38.4936V1.01471Z" fill="#1E1852"/>
+            <path d="M2.99607 0.155025L0 5.72181H1.14556L1.77708 4.48162H5.18437L5.81589 5.72181H6.99082L3.99476 0.155025H2.99607ZM2.23236 3.60784L3.49541 1.16973L4.75846 3.60784H2.23236Z" fill="#1E1852"/>
+            <path d="M12.3661 0.873774C13.3207 0.873774 14.0991 1.21201 14.5104 1.83211L15.3328 1.31066C14.76 0.53554 13.7467 0.014094 12.3661 0.014094C10.1484 0.014094 8.87071 1.40932 8.87071 2.94547C8.87071 4.48162 10.1484 5.87684 12.3661 5.87684C13.7467 5.87684 14.76 5.3413 15.3328 4.58027L14.5104 4.05882C14.1138 4.66483 13.3207 5.01716 12.3661 5.01716C10.8681 5.01716 9.91345 4.21385 9.91345 2.95956C9.89877 1.69118 10.8681 0.873774 12.3661 0.873774Z" fill="#1E1852"/>
+            <path d="M21.5746 0.873774C22.5292 0.873774 23.3076 1.21201 23.7189 1.83211L24.5413 1.31066C23.9685 0.53554 22.9552 0.014094 21.5746 0.014094C19.3569 0.014094 18.0792 1.40932 18.0792 2.94547C18.0792 4.48162 19.3569 5.87684 21.5746 5.87684C22.9552 5.87684 23.9685 5.3413 24.5413 4.58027L23.7189 4.05882C23.3223 4.66483 22.5292 5.01716 21.5746 5.01716C20.0766 5.01716 19.122 4.21385 19.122 2.95956C19.1073 1.69118 20.0766 0.873774 21.5746 0.873774Z" fill="#1E1852"/>
+            <path d="M30.7831 0C28.5654 0 27.2877 1.39522 27.2877 2.93137C27.2877 4.46752 28.5654 5.86274 30.7831 5.86274C33.0008 5.86274 34.2785 4.46752 34.2785 2.93137C34.2785 1.39522 33.0008 0 30.7831 0ZM30.7831 4.98897C29.2851 4.98897 28.3304 4.18566 28.3304 2.93137C28.3304 1.67708 29.2998 0.873774 30.7831 0.873774C32.2811 0.873774 33.2358 1.67708 33.2358 2.93137C33.2505 4.18566 32.2811 4.98897 30.7831 4.98897Z" fill="#1E1852"/>
+          </svg>
+        </div>
+        <span class="brand__name">Media Portal</span>
+      </a>
+
+      <!-- Right: nav + icons + account -->
+      <div class="site-header__right">
+        <nav class="site-nav" aria-label="Main navigation">
+          <button class="site-nav__tab site-nav__tab--active" type="button" onclick="location.href='index.html'">Home</button>
+        </nav>
+
+        <!-- Collections icon -->
+        <button class="header-icon-btn" type="button" aria-label="Collections" onclick="location.href='hub-collection.html'">
+          <svg width="24" height="24" viewBox="0 0 18 18.0072" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M16.4305 1.69007C14.6078 -0.306183 11.7822 -0.537633 9.7281 1.01501C9.46772 1.20788 9.21698 1.43933 8.98553 1.69007C8.75409 1.43933 8.50335 1.20788 8.24297 1.01501C6.18886 -0.527989 3.36325 -0.306183 1.54058 1.69007C-0.513528 3.9467 -0.513528 7.59202 1.54058 9.84865L8.98553 18.0072L16.4305 9.84865C18.5232 7.55345 18.5232 3.90812 16.4305 1.69007ZM15.36 8.86499L8.98553 15.847L2.61104 8.86499C1.0584 7.1677 1.0584 4.37102 2.61104 2.67373C4.09617 1.05358 6.42995 1.05358 7.90544 2.67373L8.97589 3.85026L10.0463 2.67373C11.5315 1.05358 13.8653 1.05358 15.3407 2.67373V2.69301C16.8934 4.34209 16.9223 7.12912 15.3215 8.87464L15.36 8.86499Z" fill="currentColor"/>
+          </svg>
+        </button>
+
+        <!-- Cart -->
+        <button class="header-cart-btn" type="button" aria-label="Cart (99 items)">
+          <svg width="24" height="24" viewBox="0 0 19.5 19.6547" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6073 17.9404C7.6336 17.9404 7.65492 17.9191 7.65492 17.8928C7.65492 17.8665 7.6336 17.8452 7.6073 17.8452C7.581 17.8452 7.55968 17.8665 7.55968 17.8928C7.55968 17.9191 7.581 17.9404 7.6073 17.9404ZM5.84539 17.8928C5.84539 16.9197 6.63422 16.1309 7.6073 16.1309C8.58037 16.1309 9.3692 16.9197 9.3692 17.8928C9.3692 18.8659 8.58037 19.6547 7.6073 19.6547C6.63422 19.6547 5.84539 18.8659 5.84539 17.8928Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1785 17.9404C16.2048 17.9404 16.2261 17.9191 16.2261 17.8928C16.2261 17.8665 16.2048 17.8452 16.1785 17.8452C16.1522 17.8452 16.1309 17.8665 16.1309 17.8928C16.1309 17.9191 16.1522 17.9404 16.1785 17.9404ZM14.4166 17.8928C14.4166 16.9197 15.2054 16.1309 16.1785 16.1309C17.1516 16.1309 17.9404 16.9197 17.9404 17.8928C17.9404 18.8659 17.1516 19.6547 16.1785 19.6547C15.2054 19.6547 14.4166 18.8659 14.4166 17.8928Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0.75C0 0.335786 0.335786 0 0.75 0H4.02273C4.38267 0 4.69186 0.255707 4.7594 0.609254L5.46179 4.28561H18.75C18.9724 4.28561 19.1834 4.38434 19.3259 4.55511C19.4684 4.72589 19.5277 4.95111 19.4879 5.16994L18.1788 12.3612L18.1778 12.3666C18.0718 12.9257 17.7802 13.435 17.3455 13.8016C16.9121 14.1671 16.3647 14.3662 15.7978 14.3568H7.85858C7.29169 14.3662 6.74423 14.1671 6.31085 13.8016C5.87631 13.4351 5.58476 12.926 5.47867 12.3671V12.3671L4.1112 5.20964C4.10612 5.18825 4.10196 5.16651 4.09875 5.14446L3.40245 1.5H0.75C0.335786 1.5 0 1.16421 0 0.75ZM5.74838 5.78561L6.95233 12.0872C6.99595 12.3173 7.11421 12.5169 7.27786 12.6549C7.44068 12.7922 7.63866 12.861 7.83676 12.857L7.85182 12.8568H15.8045L15.8196 12.857C16.0177 12.861 16.2157 12.7922 16.3785 12.6549C16.5416 12.5174 16.6596 12.3186 16.7036 12.0895L16.704 12.0872L17.8511 5.78561H5.74838Z" fill="currentColor"/>
+          </svg>
+          <span class="cart-badge" aria-hidden="true">99</span>
+        </button>
+
+        <!-- Account -->
+        <button class="header-user" type="button" aria-label="User menu" aria-expanded="false"
+                id="account-btn" onclick="toggleAccountPopover()">
+          <div class="header-user__avatar" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7788 0.437173C10.9036 0.153369 9.96973 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18C13.9706 18 18 13.9706 18 9C18 8.03027 17.8466 7.09636 17.5628 6.22121C17.0976 6.3935 16.5962 6.4911 16.073 6.49942C16.3495 7.28153 16.5 8.12319 16.5 9C16.5 11.1673 15.5807 13.12 14.1107 14.4892C13.9844 14.0735 13.8658 13.7296 13.7416 13.4525C13.5892 13.1127 13.3957 12.7968 13.0951 12.5732C12.7807 12.3393 12.4425 12.2753 12.1515 12.2549C11.97 12.2422 11.7454 12.245 11.5262 12.2477C11.4355 12.2489 11.3455 12.25 11.26 12.25H6.74002C6.65456 12.25 6.56477 12.2489 6.47407 12.2477C6.25483 12.245 6.03005 12.2422 5.84849 12.2549C5.55751 12.2753 5.21936 12.3393 4.90491 12.5732C4.60432 12.7968 4.41084 13.1127 4.25848 13.4525C4.13421 13.7296 4.01567 14.0735 3.88933 14.4892C2.41934 13.12 1.5 11.1674 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C9.87681 1.5 10.7185 1.65046 11.5006 1.92697C11.5089 1.40383 11.6065 0.902377 11.7788 0.437173ZM12.8298 15.4498C11.7088 16.1169 10.3991 16.5 9 16.5C7.60087 16.5 6.29122 16.1169 5.17024 15.4498L5.24017 15.2095C5.39911 14.6631 5.51968 14.306 5.62719 14.0662C5.73537 13.8249 5.79814 13.7782 5.80013 13.7768L5.80107 13.7762C5.80107 13.7762 5.80539 13.7741 5.8143 13.7714C5.83412 13.7655 5.87462 13.7568 5.95342 13.7513C6.07262 13.7429 6.19616 13.7446 6.37109 13.747C6.47336 13.7483 6.5932 13.75 6.74002 13.75H11.26C11.4068 13.75 11.5267 13.7483 11.629 13.747C11.8039 13.7446 11.9274 13.7429 12.0466 13.7513C12.1254 13.7568 12.1659 13.7655 12.1857 13.7714C12.1946 13.7741 12.199 13.7762 12.199 13.7762L12.1999 13.7768C12.2019 13.7782 12.2647 13.8249 12.3729 14.0662C12.4804 14.306 12.6009 14.6631 12.7599 15.2095L12.8298 15.4498Z" fill="#1E1852"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3.25C6.92893 3.25 5.25 4.92893 5.25 7C5.25 9.07107 6.92893 10.75 9 10.75C11.0711 10.75 12.75 9.07107 12.75 7C12.75 4.92893 11.0711 3.25 9 3.25ZM6.75 7C6.75 5.75736 7.75736 4.75 9 4.75C10.2426 4.75 11.25 5.75736 11.25 7C11.25 8.24264 10.2426 9.25 9 9.25C7.75736 9.25 6.75 8.24264 6.75 7Z" fill="#1E1852"/>
+            </svg>
+            <span class="header-user__avatar-dot"></span>
+          </div>
+          <span>Steven PICARD</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Account popover -->
+    <div class="account-popover" id="account-popover" hidden>
+      <div class="accp__inner">
+        <div class="accp__close-row">
+          <button class="accp__close" type="button" aria-label="Close menu" onclick="toggleAccountPopover()">
+            <svg width="16" height="16" viewBox="0 0 15.5 15.5" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2803 1.28033C15.5732 0.987437 15.5732 0.512563 15.2803 0.21967C14.9874 -0.0732233 14.5126 -0.0732233 14.2197 0.21967L7.75 6.68934L1.28033 0.21967C0.987437 -0.0732233 0.512564 -0.0732233 0.219671 0.21967C-0.0732227 0.512563 -0.0732227 0.987437 0.219671 1.28033L6.68934 7.75L0.21967 14.2197C-0.0732233 14.5126 -0.0732234 14.9874 0.21967 15.2803C0.512562 15.5732 0.987437 15.5732 1.28033 15.2803L7.75 8.81066L14.2197 15.2803C14.5126 15.5732 14.9874 15.5732 15.2803 15.2803C15.5732 14.9874 15.5732 14.5126 15.2803 14.2197L8.81066 7.75L15.2803 1.28033Z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+        <p class="accp__greeting">Hello,</p>
+        <div class="accp__name"><span>Steven</span><span>PICARD</span></div>
+        <div class="accp__sep"></div>
+        <div class="accp__list">
+          <a href="hub-collection.html" class="accp__item">
+            <svg width="24" height="24" viewBox="0 0 18 18.0072" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.4305 1.69007C14.6078 -0.306183 11.7822 -0.537633 9.7281 1.01501C9.46772 1.20788 9.21698 1.43933 8.98553 1.69007C8.75409 1.43933 8.50335 1.20788 8.24297 1.01501C6.18886 -0.527989 3.36325 -0.306183 1.54058 1.69007C-0.513528 3.9467 -0.513528 7.59202 1.54058 9.84865L8.98553 18.0072L16.4305 9.84865C18.5232 7.55345 18.5232 3.90812 16.4305 1.69007ZM15.36 8.86499L8.98553 15.847L2.61104 8.86499C1.0584 7.1677 1.0584 4.37102 2.61104 2.67373C4.09617 1.05358 6.42995 1.05358 7.90544 2.67373L8.97589 3.85026L10.0463 2.67373C11.5315 1.05358 13.8653 1.05358 15.3407 2.67373V2.69301C16.8934 4.34209 16.9223 7.12912 15.3215 8.87464L15.36 8.86499Z" fill="currentColor"/></svg>
+            Collections
+          </a>
+          <a href="#" class="accp__item">
+            <svg width="24" height="24" viewBox="0 0 18 18" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 9C16.5 13.1421 13.1421 16.5 9 16.5C4.85786 16.5 1.5 13.1421 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C13.1421 1.5 16.5 4.85786 16.5 9ZM9 18C13.9706 18 18 13.9706 18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18ZM9.75 4C9.75 3.58579 9.41421 3.25 9 3.25C8.58579 3.25 8.25 3.58579 8.25 4V9.40139L11.584 11.624C11.9286 11.8538 12.3943 11.7607 12.624 11.416C12.8538 11.0714 12.7607 10.6057 12.416 10.376L9.75 8.59861V4Z" fill="currentColor"/></svg>
+            Download history
+          </a>
+          <a href="#" class="accp__item">
+            <svg width="24" height="24" viewBox="0 0 18 15.9429" fill="none"><path d="M17.2286 11.3143H9.68914C9.32914 9.55543 7.776 8.22857 5.91429 8.22857C4.05257 8.22857 2.48914 9.55543 2.13943 11.3143H0.771429C0.349714 11.3143 0 11.664 0 12.0857C0 12.5074 0.349714 12.8571 0.771429 12.8571H2.13943C2.49943 14.616 4.05257 15.9429 5.91429 15.9429C7.776 15.9429 9.33943 14.616 9.68914 12.8571H17.2286C17.6503 12.8571 18 12.5074 18 12.0857C18 11.664 17.6503 11.3143 17.2286 11.3143ZM5.91429 14.4C4.63886 14.4 3.6 13.3611 3.6 12.0857C3.6 10.8103 4.63886 9.77143 5.91429 9.77143C7.18971 9.77143 8.22857 10.8103 8.22857 12.0857C8.22857 13.3611 7.18971 14.4 5.91429 14.4ZM0.771429 4.62857H8.31086C8.67086 6.38743 10.224 7.71429 12.0857 7.71429C13.9474 7.71429 15.5109 6.38743 15.8606 4.62857H17.2286C17.6503 4.62857 18 4.27886 18 3.85714C18 3.43543 17.6503 3.08571 17.2286 3.08571H15.8606C15.5006 1.32686 13.9474 0 12.0857 0C10.224 0 8.66057 1.32686 8.31086 3.08571H0.771429C0.349714 3.08571 0 3.43543 0 3.85714C0 4.27886 0.349714 4.62857 0.771429 4.62857ZM12.0857 1.54286C13.3611 1.54286 14.4 2.58171 14.4 3.85714C14.4 5.13257 13.3611 6.17143 12.0857 6.17143C10.8103 6.17143 9.77143 5.13257 9.77143 3.85714C9.77143 2.58171 10.8103 1.54286 12.0857 1.54286Z" fill="currentColor"/></svg>
+            Saved filters
+          </a>
+        </div>
+        <div class="accp__sep"></div>
+        <div class="accp__actions">
+          <button class="accp__link" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z" fill="currentColor"/></svg>
+            Afficher en français
+          </button>
+          <button class="accp__link" type="button">
+            Support
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ PAGE BODY ══════════════════════════════════════════════════════ -->
+  <div class="page-body">
+
+    <!-- ── Left: main content ──────────────────────────────────────── -->
+    <main class="detail-main">
+
+      <!-- Title bar -->
+      <div class="detail-title-bar">
+        <button class="btn-back" type="button" aria-label="Back to search results" onclick="history.back()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <h1 class="detail-title">Sofitel Paris Baltimore Tour Eiffel – France</h1>
+      </div>
+
+      <!-- Preview -->
+      <div class="detail-preview">
+        <span class="detail-preview__placeholder">Zone de preview</span>
+      </div>
+
+      <!-- Renditions + Actions -->
+      <div class="detail-bottom">
+
+        <!-- Renditions -->
+        <div class="detail-renditions">
+          <div>
+            <p class="detail-section-title">Renditions</p>
+            <div class="detail-separator" style="margin-top:4px;"></div>
+          </div>
+          <div class="chip-grid">
+            <button class="chip chip--active">1 : 1</button>
+            <button class="chip">3 : 2</button>
+            <button class="chip">4 : 3</button>
+            <button class="chip">6 : 5</button>
+            <button class="chip">8 : 10</button>
+            <button class="chip">9 : 16</button>
+            <button class="chip">11 : 5</button>
+            <button class="chip">13 : 5</button>
+            <button class="chip">16 : 9</button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="detail-actions">
+          <div>
+            <p class="detail-section-title">Actions</p>
+            <div class="detail-separator" style="margin-top:4px;"></div>
+          </div>
+          <div class="action-row">
+            <!-- Save to collection — toggleable heart (outline ↔ filled) -->
+            <button class="btn-action btn-action--primary btn-collect" type="button"
+                    aria-label="Save to collection" onclick="toggleCollect(this)">
+              <!-- outline heart (default / not saved) -->
+              <svg class="collect-icon-outline" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <!-- filled heart (saved) -->
+              <svg class="collect-icon-filled" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <span class="tooltip">Save to collection</span>
+            </button>
+
+            <!-- Copy Media Name (tertiary outlined) -->
+            <button class="btn-action btn-action--secondary" type="button" aria-label="Copy Media Name">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <span class="tooltip">Copy Media Name</span>
+            </button>
+
+            <!-- Email (tertiary outlined) -->
+            <button class="btn-action btn-action--secondary" type="button" aria-label="Share by email">
+              <svg width="16" height="16" viewBox="0 0 12 9.33333" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 1.62272V8.33333H11V1.62272L6.32925 5.70962C6.14074 5.87457 5.85926 5.87457 5.67075 5.70962L1 1.62272ZM10.1931 1H1.80692L6 4.66895L10.1931 1ZM0 0.666667C0 0.298477 0.298477 0 0.666667 0H11.3333C11.7015 0 12 0.298477 12 0.666667V8.66667C12 9.03486 11.7015 9.33333 11.3333 9.33333H0.666667C0.298477 9.33333 0 9.03486 0 8.66667V0.666667Z" fill="currentColor"/>
+              </svg>
+              <span class="tooltip">Share by email</span>
+            </button>
+
+            <!-- Add to cart (tertiary outlined) -->
+            <button class="btn-action btn-action--secondary" type="button" aria-label="Add to cart">
+              <svg width="16" height="16" viewBox="0 0 19.5 19.6547" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6073 17.9404C7.6336 17.9404 7.65492 17.9191 7.65492 17.8928C7.65492 17.8665 7.6336 17.8452 7.6073 17.8452C7.581 17.8452 7.55968 17.8665 7.55968 17.8928C7.55968 17.9191 7.581 17.9404 7.6073 17.9404ZM5.84539 17.8928C5.84539 16.9197 6.63422 16.1309 7.6073 16.1309C8.58037 16.1309 9.3692 16.9197 9.3692 17.8928C9.3692 18.8659 8.58037 19.6547 7.6073 19.6547C6.63422 19.6547 5.84539 18.8659 5.84539 17.8928Z" fill="currentColor"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1785 17.9404C16.2048 17.9404 16.2261 17.9191 16.2261 17.8928C16.2261 17.8665 16.2048 17.8452 16.1785 17.8452C16.1522 17.8452 16.1309 17.8665 16.1309 17.8928C16.1309 17.9191 16.1522 17.9404 16.1785 17.9404ZM14.4166 17.8928C14.4166 16.9197 15.2054 16.1309 16.1785 16.1309C17.1516 16.1309 17.9404 16.9197 17.9404 17.8928C17.9404 18.8659 17.1516 19.6547 16.1785 19.6547C15.2054 19.6547 14.4166 18.8659 14.4166 17.8928Z" fill="currentColor"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0.75C0 0.335786 0.335786 0 0.75 0H4.02273C4.38267 0 4.69186 0.255707 4.7594 0.609254L5.46179 4.28561H18.75C18.9724 4.28561 19.1834 4.38434 19.3259 4.55511C19.4684 4.72589 19.5277 4.95111 19.4879 5.16994L18.1788 12.3612L18.1778 12.3666C18.0718 12.9257 17.7802 13.435 17.3455 13.8016C16.9121 14.1671 16.3647 14.3662 15.7978 14.3568H7.85858C7.29169 14.3662 6.74423 14.1671 6.31085 13.8016C5.87631 13.4351 5.58476 12.926 5.47867 12.3671V12.3671L4.1112 5.20964C4.10612 5.18825 4.10196 5.16651 4.09875 5.14446L3.40245 1.5H0.75C0.335786 1.5 0 1.16421 0 0.75ZM5.74838 5.78561L6.95233 12.0872C6.99595 12.3173 7.11421 12.5169 7.27786 12.6549C7.44068 12.7922 7.63866 12.861 7.83676 12.857L7.85182 12.8568H15.8045L15.8196 12.857C16.0177 12.861 16.2157 12.7922 16.3785 12.6549C16.5416 12.5174 16.6596 12.3186 16.7036 12.0895L16.704 12.0872L17.8511 5.78561H5.74838Z" fill="currentColor"/>
+              </svg>
+              <span class="tooltip">Add to cart</span>
+            </button>
+
+            <!-- Download button (primary, with text) -->
+            <button class="btn-download" type="button">
+              <svg width="20" height="20" viewBox="0 0 11.5918 11.5137" fill="none">
+                <path d="M8.90701 2.46917H8.8759C8.7198 1.76871 8.32961 1.14238 7.76968 0.693496C7.20975 0.244616 6.51355 0 5.7959 0C5.07826 0 4.38205 0.244616 3.82213 0.693496C3.2622 1.14238 2.872 1.76871 2.7159 2.46917H2.68479C2.33756 2.45474 1.991 2.51067 1.66594 2.6336C1.34088 2.75653 1.04404 2.94392 0.79325 3.18451C0.542461 3.42509 0.34291 3.7139 0.206591 4.03358C0.0702718 4.35325 0 4.69719 0 5.04472C0 5.39225 0.0702718 5.73619 0.206591 6.05586C0.34291 6.37554 0.542461 6.66435 0.79325 6.90494C1.04404 7.14552 1.34088 7.33291 1.66594 7.45584C1.991 7.57877 2.33756 7.6347 2.68479 7.62028H4.46257V6.73139H2.68479C2.45601 6.74314 2.22723 6.70822 2.01237 6.62876C1.79752 6.5493 1.60107 6.42696 1.43498 6.26918C1.26889 6.11141 1.13664 5.92149 1.04627 5.71099C0.955897 5.50049 0.909293 5.2738 0.909293 5.04472C0.909293 4.81564 0.955897 4.58895 1.04627 4.37845C1.13664 4.16795 1.26889 3.97803 1.43498 3.82026C1.60107 3.66248 1.79752 3.54014 2.01237 3.46068C2.22723 3.38122 2.45601 3.34631 2.68479 3.35805H3.50257L3.53812 2.95361C3.58824 2.38939 3.84779 1.86438 4.26567 1.48198C4.68355 1.09957 5.22946 0.887486 5.7959 0.887486C6.36234 0.887486 6.90826 1.09957 7.32613 1.48198C7.74401 1.86438 8.00357 2.38939 8.05368 2.95361L8.08924 3.35805H8.90701C9.13579 3.34631 9.36457 3.38122 9.57943 3.46068C9.79429 3.54014 9.99074 3.66248 10.1568 3.82026C10.3229 3.97803 10.4552 4.16795 10.5455 4.37845C10.6359 4.58895 10.6825 4.81564 10.6825 5.04472C10.6825 5.2738 10.6359 5.50049 10.5455 5.71099C10.4552 5.92149 10.3229 6.11141 10.1568 6.26918C9.99074 6.42696 9.79429 6.5493 9.57943 6.62876C9.36457 6.70822 9.13579 6.74314 8.90701 6.73139H7.12924V7.62028H8.90701C9.25424 7.6347 9.6008 7.57877 9.92586 7.45584C10.2509 7.33291 10.5478 7.14552 10.7986 6.90494C11.0493 6.66435 11.2489 6.37554 11.3852 6.05586C11.5215 5.73619 11.5918 5.39225 11.5918 5.04472C11.5918 4.69719 11.5215 4.35325 11.3852 4.03358C11.2489 3.7139 11.0493 3.42509 10.7986 3.18451C10.5478 2.94392 10.2509 2.75653 9.92586 2.6336C9.6008 2.51067 9.25424 2.45474 8.90701 2.46917Z" fill="currentColor"/>
+                <path d="M8.35145 8.53139C8.26818 8.44861 8.15553 8.40215 8.03812 8.40215C7.9207 8.40215 7.80806 8.44861 7.72478 8.53139L6.24034 10.0158V4.50472C6.24034 4.38685 6.19352 4.2738 6.11017 4.19045C6.02682 4.1071 5.91377 4.06028 5.7959 4.06028C5.67802 4.06028 5.56498 4.1071 5.48163 4.19045C5.39828 4.2738 5.35145 4.38685 5.35145 4.50472V10.0158L3.86701 8.53139C3.78373 8.44861 3.67109 8.40215 3.55367 8.40215C3.43626 8.40215 3.32361 8.44861 3.24034 8.53139C3.19868 8.5727 3.16562 8.62186 3.14306 8.67602C3.12049 8.73018 3.10887 8.78827 3.10887 8.84694C3.10887 8.90561 3.12049 8.96371 3.14306 9.01787C3.16562 9.07203 3.19868 9.12118 3.24034 9.1625L5.46256 11.3847C5.50402 11.4284 5.55392 11.4632 5.60923 11.4869C5.65217 11.5022 5.69707 11.5112 5.74256 11.5136H5.7959C5.85559 11.5147 5.91478 11.5026 5.96923 11.4781C5.9939 11.4649 6.01766 11.45 6.04034 11.4336C6.06505 11.4188 6.08881 11.4025 6.11145 11.3847L8.33367 9.14028C8.41362 9.06014 8.45998 8.95251 8.46328 8.83936C8.46658 8.7262 8.42659 8.61606 8.35145 8.53139Z" fill="currentColor"/>
+              </svg>
+              Download
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /detail-bottom -->
+    </main>
+
+    <!-- ── Right: metadata panel ──────────────────────────────────── -->
+    <aside class="detail-panel">
+
+      <div class="dp-field">
+        <p class="dp-label">Format</p>
+        <p class="dp-value">Image</p>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Size</p>
+        <p class="dp-value">11.3 MB</p>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Shooting date</p>
+        <p class="dp-value">03 May 2024</p>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Expiration date</p>
+        <p class="dp-value">03 May 2032</p>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Location</p>
+        <a href="#" class="dp-link">Paris</a>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Hotel name</p>
+        <a href="#" class="dp-link">Novotel Paris</a>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Channel scope</p>
+        <p class="dp-value">All channels</p>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Geographic scope</p>
+        <a href="#" class="dp-link">Novotel Paris</a>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Type of rights</p>
+        <div class="dp-rights-box">
+          Model(s) authorization on a non-exclusive basis, authorized use for WEB ONLY for Accor group hotels
+        </div>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Asset source</p>
+        <p class="dp-value">martin de brown</p>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Copyright</p>
+        <a href="#" class="dp-link">See preview</a>
+      </div>
+
+      <div class="dp-field dp-field--tags">
+        <p class="dp-label">Smart tags</p>
+        <div class="dp-tags">
+          <a href="#" class="dp-tag">mosquito</a>
+          <a href="#" class="dp-tag">scratch</a>
+          <a href="#" class="dp-tag">network</a>
+          <a href="#" class="dp-tag">plankton</a>
+        </div>
+      </div>
+
+      <div class="dp-field dp-field--tags">
+        <p class="dp-label">Descriptors</p>
+        <div class="dp-tags">
+          <a href="#" class="dp-tag">Interior design</a>
+          <a href="#" class="dp-tag">Lobby</a>
+          <a href="#" class="dp-tag">Luxury</a>
+        </div>
+      </div>
+
+      <div class="dp-field">
+        <p class="dp-label">Description</p>
+        <p class="dp-value" style="white-space:pre-wrap;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <p class="site-footer__copy">© 2026 Accor Media Portal</p>
+  </footer>
+
+</div><!-- /.page -->
+
+<script>
+  /* ── Account popover ───────────────────────────────────────────── */
+  function toggleAccountPopover() {
+    const popover = document.getElementById('account-popover');
+    const btn     = document.getElementById('account-btn');
+    const isOpen  = !popover.hidden;
+    popover.hidden = isOpen;
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+  document.addEventListener('click', function(e) {
+    const popover = document.getElementById('account-popover');
+    const btn     = document.getElementById('account-btn');
+    if (!popover.hidden && !popover.contains(e.target) && !btn.contains(e.target)) {
+      popover.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  /* ── Save to collection toggle ──────────────────────────────────── */
+  function toggleCollect(btn) {
+    if (!btn.classList.contains('is-saved')) {
+      openSaveModal(btn);
+    } else {
+      location.href = 'hub-collection.html';
+    }
+  }
+
+  /* ── Modal state ───────────────────────────────────────────────── */
+  var _saveModalTriggerBtn = null;
+  var _createdCollections = [];
+
+  var _demoCollections = [
+    { title: 'Summer sale 2026',        count: 0,   status: 'default' },
+    { title: 'Winter campaign 2024-25', count: 16,  status: 'already' },
+    { title: 'Winter campaign 2024-25', count: 100, status: 'full'    }
+  ];
+
+  function openSaveModal(triggerBtn) {
+    _saveModalTriggerBtn = triggerBtn || null;
+    _createdCollections = [];
+    _demoCollections[0].status = 'default';
+    document.getElementById('modal-view-save').hidden = false;
+    document.getElementById('modal-view-create').hidden = true;
+    document.getElementById('modal-validate-save').hidden = true;
+    renderModalCollections();
+    document.getElementById('save-modal').hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSaveModal() {
+    document.getElementById('save-modal').hidden = true;
+    document.body.style.overflow = '';
+  }
+  function showCreateStep() {
+    document.getElementById('modal-view-save').hidden = true;
+    document.getElementById('modal-view-create').hidden = false;
+    document.getElementById('coll-title-input').value = '';
+    document.getElementById('coll-desc-input').value = '';
+    document.getElementById('coll-title-clear').classList.remove('is-visible');
+    document.getElementById('create-error').hidden = true;
+    setTimeout(function() { document.getElementById('coll-title-input').focus(); }, 50);
+  }
+  function closeCreateStep() {
+    document.getElementById('modal-view-create').hidden = true;
+    document.getElementById('modal-view-save').hidden = false;
+    document.getElementById('create-error').hidden = true;
+  }
+  function onTitleInput(input) {
+    document.getElementById('coll-title-clear').classList.toggle('is-visible', input.value.length > 0);
+    if (input.value.trim()) document.getElementById('create-error').hidden = true;
+  }
+  function clearTitleInput() {
+    var input = document.getElementById('coll-title-input');
+    input.value = '';
+    document.getElementById('coll-title-clear').classList.remove('is-visible');
+    input.focus();
+  }
+  function onValidateCreate() {
+    var title = document.getElementById('coll-title-input').value.trim();
+    if (!title) {
+      document.getElementById('create-error').hidden = false;
+      document.getElementById('coll-title-input').focus();
+      return;
+    }
+    var desc = document.getElementById('coll-desc-input').value.trim();
+    _createdCollections.push({ title: title, desc: desc, selected: true });
+    closeCreateStep();
+    renderModalCollections();
+    document.getElementById('modal-validate-save').hidden = false;
+  }
+  var SVG_IMG_PLACEHOLDER = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none">'
+    + '<rect x="3" y="3" width="18" height="18" rx="2" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>'
+    + '<circle cx="8.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.7)"/>'
+    + '<path d="M21 15l-5-5L9 17" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
+    + '</svg>';
+
+  function _collThumbHtml(coll) {
+    if (coll.firstAssetImg) {
+      return '<div class="modal__coll-item__thumb"><img src="' + coll.firstAssetImg + '" alt=""/></div>';
+    }
+    return '<div class="modal__coll-item__thumb">' + SVG_IMG_PLACEHOLDER + '</div>';
+  }
+
+  var SVG_CHECK_SM = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var SVG_CHECK_GREEN = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var SVG_WARN = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" fill="currentColor"/><line x1="12" y1="9" x2="12" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.5" r="0.7" fill="white"/></svg>';
+  var SVG_ARROW = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="12 5 19 12 12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function _collItemHtml(coll, type, idx) {
+    var cls = 'modal__coll-item';
+    var right = '';
+    var onclick = '';
+    var st = coll.status || (coll.selected ? 'selected' : 'default');
+
+    if (st === 'selected') {
+      cls += ' modal__coll-item--selected';
+      right = '<div class="modal__coll-item__check">' + SVG_CHECK_SM + '</div>';
+      onclick = 'onclick="toggleColl(\'' + type + '\',' + idx + ')"';
+    } else if (st === 'default') {
+      right = '<div class="modal__coll-item__check--empty"></div>';
+      onclick = 'onclick="toggleColl(\'' + type + '\',' + idx + ')"';
+    } else if (st === 'already') {
+      cls += ' modal__coll-item--already';
+      right = '<div class="modal__coll-badge modal__coll-badge--added">' + SVG_CHECK_GREEN + ' Already added</div>'
+        + '<a href="collection.html" class="modal__coll-see" onclick="closeSaveModal()">' + SVG_ARROW + ' See collection</a>';
+    } else if (st === 'full') {
+      cls += ' modal__coll-item--full';
+      right = '<div class="modal__coll-badge modal__coll-badge--full">' + SVG_WARN + ' Collection full</div>'
+        + '<a href="collection.html" class="modal__coll-see" onclick="closeSaveModal()">' + SVG_ARROW + ' See collection</a>';
+    }
+
+    return '<button class="' + cls + '" type="button" ' + onclick + '>'
+      + _collThumbHtml(coll)
+      + '<div class="modal__coll-item__info">'
+      +   '<span class="modal__coll-item__name">' + coll.title + '</span>'
+      +   '<span class="modal__coll-item__count">Assets (' + (coll.count || 0) + ')</span>'
+      + '</div>'
+      + right
+      + '</button>';
+  }
+
+  function toggleColl(type, idx) {
+    if (type === 'created') {
+      _createdCollections[idx].selected = !_createdCollections[idx].selected;
+    } else {
+      var c = _demoCollections[idx];
+      if (c.status === 'default') c.status = 'selected';
+      else if (c.status === 'selected') c.status = 'default';
+    }
+    renderModalCollections();
+    _syncValidateBtn();
+  }
+
+  function _syncValidateBtn() {
+    var anySelected = _createdCollections.some(function(c) { return c.selected; })
+      || _demoCollections.some(function(c) { return c.status === 'selected'; });
+    document.getElementById('modal-validate-save').hidden = !anySelected;
+  }
+
+  function renderModalCollections() {
+    var list = document.getElementById('modal-coll-list');
+    var html = '';
+    _createdCollections.forEach(function(coll, idx) {
+      var st = coll.selected ? 'selected' : 'default';
+      html += _collItemHtml({ title: coll.title, count: 0, status: st }, 'created', idx);
+    });
+    _demoCollections.forEach(function(coll, idx) {
+      html += _collItemHtml(coll, 'demo', idx);
+    });
+    list.innerHTML = html;
+  }
+
+  function onValidateSave() {
+    if (_saveModalTriggerBtn) {
+      _saveModalTriggerBtn.classList.add('is-saved');
+      var tip = _saveModalTriggerBtn.querySelector('.tooltip');
+      if (tip) tip.textContent = 'See saved collection';
+      _saveModalTriggerBtn.setAttribute('aria-label', 'See saved collection');
+    }
+    var selectedColl = _createdCollections.find(function(c) { return c.selected; })
+      || _demoCollections.find(function(c) { return c.status === 'selected'; });
+    var collName = selectedColl ? selectedColl.title : 'collection';
+    var collDesc = selectedColl ? (selectedColl.desc || '') : '';
+    /* Get asset title from the detail page */
+    var assetTitle = (document.querySelector('.detail-title') || {}).textContent || '';
+    try {
+      sessionStorage.setItem('savedCollection', JSON.stringify({
+        title: collName,
+        desc: collDesc,
+        asset: assetTitle.trim() ? { title: assetTitle.trim() } : null
+      }));
+    } catch(e) {}
+    closeSaveModal();
+    showSnackbar(collName);
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('save-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeSaveModal();
+    });
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && !document.getElementById('save-modal').hidden) closeSaveModal();
+  });
+
+  /* ── Snackbar ──────────────────────────────────────────────────── */
+  var _snackbarTimer = null;
+  function showSnackbar(collName) {
+    var sb = document.getElementById('snackbar');
+    document.getElementById('snackbar-text').innerHTML = 'Asset added in<br>' + collName;
+    document.getElementById('snackbar-see-link').href = 'collection.html';
+    sb.hidden = false;
+    sb.offsetHeight;
+    sb.classList.add('is-visible');
+    if (_snackbarTimer) clearTimeout(_snackbarTimer);
+    _snackbarTimer = setTimeout(closeSnackbar, 3000);
+  }
+  function closeSnackbar() {
+    var sb = document.getElementById('snackbar');
+    sb.classList.remove('is-visible');
+    setTimeout(function() { sb.hidden = true; }, 300);
+    if (_snackbarTimer) { clearTimeout(_snackbarTimer); _snackbarTimer = null; }
+  }
+
+  /* ── Rendition chip toggle ─────────────────────────────────────── */
+  document.querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('chip--active'); });
+      chip.classList.add('chip--active');
+    });
+  });
+</script>
+
+<!-- ══ SAVE-TO-COLLECTION MODAL ══════════════════════════════════════════ -->
+<div id="save-modal" class="modal-overlay" hidden role="dialog" aria-modal="true">
+
+  <!-- ── View 1 & 3: Save to collection ──────────────────────────────── -->
+  <div class="modal" id="modal-view-save">
+    <div class="modal__header-row">
+      <button class="modal__close-btn" type="button" onclick="closeSaveModal()" aria-label="Close">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <h2 class="modal__title">Save to collection</h2>
+    <div class="modal__body">
+      <div class="modal__preview">
+        <svg viewBox="0 0 320 213" fill="none">
+          <rect width="320" height="213" fill="#e8e6f0"/>
+          <polygon points="60,175 165,68 270,175" fill="#3b3768" opacity="0.65"/>
+          <polygon points="30,175 115,105 200,175" fill="#9896b8" opacity="0.55"/>
+          <circle cx="220" cy="72" r="14" fill="#c9a830"/>
+        </svg>
+      </div>
+      <button class="modal__create-card" type="button" onclick="showCreateStep()">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+          <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="12" y1="11" x2="12" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="9" y1="14" x2="15" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="modal__create-card__label">Create a new collection</span>
+      </button>
+      <div class="modal__coll-list" id="modal-coll-list"></div>
+    </div>
+    <div class="modal__footer">
+      <button class="modal__btn-close" type="button" onclick="closeSaveModal()">Close</button>
+      <button class="modal__btn-validate" id="modal-validate-save" type="button" onclick="onValidateSave()" hidden>Validate</button>
+    </div>
+  </div>
+
+  <!-- ── View 2: Create a new collection ─────────────────────────────── -->
+  <div class="modal" id="modal-view-create" hidden>
+    <div class="modal__header-row">
+      <button class="modal__close-btn" type="button" onclick="closeCreateStep()" aria-label="Close">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <h2 class="modal__title">Create a new collection</h2>
+    <div class="modal__body">
+      <div class="modal__preview">
+        <svg viewBox="0 0 320 213" fill="none">
+          <rect width="320" height="213" fill="#e8e6f0"/>
+          <polygon points="60,175 165,68 270,175" fill="#3b3768" opacity="0.65"/>
+          <polygon points="30,175 115,105 200,175" fill="#9896b8" opacity="0.55"/>
+          <circle cx="220" cy="72" r="14" fill="#c9a830"/>
+        </svg>
+      </div>
+      <div id="create-error" class="modal__error" hidden>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" fill="#BA1F1A"/>
+          <line x1="12" y1="9" x2="12" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="17" x2="12.01" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Please name your collection title.
+      </div>
+      <div class="modal__form">
+        <div class="modal__field">
+          <label class="modal__field-label" for="coll-title-input">Collection title</label>
+          <div class="modal__input-wrap">
+            <input class="modal__input" id="coll-title-input" type="text"
+              placeholder="Collection title" autocomplete="off"
+              oninput="onTitleInput(this)"/>
+            <button class="modal__input-clear" id="coll-title-clear" type="button"
+              aria-label="Clear" onclick="clearTitleInput()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="modal__field">
+          <label class="modal__field-label" for="coll-desc-input">
+            Description <span class="modal__field-label--opt">(optional)</span>
+          </label>
+          <textarea class="modal__textarea" id="coll-desc-input"
+            placeholder="Description of the collection"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="modal__btn-close" type="button" onclick="closeCreateStep()">Close</button>
+      <button class="modal__btn-validate" type="button" onclick="onValidateCreate()">Validate</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ SNACKBAR ══════════════════════════════════════════════════════════ -->
+<div id="snackbar" class="snackbar" hidden role="status" aria-live="polite">
+  <svg class="snackbar__icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="12" fill="#117846"/>
+    <polyline points="7,12.5 10.5,16 17,9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="snackbar__content">
+    <span id="snackbar-text">Asset added in</span>
+  </div>
+  <a href="collection.html" id="snackbar-see-link" class="snackbar__link">See collection</a>
+  <button class="snackbar__close" type="button" onclick="closeSnackbar()" aria-label="Close">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+</body>
+</html>

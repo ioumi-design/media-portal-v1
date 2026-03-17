@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Summer Promotion – Accor Media Portal</title>
+  <meta name="viewport" content="width=1440" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design tokens ──────────────────────────────────────────────── */
+    :root {
+      --color-surface:               #ffffff;
+      --color-surface-container-low: #ffffff;
+      --color-surface-container-mid: #f7f9fb;
+      --color-on-surface-hi:         #252339;
+      --color-on-surface-mid:        #38364d;
+      --color-on-surface-low:        #5e5b73;
+      --color-outline-low:           #dadadd;
+      --color-outline-hi:            #8b8a93;
+      --color-accent:                #068484;
+      --color-primary:               #1e1852;
+      --color-on-primary:            #f9f9ff;
+      --color-danger:                #be003c;
+      --color-link:                  #0051ae;
+      --font-display: 'Montserrat', sans-serif;
+      --font-body:    'Roboto', sans-serif;
+      --font-label:   'Roboto', sans-serif;
+      --br-surface:   6px;
+      --br-full:      100px;
+      --grid-margin:  64px;
+      --header-h:     80px;
+      --footer-h:     48px;
+    }
+
+    /* ── Reset ──────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font-body);
+      background: var(--color-surface-container-low);
+      color: var(--color-on-surface-hi);
+      min-width: 1440px;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; background: none; border: none; }
+
+    /* ── Page shell ─────────────────────────────────────────────────── */
+    .page {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────── */
+    .site-header {
+      flex-shrink: 0;
+      background: var(--color-surface-container-low);
+      border-bottom: 1px solid var(--color-outline-low);
+      height: var(--header-h);
+      position: relative;
+      z-index: 100;
+    }
+    .site-header__inner {
+      max-width: 1440px;
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 var(--grid-margin);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .brand:hover .brand__name { text-decoration: none; }
+    .brand__logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 56px;
+      height: 46px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .brand__monogramme { width: 22px; height: auto; }
+    .brand__typogramme { width: 44px; height: auto; margin-top: 4px; }
+    .brand__name {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 40px;
+      letter-spacing: 0.5px;
+      color: var(--color-primary);
+      white-space: nowrap;
+    }
+    .site-header__right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 100%;
+    }
+    .site-nav {
+      display: flex;
+      height: 100%;
+      align-items: stretch;
+      gap: 20px;
+    }
+    .site-nav__tab {
+      display: flex;
+      align-items: center;
+      padding: 12px 4px;
+      font-family: var(--font-label);
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-on-surface-hi);
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 120ms;
+    }
+    .site-nav__tab:hover { color: var(--color-accent); }
+    .header-icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 100%;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--color-on-surface-hi);
+      cursor: pointer;
+      transition: color 120ms;
+      padding: 8px;
+    }
+    .header-icon-btn:hover { color: var(--color-accent); }
+    .header-icon-btn--active {
+      border-bottom: 4px solid var(--color-accent);
+      color: var(--color-on-surface-hi);
+    }
+    .header-cart-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 58px;
+      height: 100%;
+      background: none;
+      border: none;
+      color: var(--color-on-surface-hi);
+      cursor: pointer;
+      transition: color 120ms;
+    }
+    .header-cart-btn:hover { color: var(--color-accent); }
+    .cart-badge {
+      position: absolute;
+      top: 12px; right: 8px;
+      width: 18px; height: 18px;
+      background: var(--color-accent);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-user {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 24px 12px 20px;
+      background: none;
+      border: none;
+      border-radius: 60px;
+      font-size: 16px;
+      color: var(--color-on-surface-hi);
+      cursor: pointer;
+      transition: background 120ms;
+    }
+    .header-user:hover { background: rgba(6,132,132,.08); }
+    .header-user__avatar { position: relative; width: 24px; height: 24px; flex-shrink: 0; }
+    .header-user__avatar-dot {
+      position: absolute; top: 0; right: 0;
+      width: 6px; height: 6px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      border: 1px solid #fff;
+    }
+
+    /* ── Account popover ─────────────────────────────────────────────── */
+    .account-popover {
+      position: absolute;
+      top: 80px;
+      right: 64px;
+      width: 375px;
+      background: var(--color-surface);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.16), 0 2px 8px rgba(0,0,0,.08);
+      z-index: 200;
+      padding: 20px;
+    }
+    .account-popover[hidden] { display: none; }
+    .accp__inner { display: flex; flex-direction: column; gap: 0; }
+    .accp__close-row { display: flex; justify-content: flex-end; height: 40px; }
+    .accp__close {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; border-radius: 40px;
+      color: var(--color-on-surface-hi); cursor: pointer;
+      margin-right: -8px; margin-top: -8px;
+    }
+    .accp__close:hover { background: rgba(0,0,0,.06); }
+    .accp__greeting {
+      font-family: var(--font-label); font-weight: 500;
+      font-size: 18px; line-height: 24px;
+      color: var(--color-on-surface-hi); margin-bottom: 8px;
+    }
+    .accp__name {
+      font-family: var(--font-label); font-weight: 500;
+      font-size: 20px; line-height: 28px;
+      color: var(--color-on-surface-hi);
+      display: flex; gap: 4px; padding-bottom: 16px;
+    }
+    .accp__sep { height: 1px; background: var(--color-outline-low); }
+    .accp__list { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
+    .accp__item {
+      display: flex; align-items: center; gap: 8px;
+      height: 24px; cursor: pointer;
+      color: #232136; text-decoration: none;
+      font-family: var(--font-body); font-size: 16px; line-height: 24px;
+    }
+    .accp__item:hover { text-decoration: underline; color: #232136; }
+    .accp__item svg { flex-shrink: 0; }
+    .accp__actions { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; }
+    .accp__link {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: none; padding: 0;
+      font-family: var(--font-body); font-size: 14px; line-height: 20px;
+      color: var(--color-on-surface-hi); cursor: pointer; text-align: left;
+    }
+    .accp__link:hover { text-decoration: underline; color: #232136; }
+
+    /* ── Scrollable body ─────────────────────────────────────────────── */
+    .page-body {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Breadcrumb ──────────────────────────────────────────────────── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px var(--grid-margin);
+      flex-shrink: 0;
+    }
+    .breadcrumb__link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--color-link);
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: text-decoration 120ms;
+    }
+    .breadcrumb__link:hover { text-decoration: underline; }
+
+    /* ── Main content ────────────────────────────────────────────────── */
+    .coll-main {
+      flex: 1;
+      padding: 36px var(--grid-margin);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── Top: title + actions ────────────────────────────────────────── */
+    .coll-top {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .coll-title-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .coll-title {
+      flex: 1;
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 40px;
+      letter-spacing: 0.5px;
+      color: var(--color-on-surface-hi);
+    }
+    .coll-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .btn-icon-circle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 100px;
+      border: 1px solid var(--color-primary);
+      color: var(--color-primary);
+      background: none;
+      cursor: pointer;
+      transition: background 120ms, color 120ms;
+      flex-shrink: 0;
+    }
+    .btn-icon-circle:hover { background: rgba(30,24,82,.06); }
+    .btn-icon-circle--danger {
+      border-color: var(--color-danger);
+      color: var(--color-danger);
+    }
+    .btn-icon-circle--danger:hover { background: rgba(190,0,60,.06); }
+
+    /* ── Asset count ─────────────────────────────────────────────────── */
+    .coll-count {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-on-surface-low);
+    }
+
+    /* ── Description ─────────────────────────────────────────────────── */
+    .coll-desc {
+      position: relative;
+    }
+    .coll-desc__text {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-on-surface-mid);
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .coll-desc__text.is-expanded {
+      -webkit-line-clamp: unset;
+      display: block;
+    }
+    .coll-desc__toggle {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+      margin-top: 4px;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-link);
+      background: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .coll-desc__toggle:hover { text-decoration: underline; }
+
+    /* ── Asset section ───────────────────────────────────────────────── */
+    .coll-assets {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    /* ── Empty state ─────────────────────────────────────────────────── */
+    .coll-assets-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 44px 0;
+    }
+    .coll-assets-empty[hidden] { display: none; }
+    .coll-assets-empty__img {
+      width: 280px;
+      height: auto;
+    }
+    .coll-assets-empty__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 32px;
+      letter-spacing: 0.5px;
+      color: var(--color-on-surface-hi);
+      text-align: center;
+    }
+    .coll-assets-empty__cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--color-accent);
+      color: #fff;
+      font-size: 16px;
+      line-height: 24px;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 120ms;
+    }
+    .coll-assets-empty__cta:hover { background: #046f6f; }
+
+    /* Disabled top-right action buttons */
+    .btn-icon-circle.is-disabled {
+      opacity: 0.38;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    /* ── Action bar ──────────────────────────────────────────────────── */
+    .asset-action-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .btn-asset-action {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 16px;
+      border-radius: var(--br-full);
+      border: 1px solid var(--color-primary);
+      font-family: var(--font-label);
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-primary);
+      background: none;
+      cursor: pointer;
+      transition: background 120ms, opacity 120ms;
+      white-space: nowrap;
+    }
+    .btn-asset-action:hover:not(.is-disabled) { background: rgba(30,24,82,.06); }
+    .btn-asset-action.is-disabled {
+      opacity: 0.38;
+      cursor: default;
+      pointer-events: none;
+    }
+    .btn-asset-action--danger {
+      border-color: var(--color-danger);
+      color: var(--color-danger);
+    }
+    .btn-asset-action--danger:hover:not(.is-disabled) { background: rgba(190,0,60,.06); }
+
+    /* "Select all" button: border + checkmark icon */
+    .btn-asset-action--select-all {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    /* Selection counter */
+    .select-counter-sep {
+      width: 1px;
+      height: 24px;
+      background: var(--color-outline-low);
+      flex-shrink: 0;
+    }
+    .select-counter {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-on-surface-low);
+      white-space: nowrap;
+    }
+
+    /* ── Asset card grid ─────────────────────────────────────────────── */
+    .asset-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .asset-row {
+      display: flex;
+      gap: 24px;
+    }
+    .asset-card {
+      width: 309px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .asset-card__thumb {
+      width: 100%;
+      aspect-ratio: 309 / 213;
+      border-radius: var(--br-surface);
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .asset-card__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Checkbox overlay (select mode) */
+    .asset-card__checkbox {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      border: 1.5px solid var(--color-outline-hi);
+      background: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,.15);
+      cursor: pointer;
+      transition: background 120ms, border-color 120ms;
+    }
+    .select-mode .asset-card__checkbox { display: flex; }
+    .asset-card.is-selected .asset-card__checkbox {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+    .asset-card.is-selected .asset-card__checkbox::after {
+      content: '';
+      width: 10px;
+      height: 6px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+    .asset-card__body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .asset-card__title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .asset-card__title {
+      flex: 1;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      letter-spacing: 0.5px;
+      color: var(--color-on-surface-hi);
+      height: 48px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      cursor: pointer;
+    }
+    .asset-card__title:hover { text-decoration: underline; }
+    .asset-card__menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 100px;
+      border: none;
+      background: none;
+      color: var(--color-on-surface-hi);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 120ms;
+      position: relative;
+    }
+    .asset-card__menu-btn:hover { background: rgba(30,24,82,.06); }
+
+    /* Card context menu */
+    .card-ctx-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      min-width: 220px;
+      background: var(--color-surface-container-low);
+      border-radius: var(--br-surface);
+      box-shadow: 0 8px 16px rgba(0,0,0,.05);
+      z-index: 50;
+      overflow: hidden;
+    }
+    .card-ctx-menu__item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      padding: 12px 16px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-on-surface-mid);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: background 120ms;
+    }
+    .card-ctx-menu__item:hover { background: rgba(6,132,132,.08); }
+    .card-ctx-menu__item--danger {
+      color: var(--color-danger);
+    }
+    .card-ctx-menu__item--danger:hover { background: rgba(186,31,26,.06); }
+
+    /* "See asset details" link */
+    .asset-card__link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-link);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-family: var(--font-body);
+    }
+    .asset-card__link:hover { text-decoration: underline; }
+
+    /* ── Footer ─────────────────────────────────────────────────────── */
+    .site-footer {
+      flex-shrink: 0;
+      height: var(--footer-h);
+      background: var(--color-surface-container-low);
+      box-shadow: 0 -2px 6px rgba(7,5,24,.05);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--grid-margin);
+    }
+    .site-footer__copy {
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--color-on-surface-low);
+    }
+
+    /* ── Hover on icon-btn same as secondary ────────────────────────── */
+    .btn-icon-circle:hover,
+    .header-icon-btn:hover,
+    .header-cart-btn:hover,
+    .header-user:hover {
+      background: rgba(6,132,132,.08);
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ HEADER ══════════════════════════════════════════════════════════ -->
+  <header class="site-header" style="position:relative;">
+    <div class="site-header__inner">
+
+      <!-- Brand → Homepage -->
+      <a href="index.html" class="brand" aria-label="Accor Media Portal – Home">
+        <div class="brand__logo" aria-hidden="true">
+          <svg class="brand__monogramme" viewBox="0 0 22.1544 22.9087" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.1544 22.5631H16.6763L12.6522 14.5159C10.4492 15.6575 9.20085 18.3211 6.98317 20.0686C5.8523 20.9565 4.51582 21.7598 2.87092 22.2953C2.12191 22.5349 0.844171 22.8591 0.374199 22.9013C0.168587 22.9154 0.0364077 22.9154 0.00703446 22.845C-0.0223387 22.7886 0.0364083 22.7463 0.256707 22.6477C0.50638 22.5349 1.50507 22.1403 2.13659 21.7175C2.92967 21.1961 3.37027 20.6183 3.41433 20.1814C3.19403 19.4485 1.65193 17.8278 3.23809 14.8542C3.79618 13.7831 4.29552 13.0221 4.648 12.2469C5.04454 11.3591 5.33827 10.1048 5.42639 9.17463C5.42639 9.11826 5.44108 9.11826 5.47045 9.14645C6.23415 9.89338 9.21553 12.8248 8.77493 15.742C9.75894 15.3756 11.4773 14.2763 12.2703 13.6844C13.1075 13.0643 13.6509 12.4161 14.5321 12.402C15.3252 12.3879 15.3986 12.7543 16.0154 12.8388C16.177 12.8529 16.3973 12.8248 16.5148 12.7684C16.5588 12.7402 16.5441 12.6979 16.4854 12.6838C15.6189 12.4865 15.4133 11.8101 14.3118 11.8101C13.3131 11.8101 12.52 12.6838 11.9472 13.0502L9.1421 7.42708C7.96717 5.07353 8.31965 3.36826 10.9045 0L22.1544 22.5631Z" fill="#1E1852"/>
+          </svg>
+          <svg class="brand__typogramme" viewBox="0 0 43.7808 5.87684" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M43.7808 5.70772L41.8715 3.52329C42.8849 3.2978 43.487 2.74816 43.487 1.77574C43.487 0.690565 42.5177 0.140931 41.2987 0.140931H37.4802V5.70772H38.4936V3.60784H40.77L42.5177 5.70772H43.7808ZM38.4936 1.01471H41.3281C42.033 1.01471 42.4443 1.32475 42.4443 1.86029C42.4443 2.39583 42.0037 2.74816 41.3281 2.74816H38.4936V1.01471Z" fill="#1E1852"/>
+            <path d="M2.99607 0.155025L0 5.72181H1.14556L1.77708 4.48162H5.18437L5.81589 5.72181H6.99082L3.99476 0.155025H2.99607ZM2.23236 3.60784L3.49541 1.16973L4.75846 3.60784H2.23236Z" fill="#1E1852"/>
+            <path d="M12.3661 0.873774C13.3207 0.873774 14.0991 1.21201 14.5104 1.83211L15.3328 1.31066C14.76 0.53554 13.7467 0.014094 12.3661 0.014094C10.1484 0.014094 8.87071 1.40932 8.87071 2.94547C8.87071 4.48162 10.1484 5.87684 12.3661 5.87684C13.7467 5.87684 14.76 5.3413 15.3328 4.58027L14.5104 4.05882C14.1138 4.66483 13.3207 5.01716 12.3661 5.01716C10.8681 5.01716 9.91345 4.21385 9.91345 2.95956C9.89877 1.69118 10.8681 0.873774 12.3661 0.873774Z" fill="#1E1852"/>
+            <path d="M21.5746 0.873774C22.5292 0.873774 23.3076 1.21201 23.7189 1.83211L24.5413 1.31066C23.9685 0.53554 22.9552 0.014094 21.5746 0.014094C19.3569 0.014094 18.0792 1.40932 18.0792 2.94547C18.0792 4.48162 19.3569 5.87684 21.5746 5.87684C22.9552 5.87684 23.9685 5.3413 24.5413 4.58027L23.7189 4.05882C23.3223 4.66483 22.5292 5.01716 21.5746 5.01716C20.0766 5.01716 19.122 4.21385 19.122 2.95956C19.1073 1.69118 20.0766 0.873774 21.5746 0.873774Z" fill="#1E1852"/>
+            <path d="M30.7831 0C28.5654 0 27.2877 1.39522 27.2877 2.93137C27.2877 4.46752 28.5654 5.86274 30.7831 5.86274C33.0008 5.86274 34.2785 4.46752 34.2785 2.93137C34.2785 1.39522 33.0008 0 30.7831 0ZM30.7831 4.98897C29.2851 4.98897 28.3304 4.18566 28.3304 2.93137C28.3304 1.67708 29.2998 0.873774 30.7831 0.873774C32.2811 0.873774 33.2358 1.67708 33.2358 2.93137C33.2505 4.18566 32.2811 4.98897 30.7831 4.98897Z" fill="#1E1852"/>
+          </svg>
+        </div>
+        <span class="brand__name">Media Portal</span>
+      </a>
+
+      <!-- Right: tabs + cart + account -->
+      <div class="site-header__right">
+        <nav class="site-nav" aria-label="Main navigation">
+          <button class="site-nav__tab" type="button" onclick="location.href='index.html'">Home</button>
+        </nav>
+
+        <!-- Collections icon tab – ACTIVE (filled heart + green underline) -->
+        <button class="header-icon-btn header-icon-btn--active" type="button"
+                aria-label="My Collections" aria-current="page"
+                onclick="location.href='hub-collection.html'">
+          <svg width="24" height="24" viewBox="0 0 18 18.0072" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.4305 1.69007C14.6078 -0.306183 11.7822 -0.537633 9.7281 1.01501C9.46772 1.20788 9.21698 1.43933 8.98553 1.69007C8.75409 1.43933 8.50335 1.20788 8.24297 1.01501C6.18886 -0.527989 3.36325 -0.306183 1.54058 1.69007C-0.513528 3.9467 -0.513528 7.59202 1.54058 9.84865L8.98553 18.0072L16.4305 9.84865C18.5232 7.55345 18.5232 3.90812 16.4305 1.69007Z" fill="currentColor"/>
+          </svg>
+        </button>
+
+        <!-- Cart -->
+        <button class="header-cart-btn" type="button" aria-label="Cart (99 items)">
+          <svg width="24" height="24" viewBox="0 0 19.5 19.6547" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6073 17.9404C7.6336 17.9404 7.65492 17.9191 7.65492 17.8928C7.65492 17.8665 7.6336 17.8452 7.6073 17.8452C7.581 17.8452 7.55968 17.8665 7.55968 17.8928C7.55968 17.9191 7.581 17.9404 7.6073 17.9404ZM5.84539 17.8928C5.84539 16.9197 6.63422 16.1309 7.6073 16.1309C8.58037 16.1309 9.3692 16.9197 9.3692 17.8928C9.3692 18.8659 8.58037 19.6547 7.6073 19.6547C6.63422 19.6547 5.84539 18.8659 5.84539 17.8928Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1785 17.9404C16.2048 17.9404 16.2261 17.9191 16.2261 17.8928C16.2261 17.8665 16.2048 17.8452 16.1785 17.8452C16.1522 17.8452 16.1309 17.8665 16.1309 17.8928C16.1309 17.9191 16.1522 17.9404 16.1785 17.9404ZM14.4166 17.8928C14.4166 16.9197 15.2054 16.1309 16.1785 16.1309C17.1516 16.1309 17.9404 16.9197 17.9404 17.8928C17.9404 18.8659 17.1516 19.6547 16.1785 19.6547C15.2054 19.6547 14.4166 18.8659 14.4166 17.8928Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0.75C0 0.335786 0.335786 0 0.75 0H4.02273C4.38267 0 4.69186 0.255707 4.7594 0.609254L5.46179 4.28561H18.75C18.9724 4.28561 19.1834 4.38434 19.3259 4.55511C19.4684 4.72589 19.5277 4.95111 19.4879 5.16994L18.1788 12.3612L18.1778 12.3666C18.0718 12.9257 17.7802 13.435 17.3455 13.8016C16.9121 14.1671 16.3647 14.3662 15.7978 14.3568H7.85858C7.29169 14.3662 6.74423 14.1671 6.31085 13.8016C5.87631 13.4351 5.58476 12.926 5.47867 12.3671L4.1112 5.20964C4.10612 5.18825 4.10196 5.16651 4.09875 5.14446L3.40245 1.5H0.75C0.335786 1.5 0 1.16421 0 0.75ZM5.74838 5.78561L6.95233 12.0872C6.99595 12.3173 7.11421 12.5169 7.27786 12.6549C7.44068 12.7922 7.63866 12.861 7.83676 12.857L7.85182 12.8568H15.8045L15.8196 12.857C16.0177 12.861 16.2157 12.7922 16.3785 12.6549C16.5416 12.5174 16.6596 12.3186 16.7036 12.0895L16.704 12.0872L17.8511 5.78561H5.74838Z" fill="currentColor"/>
+          </svg>
+          <span class="cart-badge" aria-hidden="true">99</span>
+        </button>
+
+        <!-- Account button -->
+        <button class="header-user" type="button" aria-label="User menu" aria-expanded="false" id="account-btn" onclick="toggleAccountPopover()">
+          <div class="header-user__avatar" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7788 0.437173C10.9036 0.153369 9.96973 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18C13.9706 18 18 13.9706 18 9C18 8.03027 17.8466 7.09636 17.5628 6.22121C17.0976 6.3935 16.5962 6.4911 16.073 6.49942C16.3495 7.28153 16.5 8.12319 16.5 9C16.5 11.1673 15.5807 13.12 14.1107 14.4892C13.9844 14.0735 13.8658 13.7296 13.7416 13.4525C13.5892 13.1127 13.3957 12.7968 13.0951 12.5732C12.7807 12.3393 12.4425 12.2753 12.1515 12.2549C11.97 12.2422 11.7454 12.245 11.5262 12.2477C11.4355 12.2489 11.3455 12.25 11.26 12.25H6.74002C6.65456 12.25 6.56477 12.2489 6.47407 12.2477C6.25483 12.245 6.03005 12.2422 5.84849 12.2549C5.55751 12.2753 5.21936 12.3393 4.90491 12.5732C4.60432 12.7968 4.41084 13.1127 4.25848 13.4525C4.13421 13.7296 4.01567 14.0735 3.88933 14.4892C2.41934 13.12 1.5 11.1674 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C9.87681 1.5 10.7185 1.65046 11.5006 1.92697C11.5089 1.40383 11.6065 0.902377 11.7788 0.437173ZM12.8298 15.4498C11.7088 16.1169 10.3991 16.5 9 16.5C7.60087 16.5 6.29122 16.1169 5.17024 15.4498L5.24017 15.2095C5.39911 14.6631 5.51968 14.306 5.62719 14.0662C5.73537 13.8249 5.79814 13.7782 5.80013 13.7768L5.80107 13.7762C5.80107 13.7762 5.80539 13.7741 5.8143 13.7714C5.83412 13.7655 5.87462 13.7568 5.95342 13.7513C6.07262 13.7429 6.19616 13.7446 6.37109 13.747C6.47336 13.7483 6.5932 13.75 6.74002 13.75H11.26C11.4068 13.75 11.5267 13.7483 11.629 13.747C11.8039 13.7446 11.9274 13.7429 12.0466 13.7513C12.1254 13.7568 12.1659 13.7655 12.1857 13.7714C12.1946 13.7741 12.199 13.7762 12.1999 13.7768C12.2019 13.7782 12.2647 13.8249 12.3729 14.0662C12.4804 14.306 12.6009 14.6631 12.7599 15.2095L12.8298 15.4498Z" fill="#1E1852"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3.25C6.92893 3.25 5.25 4.92893 5.25 7C5.25 9.07107 6.92893 10.75 9 10.75C11.0711 10.75 12.75 9.07107 12.75 7C12.75 4.92893 11.0711 3.25 9 3.25ZM6.75 7C6.75 5.75736 7.75736 4.75 9 4.75C10.2426 4.75 11.25 5.75736 11.25 7C11.25 8.24264 10.2426 9.25 9 9.25C7.75736 9.25 6.75 8.24264 6.75 7Z" fill="#1E1852"/>
+            </svg>
+            <span class="header-user__avatar-dot"></span>
+          </div>
+          <span>Steven PICARD</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Account popover -->
+    <div class="account-popover" id="account-popover" hidden>
+      <div class="accp__inner">
+        <div class="accp__close-row">
+          <button class="accp__close" type="button" aria-label="Close menu" onclick="toggleAccountPopover()">
+            <svg width="16" height="16" viewBox="0 0 15.5 15.5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.2803 1.28033C15.5732 0.987437 15.5732 0.512563 15.2803 0.21967C14.9874 -0.0732233 14.5126 -0.0732233 14.2197 0.21967L7.75 6.68934L1.28033 0.21967C0.987437 -0.0732233 0.512564 -0.0732233 0.219671 0.21967C-0.0732227 0.512563 -0.0732227 0.987437 0.219671 1.28033L6.68934 7.75L0.21967 14.2197C-0.0732233 14.5126 -0.0732234 14.9874 0.21967 15.2803C0.512562 15.5732 0.987437 15.5732 1.28033 15.2803L7.75 8.81066L14.2197 15.2803C14.5126 15.5732 14.9874 15.5732 15.2803 15.2803C15.5732 14.9874 15.5732 14.5126 15.2803 14.2197L8.81066 7.75L15.2803 1.28033Z" fill="currentColor"/></svg>
+          </button>
+        </div>
+        <p class="accp__greeting">Hello,</p>
+        <div class="accp__name"><span>Steven</span><span>PICARD</span></div>
+        <div class="accp__sep"></div>
+        <div class="accp__list">
+          <a href="hub-collection.html" class="accp__item">
+            <svg width="24" height="24" viewBox="0 0 18 18.0072" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.4305 1.69007C14.6078 -0.306183 11.7822 -0.537633 9.7281 1.01501C9.46772 1.20788 9.21698 1.43933 8.98553 1.69007C8.75409 1.43933 8.50335 1.20788 8.24297 1.01501C6.18886 -0.527989 3.36325 -0.306183 1.54058 1.69007C-0.513528 3.9467 -0.513528 7.59202 1.54058 9.84865L8.98553 18.0072L16.4305 9.84865C18.5232 7.55345 18.5232 3.90812 16.4305 1.69007ZM15.36 8.86499L8.98553 15.847L2.61104 8.86499C1.0584 7.1677 1.0584 4.37102 2.61104 2.67373C4.09617 1.05358 6.42995 1.05358 7.90544 2.67373L8.97589 3.85026L10.0463 2.67373C11.5315 1.05358 13.8653 1.05358 15.3407 2.67373V2.69301C16.8934 4.34209 16.9223 7.12912 15.3215 8.87464L15.36 8.86499Z" fill="currentColor"/></svg>
+            Collections
+          </a>
+          <a href="#" class="accp__item">
+            <svg width="24" height="24" viewBox="0 0 18 18" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 9C16.5 13.1421 13.1421 16.5 9 16.5C4.85786 16.5 1.5 13.1421 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C13.1421 1.5 16.5 4.85786 16.5 9ZM9 18C13.9706 18 18 13.9706 18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18ZM9.75 4C9.75 3.58579 9.41421 3.25 9 3.25C8.58579 3.25 8.25 3.58579 8.25 4V9.40139L11.584 11.624C11.9286 11.8538 12.3943 11.7607 12.624 11.416C12.8538 11.0714 12.7607 10.6057 12.416 10.376L9.75 8.59861V4Z" fill="currentColor"/></svg>
+            Download history
+          </a>
+          <a href="#" class="accp__item">
+            <svg width="24" height="24" viewBox="0 0 18 15.9429" fill="none"><path d="M17.2286 11.3143H9.68914C9.32914 9.55543 7.776 8.22857 5.91429 8.22857C4.05257 8.22857 2.48914 9.55543 2.13943 11.3143H0.771429C0.349714 11.3143 0 11.664 0 12.0857C0 12.5074 0.349714 12.8571 0.771429 12.8571H2.13943C2.49943 14.616 4.05257 15.9429 5.91429 15.9429C7.776 15.9429 9.33943 14.616 9.68914 12.8571H17.2286C17.6503 12.8571 18 12.5074 18 12.0857C18 11.664 17.6503 11.3143 17.2286 11.3143ZM5.91429 14.4C4.63886 14.4 3.6 13.3611 3.6 12.0857C3.6 10.8103 4.63886 9.77143 5.91429 9.77143C7.18971 9.77143 8.22857 10.8103 8.22857 12.0857C8.22857 13.3611 7.18971 14.4 5.91429 14.4ZM0.771429 4.62857H8.31086C8.67086 6.38743 10.224 7.71429 12.0857 7.71429C13.9474 7.71429 15.5109 6.38743 15.8606 4.62857H17.2286C17.6503 4.62857 18 4.27886 18 3.85714C18 3.43543 17.6503 3.08571 17.2286 3.08571H15.8606C15.5006 1.32686 13.9474 0 12.0857 0C10.224 0 8.66057 1.32686 8.31086 3.08571H0.771429C0.349714 3.08571 0 3.43543 0 3.85714C0 4.27886 0.349714 4.62857 0.771429 4.62857ZM12.0857 1.54286C13.3611 1.54286 14.4 2.58171 14.4 3.85714C14.4 5.13257 13.3611 6.17143 12.0857 6.17143C10.8103 6.17143 9.77143 5.13257 9.77143 3.85714C9.77143 2.58171 10.8103 1.54286 12.0857 1.54286Z" fill="currentColor"/></svg>
+            Saved filters
+          </a>
+        </div>
+        <div class="accp__sep"></div>
+        <div class="accp__actions">
+          <button class="accp__link" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z" fill="currentColor"/></svg>
+            Afficher en français
+          </button>
+          <button class="accp__link" type="button">
+            Support
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ SCROLLABLE BODY ══════════════════════════════════════════════════ -->
+  <div class="page-body">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <button class="breadcrumb__link" type="button" onclick="location.href='hub-collection.html'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to collections
+      </button>
+    </nav>
+
+    <!-- Main content -->
+    <main class="coll-main">
+
+      <!-- Title + icon actions -->
+      <div class="coll-top">
+        <div class="coll-title-row">
+          <h1 class="coll-title">Summer promotion (Title of the collection)</h1>
+          <div class="coll-actions">
+            <!-- Email / Share -->
+            <button class="btn-icon-circle" id="btn-share" type="button" aria-label="Share via email" title="Share via email">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <!-- Upload / Download collection -->
+            <button class="btn-icon-circle" id="btn-download-coll" type="button" aria-label="Download collection" title="Download collection">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <!-- Edit -->
+            <button class="btn-icon-circle" type="button" aria-label="Edit collection" title="Edit collection">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <!-- Delete (danger) -->
+            <button class="btn-icon-circle btn-icon-circle--danger" type="button" aria-label="Delete collection" title="Delete collection">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Asset count -->
+        <p class="coll-count" id="asset-count">7 assets</p>
+
+        <!-- Description -->
+        <div class="coll-desc">
+          <div class="coll-desc__text" id="desc-text">
+            Description 380 characters max, gnorare et iusserim novo inusitato haec quid ut maiestati postulat inusitato recalcitrantes haec tumore haec inusitato.
+            Augustae inusitato incusat iratus quodam iusserim per quodam et quodam quodam dissimulantem Augustae quodam dissimulantem quid recalcitrantes tumore haec quid rerum nos et maiestati incusat strepit iusserim.
+          </div>
+          <button class="coll-desc__toggle" id="desc-toggle" type="button" onclick="toggleDesc()">
+            Show more
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Assets -->
+      <div class="coll-assets">
+        <!-- Action bar (content swapped via JS on select mode toggle) -->
+        <div class="asset-action-bar" id="action-bar"></div>
+
+        <!-- Empty state (shown when ASSETS.length === 0) -->
+        <div class="coll-assets-empty" id="coll-assets-empty" hidden>
+          <img src="assets/empty-collection-assets.png" alt="No assets illustration" class="coll-assets-empty__img"/>
+          <p class="coll-assets-empty__title">You have no asset here yet...</p>
+          <button class="coll-assets-empty__cta" type="button" onclick="location.href='index.html'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Find assets
+          </button>
+        </div>
+
+        <!-- Card grid -->
+        <div class="asset-grid" id="asset-grid"></div>
+      </div>
+
+    </main>
+
+    </div><!-- /page-body -->
+
+  <!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <p class="site-footer__copy">© 2026 Accor Media Portal</p>
+  </footer>
+
+</div><!-- /page -->
+
+<script>
+/* ── Account popover ─────────────────────────────────────────────────── */
+function toggleAccountPopover() {
+  var popover = document.getElementById('account-popover');
+  var btn = document.getElementById('account-btn');
+  var isOpen = !popover.hidden;
+  popover.hidden = isOpen;
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
+document.addEventListener('click', function(e) {
+  var popover = document.getElementById('account-popover');
+  var btn = document.getElementById('account-btn');
+  if (!popover.hidden && !popover.contains(e.target) && !btn.contains(e.target)) {
+    popover.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+  }
+});
+
+/* ── Description toggle ──────────────────────────────────────────────── */
+function toggleDesc() {
+  var text   = document.getElementById('desc-text');
+  var toggle = document.getElementById('desc-toggle');
+  var expanded = text.classList.toggle('is-expanded');
+  toggle.innerHTML = expanded
+    ? 'Show less <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 15l-6-6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    : 'Show more <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+
+function updateDescToggleVisibility() {
+  var text   = document.getElementById('desc-text');
+  var toggle = document.getElementById('desc-toggle');
+  if (!text || !toggle) return;
+  /* scrollHeight > clientHeight means text is clamped/overflowing */
+  if (text.scrollHeight > text.clientHeight + 2) {
+    toggle.hidden = false;
+  } else {
+    toggle.hidden = true;
+    /* If text was previously expanded and we hide the toggle, collapse it back */
+    text.classList.remove('is-expanded');
+  }
+}
+
+/* ── Action bar render ───────────────────────────────────────────────── */
+var SVG_MAIL     = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var SVG_DOWNLOAD = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var SVG_TRASH    = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var SVG_CHECK    = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var SVG_CLOSE    = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function renderActionBar(selectedCount) {
+  var bar = document.getElementById('action-bar');
+  var total = ASSETS.length;
+  var disabled = selectedCount === 0 ? ' is-disabled' : '';
+
+  if (!selectMode) {
+    bar.innerHTML =
+      '<button class="btn-asset-action" type="button" onclick="enterSelectMode()">Select</button>' +
+      '<button class="btn-asset-action is-disabled" type="button">' + SVG_MAIL + ' Share</button>' +
+      '<button class="btn-asset-action is-disabled" type="button">' + SVG_DOWNLOAD + ' Download</button>' +
+      '<button class="btn-asset-action btn-asset-action--danger is-disabled" type="button">' + SVG_TRASH + ' Remove</button>';
+  } else {
+    bar.innerHTML =
+      '<button class="btn-asset-action" type="button" onclick="exitSelectMode()">' + SVG_CLOSE + ' Cancel</button>' +
+      '<button class="btn-asset-action btn-asset-action--select-all" type="button" onclick="selectAll()">' + SVG_CHECK + ' Select all</button>' +
+      '<button class="btn-asset-action' + disabled + '" type="button">' + SVG_MAIL + ' Share</button>' +
+      '<button class="btn-asset-action' + disabled + '" type="button">' + SVG_DOWNLOAD + ' Download</button>' +
+      '<button class="btn-asset-action btn-asset-action--danger' + disabled + '" type="button">' + SVG_TRASH + ' Remove</button>' +
+      '<div class="select-counter-sep"></div>' +
+      '<span class="select-counter">' + selectedCount + ' / ' + total + ' selected</span>';
+  }
+}
+
+/* ── Select mode ─────────────────────────────────────────────────────── */
+var selectMode = false;
+
+function enterSelectMode() {
+  selectMode = true;
+  document.getElementById('asset-grid').classList.add('select-mode');
+  renderActionBar(0);
+}
+
+function exitSelectMode() {
+  selectMode = false;
+  document.getElementById('asset-grid').classList.remove('select-mode');
+  document.querySelectorAll('.asset-card.is-selected').forEach(function(c) {
+    c.classList.remove('is-selected');
+  });
+  renderActionBar(0);
+}
+
+function selectAll() {
+  document.querySelectorAll('.asset-card').forEach(function(c) {
+    c.classList.add('is-selected');
+  });
+  renderActionBar(ASSETS.length);
+}
+
+function toggleCardSelect(card) {
+  if (!selectMode) return;
+  card.classList.toggle('is-selected');
+  var count = document.querySelectorAll('.asset-card.is-selected').length;
+  renderActionBar(count);
+}
+
+/* ── Card context menus ──────────────────────────────────────────────── */
+function toggleCardMenu(cardId, btn) {
+  var menu = document.getElementById('cm-' + cardId);
+  var isOpen = !menu.hidden;
+  document.querySelectorAll('.card-ctx-menu').forEach(function(m) { m.hidden = true; });
+  menu.hidden = isOpen;
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.asset-card__menu-btn')) {
+    document.querySelectorAll('.card-ctx-menu').forEach(function(m) { m.hidden = true; });
+  }
+});
+
+/* ── Asset card data & render ────────────────────────────────────────── */
+var ASSET_COLORS = ['#C5D8E8','#D8C5E8','#C5E8D8','#E8D8C5','#C5C5E8','#E8C5D8','#D8E8C5'];
+/* Start empty to demo the empty state; populated via demoFillAssets() */
+var ASSETS = [];
+var ASSETS_DEMO = [
+  { id: 'a1', title: 'Grand Hotel Paris – Exterior Facade at Dusk' },
+  { id: 'a2', title: 'Sofitel Lyon Bellecour – Lobby Interior' },
+  { id: 'a3', title: 'Novotel Berlin Mitte – Standard Room' },
+  { id: 'a4', title: 'Mercure Bordeaux – Rooftop Terrace' },
+  { id: 'a5', title: 'ibis Paris Gare de Lyon – Reception Area' },
+  { id: 'a6', title: 'Pullman Paris Tour Eiffel – Restaurant' },
+  { id: 'a7', title: 'Swissôtel Kolkata – Swimming Pool' },
+];
+
+function makeThumb(i) {
+  var bg = ASSET_COLORS[i % ASSET_COLORS.length];
+  return (
+    '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 309 213" preserveAspectRatio="xMidYMid slice">' +
+      '<rect width="309" height="213" fill="' + bg + '"/>' +
+      '<g opacity="0.5">' +
+        '<polygon points="80,160 140,80 200,160" fill="#e8e8f0"/>' +
+        '<polygon points="120,160 170,100 220,160" fill="#c8c8d8"/>' +
+        '<circle cx="155" cy="60" r="10" fill="#f0c050"/>' +
+      '</g>' +
+    '</svg>'
+  );
+}
+
+function buildCard(asset, i) {
+  return (
+    '<div class="asset-card" id="card-' + asset.id + '" onclick="handleCardClick(this, event)">' +
+      '<div class="asset-card__thumb">' +
+        makeThumb(i) +
+        '<div class="asset-card__checkbox" aria-hidden="true"></div>' +
+      '</div>' +
+      '<div class="asset-card__body">' +
+        '<div class="asset-card__title-row">' +
+          '<span class="asset-card__title" onclick="if(!selectMode)location.href=\'asset-detail.html\'">' + asset.title + '</span>' +
+          '<div style="position:relative;flex-shrink:0;">' +
+            '<button class="asset-card__menu-btn" type="button" aria-label="Options for ' + asset.title + '" aria-expanded="false" onclick="event.stopPropagation();toggleCardMenu(\'' + asset.id + '\',this)">' +
+              '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>' +
+            '</button>' +
+            '<div class="card-ctx-menu" id="cm-' + asset.id + '" hidden>' +
+              '<button class="card-ctx-menu__item" type="button">' +
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                'Copy Media URL' +
+              '</button>' +
+              '<button class="card-ctx-menu__item" type="button">' +
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                'Share via mail' +
+              '</button>' +
+              '<button class="card-ctx-menu__item" type="button">' +
+                '<svg width="24" height="24" viewBox="0 0 11.5918 11.5137" fill="none"><path d="M8.907 2.469H8.876C8.72 1.769 8.33 1.142 7.77.693 7.21.245 6.514 0 5.796 0c-.718 0-1.414.245-1.974.693-.56.449-.95 1.076-1.106 1.776H2.685c-.347-.014-.694.041-1.019.164-.325.123-.622.31-.873.55-.25.241-.45.529-.586.849C.07 4.353 0 4.697 0 5.045c0 .347.07.691.206 1.011.137.32.336.609.587.849.25.241.547.428.872.552.325.122.672.178 1.019.164H4.463V6.731H2.685c-.229.012-.458-.023-.673-.103-.215-.08-.411-.202-.577-.359-.166-.158-.298-.348-.388-.558-.09-.21-.137-.437-.137-.666 0-.23.046-.456.137-.666.09-.21.222-.4.388-.558.166-.158.362-.28.577-.36.215-.079.444-.114.673-.102H3.503L3.538 2.954C3.588 2.389 3.848 1.864 4.266 1.482 4.684 1.1 5.23.887 5.796.887c.566 0 1.112.212 1.53.595.418.382.677.907.728 1.472L8.088 3.358H8.907c.229-.012.458.023.673.103.215.08.411.202.577.36.166.157.298.347.389.558.09.21.136.436.136.666 0 .229-.046.456-.136.666-.09.21-.223.4-.389.558-.166.157-.362.279-.577.359-.215.079-.444.114-.673.102H7.129V7.62H8.907c.347.015.694-.041 1.019-.164.325-.123.622-.31.873-.55.25-.24.45-.529.586-.849.136-.32.206-.664.206-1.011 0-.348-.07-.692-.206-1.011-.136-.32-.336-.609-.586-.85-.251-.24-.548-.427-.873-.55-.325-.123-.672-.178-1.019-.164z" fill="currentColor"/><path d="M8.351 8.531c-.083-.083-.196-.13-.313-.13s-.23.047-.313.13L6.24 10.016V4.505c0-.118-.047-.23-.13-.314-.084-.083-.197-.13-.314-.13-.118 0-.23.047-.314.13-.083.084-.13.196-.13.314v5.511L3.867 8.531c-.083-.083-.196-.13-.314-.13-.117 0-.23.047-.313.13-.042.042-.075.091-.097.145-.023.054-.035.112-.035.171 0 .059.012.117.035.171.022.054.055.103.097.145l2.222 2.222c.042.044.092.078.147.102.043.015.088.024.133.026h.053c.06.001.119-.011.173-.036.025-.013.049-.028.071-.045.025-.015.049-.031.071-.049l2.222-2.244c.08-.08.126-.187.129-.3.004-.113-.036-.223-.111-.308z" fill="currentColor"/></svg>' +
+                'Download' +
+              '</button>' +
+              '<button class="card-ctx-menu__item card-ctx-menu__item--danger" type="button">' +
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+                'Remove' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<button class="asset-card__link" type="button" onclick="location.href=\'asset-detail.html\'">' +
+          'See asset details' +
+          '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M12 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '</button>' +
+      '</div>' +
+    '</div>'
+  );
+}
+
+function handleCardClick(card, e) {
+  if (e.target.closest('.asset-card__menu-btn') || e.target.closest('.card-ctx-menu') || e.target.closest('.asset-card__link') || e.target.closest('.asset-card__title')) return;
+  if (selectMode) toggleCardSelect(card);
+}
+
+function renderAssets() {
+  var grid      = document.getElementById('asset-grid');
+  var emptyEl   = document.getElementById('coll-assets-empty');
+  var actionBar = document.getElementById('action-bar');
+  var btnShare  = document.getElementById('btn-share');
+  var btnDl     = document.getElementById('btn-download-coll');
+  var isEmpty   = ASSETS.length === 0;
+
+  document.getElementById('asset-count').textContent = ASSETS.length + ' assets';
+
+  /* Disable share/download when empty, enable otherwise */
+  btnShare.classList.toggle('is-disabled', isEmpty);
+  btnDl.classList.toggle('is-disabled', isEmpty);
+
+  if (isEmpty) {
+    emptyEl.hidden = false;
+    grid.innerHTML = '';
+    actionBar.innerHTML = '';
+  } else {
+    emptyEl.hidden = true;
+    var html = '';
+    var cols = 4;
+    var rows = Math.ceil(ASSETS.length / cols);
+    for (var r = 0; r < rows; r++) {
+      html += '<div class="asset-row">';
+      for (var c = 0; c < cols; c++) {
+        var idx = r * cols + c;
+        if (idx < ASSETS.length) html += buildCard(ASSETS[idx], idx);
+      }
+      html += '</div>';
+    }
+    grid.innerHTML = html;
+    renderActionBar(0);
+  }
+}
+
+/* Demo helper: "Find assets" CTA on this page links to index.html,
+   but you can also call this to populate assets for testing */
+function demoFillAssets() {
+  ASSETS = ASSETS_DEMO.slice();
+  renderAssets();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  /* ── Load collection data from sessionStorage (navigated via "See collection") ── */
+  try {
+    var saved = sessionStorage.getItem('savedCollection');
+    if (saved) {
+      var data = JSON.parse(saved);
+      sessionStorage.removeItem('savedCollection');
+
+      /* Update collection title */
+      if (data.title) {
+        document.querySelector('.coll-title').textContent = data.title;
+        document.title = data.title + ' – Accor Media Portal';
+      }
+
+      /* Update description */
+      var descText = document.getElementById('desc-text');
+      var descWrap = document.querySelector('.coll-desc');
+      if (data.desc && data.desc.trim()) {
+        descText.textContent = data.desc;
+        descWrap.style.display = '';
+      } else {
+        descWrap.style.display = 'none';
+      }
+      /* Reset toggle state when desc is replaced */
+      descText.classList.remove('is-expanded');
+      var dt = document.getElementById('desc-toggle');
+      if (dt) dt.innerHTML = 'Show more <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+      /* Add saved asset */
+      if (data.asset && data.asset.title) {
+        var id = 'saved-' + Date.now();
+        ASSETS = [{ id: id, title: data.asset.title }];
+      } else {
+        ASSETS = [];
+      }
+    }
+  } catch(e) {}
+
+  renderAssets();
+  updateDescToggleVisibility();
+  window.addEventListener('resize', updateDescToggleVisibility);
+});
+</script>
+</body>
+</html>
