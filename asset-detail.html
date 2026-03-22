@@ -530,8 +530,14 @@
     .modal__textarea:focus { border-color: var(--color-primary); }
     .modal__coll-list {
       display: flex; flex-direction: column;
-      width: 100%; overflow: hidden;
+      width: 100%; overflow-y: auto;
+      max-height: 260px;
       border: 1px solid #DADADD; border-radius: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: #c8c6d4 transparent;
+    }
+    .modal__coll-list::-webkit-scrollbar { width: 4px; }
+    .modal__coll-list::-webkit-scrollbar-thumb { background: #c8c6d4; border-radius: 2px; }
     }
     .modal__coll-item {
       display: flex; align-items: center; gap: 20px;
@@ -944,15 +950,22 @@
     document.getElementById('modal-validate-save').hidden = true;
     document.getElementById('save-modal').hidden = false;
     document.body.style.overflow = 'hidden';
-    /* Mark collections that already contain this asset and sort them to top */
-    DB.getCollections().then(function(cols) {
+    /* Load collections + assets to resolve thumbnails; already-added collections go first */
+    Promise.all([DB.getCollections(), DB.getAssets()]).then(function(results) {
+      var cols   = results[0];
+      var assets = results[1];
       var assetId = _currentAssetId;
       var already = [];
       var others  = [];
       cols.forEach(function(c) {
-        var hasAsset = assetId && c.assetIds && c.assetIds.indexOf(assetId) >= 0;
-        var item = { id: c.id, title: c.title, count: c.assetIds ? c.assetIds.length : 0,
-                     _status: hasAsset ? 'already' : 'default' };
+        var hasAsset   = assetId && c.assetIds && c.assetIds.indexOf(assetId) >= 0;
+        var firstAsset = c.assetIds && c.assetIds[0]
+          ? assets.find(function(a) { return a.id === c.assetIds[0]; }) : null;
+        var item = {
+          id: c.id, title: c.title, count: c.assetIds ? c.assetIds.length : 0,
+          thumbnailUrl: firstAsset ? firstAsset.thumbnail : null,
+          _status: hasAsset ? 'already' : 'default'
+        };
         if (hasAsset) already.push(item); else others.push(item);
       });
       _dbCollections = already.concat(others);
@@ -1007,8 +1020,8 @@
     + '</svg>';
 
   function _collThumbHtml(coll) {
-    if (coll.firstAssetImg) {
-      return '<div class="modal__coll-item__thumb"><img src="' + coll.firstAssetImg + '" alt=""/></div>';
+    if (coll.thumbnailUrl) {
+      return '<div class="modal__coll-item__thumb"><img src="' + coll.thumbnailUrl + '" alt="" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>';
     }
     return '<div class="modal__coll-item__thumb">' + SVG_IMG_PLACEHOLDER + '</div>';
   }
@@ -1078,7 +1091,7 @@
       html += _collItemHtml({ title: coll.title, count: 0, status: coll.selected ? 'selected' : 'default' }, 'created', idx);
     });
     _dbCollections.forEach(function(coll, idx) {
-      html += _collItemHtml({ id: coll.id, title: coll.title, count: coll.count, status: coll._status }, 'db', idx);
+      html += _collItemHtml({ id: coll.id, title: coll.title, count: coll.count, status: coll._status, thumbnailUrl: coll.thumbnailUrl || null }, 'db', idx);
     });
     list.innerHTML = html;
   }
