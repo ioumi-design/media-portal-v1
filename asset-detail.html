@@ -410,8 +410,13 @@
       display: flex;
       justify-content: flex-end;
       gap: 16px;
-      padding-top: 20px;
+      padding: 16px 24px;
       flex-shrink: 0;
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      border-top: 1px solid #E5E7EB;
+      margin-top: auto;
     }
     .modal__btn-close {
       padding: 12px 16px;
@@ -538,10 +543,9 @@
     }
     .modal__coll-list::-webkit-scrollbar { width: 4px; }
     .modal__coll-list::-webkit-scrollbar-thumb { background: #c8c6d4; border-radius: 2px; }
-    }
     .modal__coll-item {
-      display: flex; align-items: center; gap: 20px;
-      width: 100%; padding: 16px; box-sizing: border-box;
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; padding: 12px 16px; box-sizing: border-box;
       background: #fff;
       border: none; border-bottom: 1px solid #DADADD;
       cursor: pointer; text-align: left; transition: background 120ms;
@@ -550,11 +554,11 @@
     .modal__coll-item:not(.modal__coll-item--selected):not(.modal__coll-item--already):not(.modal__coll-item--full):hover { background: #F5F5F6; }
     .modal__coll-item .modal__coll-item__check--empty { visibility: hidden; }
     .modal__coll-item:hover .modal__coll-item__check--empty { visibility: visible; }
-    .modal__coll-item--selected { background: #EFF8F8; }
-    .modal__coll-item--selected:hover { background: #e0f2f2; }
-    .modal__coll-item--already,
+    .modal__coll-item--selected { background: #F0FAF9; }
+    .modal__coll-item--selected:hover { background: #e5f5f3; }
+    .modal__coll-item--already { background: #F0FAF9; cursor: default; }
     .modal__coll-item--full { cursor: default; }
-    .modal__coll-item--already:hover,
+    .modal__coll-item--already:hover { background: #F0FAF9; }
     .modal__coll-item--full:hover { background: #F5F5F6; }
     .modal__coll-item--already .modal__coll-badge,
     .modal__coll-item--full   .modal__coll-badge { display: flex; }
@@ -565,33 +569,33 @@
     .modal__coll-item--already:hover .modal__coll-see,
     .modal__coll-item--full:hover   .modal__coll-see   { display: flex; }
     .modal__coll-item__thumb {
-      width: 60px; height: 60px; flex-shrink: 0;
-      background: #6F6E77; border-radius: 2px;
+      width: 48px; height: 48px; flex-shrink: 0;
+      background: #6F6E77; border-radius: 4px;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden; border: 1px solid #DADADD;
     }
     .modal__coll-item__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .modal__coll-item__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
     .modal__coll-item__name {
-      font-size: 18px; font-weight: 500; line-height: 24px; letter-spacing: 0;
-      color: #252339; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: 0;
+      color: #1B2A4A; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
-    .modal__coll-item__count { font-size: 14px; line-height: 20px; color: #6F6E77; }
+    .modal__coll-item__count { font-size: 13px; line-height: 18px; color: #6B7280; }
     .modal__coll-item__check {
-      width: 18px; height: 18px; flex-shrink: 0;
-      background: var(--color-accent); border-radius: 3px;
+      width: 20px; height: 20px; flex-shrink: 0;
+      background: #007A6E; border-radius: 3px;
       display: flex; align-items: center; justify-content: center;
     }
     .modal__coll-item__check--empty {
-      width: 18px; height: 18px; flex-shrink: 0;
-      border: 1.5px solid #6F6E77; border-radius: 3px; box-sizing: border-box;
+      width: 20px; height: 20px; flex-shrink: 0;
+      border: 1.5px solid #E5E7EB; border-radius: 3px; box-sizing: border-box;
     }
     .modal__coll-badge {
       display: flex; align-items: center; gap: 4px;
       font-size: 12px; line-height: 16px; white-space: nowrap; flex-shrink: 0;
       padding: 3px 10px; border-radius: 100px;
     }
-    .modal__coll-badge--added { color: #117846; background: #E6F3EB; }
+    .modal__coll-badge--added { color: #007A6E; background: #E6F3F1; font-size: 13px; }
     .modal__coll-badge--full  { color: #C66000; background: #FFF3E0; }
     .modal__coll-see {
       display: flex; align-items: center; gap: 4px;
