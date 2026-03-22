@@ -1761,7 +1761,7 @@
         <a href="asset-detail.html?id=${d.id}" class="asset-card__image-link" aria-label="View ${d.title} details">
           <div class="asset-card__image">${imgContent}</div>
         </a>
-        <button class="asset-card__fav" type="button" aria-label="Save to collection" onclick="event.preventDefault();event.stopPropagation();toggleFav(this)">
+        <button class="asset-card__fav" type="button" aria-label="Save to collection" data-thumbnail="${d.thumbnail || ''}" onclick="event.preventDefault();event.stopPropagation();toggleFav(this)">
           ${ICON_HEART_OUTLINE}${ICON_HEART_FILLED}
           <span class="tooltip">Save to collection</span>
         </button>
@@ -2017,6 +2017,7 @@
 
 <script>
   var _saveModalTriggerBtn = null;
+  var _saveModalThumbnail = '';
   var _createdCollections = [];
 
   /* Demo existing collections shown in the save modal */
@@ -2026,8 +2027,16 @@
     { title: 'Winter campaign 2024-25', count: 100, status: 'full'    }
   ];
 
+  function _setModalPreviews(thumbnailUrl) {
+    var svgFallback = '<svg viewBox="0 0 320 213" fill="none"><rect width="320" height="213" fill="#e8e6f0"/><polygon points="60,175 165,68 270,175" fill="#3b3768" opacity="0.65"/><polygon points="30,175 115,105 200,175" fill="#9896b8" opacity="0.55"/><circle cx="220" cy="72" r="14" fill="#c9a830"/></svg>';
+    var content = thumbnailUrl
+      ? '<img src="' + thumbnailUrl + '" alt="" style="width:100%;height:100%;object-fit:cover;">'
+      : svgFallback;
+    document.querySelectorAll('.modal__preview').forEach(function(el) { el.innerHTML = content; });
+  }
   function openSaveModal(triggerBtn) {
     _saveModalTriggerBtn = triggerBtn || null;
+    _saveModalThumbnail = (triggerBtn && triggerBtn.dataset.thumbnail) || '';
     _createdCollections = [];
     /* Reset demo collections to their original statuses */
     _demoCollections[0].status = 'default';
@@ -2035,6 +2044,7 @@
     document.getElementById('modal-view-create').hidden = true;
     document.getElementById('modal-validate-save').hidden = true;
     renderModalCollections();
+    _setModalPreviews(_saveModalThumbnail);
     document.getElementById('save-modal').hidden = false;
     document.body.style.overflow = 'hidden';
   }
@@ -2045,6 +2055,7 @@
   function showCreateStep() {
     document.getElementById('modal-view-save').hidden = true;
     document.getElementById('modal-view-create').hidden = false;
+    _setModalPreviews(_saveModalThumbnail);
     document.getElementById('coll-title-input').value = '';
     document.getElementById('coll-desc-input').value = '';
     document.getElementById('coll-title-clear').classList.remove('is-visible');
