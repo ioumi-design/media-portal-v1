@@ -173,8 +173,8 @@ window.ScenarioManager = {
     // No collections
     localStorage.setItem('mp_collections', JSON.stringify([]));
 
-    // Empty cart and favorites
-    localStorage.setItem('mp_cart', JSON.stringify([]));
+    // Empty cart (sessionStorage) and favorites
+    sessionStorage.setItem('mp_cart', JSON.stringify([]));
     localStorage.setItem('mp_favorites', JSON.stringify([]));
 
     // Set search state to "summer"
@@ -202,6 +202,7 @@ window.ScenarioManager = {
 
     localStorage.setItem('mp_collections', JSON.stringify(allCollections));
     localStorage.setItem('mp_scenario', '2');
+    sessionStorage.setItem('mp_cart', JSON.stringify([]));
     localStorage.removeItem('mp_initial_search');
 
     alert('✅ Scenario 2 loaded!\n5 collections ready (including from Scenario 1).\nRedirecting to homepage...');
@@ -217,6 +218,7 @@ window.ScenarioManager = {
     ['mp_collections','mp_cart','mp_favorites','mp_favs','mp_scenario','mp_initial_search'].forEach(function(k) {
       localStorage.removeItem(k);
     });
+    sessionStorage.removeItem('mp_cart');
     window.location.href = 'index.html';
   }
 };

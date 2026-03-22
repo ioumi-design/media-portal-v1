@@ -551,15 +551,15 @@
       cursor: pointer; text-align: left; transition: background 120ms;
     }
     .modal__coll-list > :last-child { border-bottom: none; }
-    .modal__coll-item:not(.modal__coll-item--selected):not(.modal__coll-item--already):not(.modal__coll-item--full):hover { background: #F5F5F6; }
+    .modal__coll-item:not(.modal__coll-item--selected):not(.modal__coll-item--already):not(.modal__coll-item--full):hover { background: #F9FAFB; }
     .modal__coll-item .modal__coll-item__check--empty { visibility: hidden; }
     .modal__coll-item:hover .modal__coll-item__check--empty { visibility: visible; }
     .modal__coll-item--selected { background: #F0FAF9; }
     .modal__coll-item--selected:hover { background: #e5f5f3; }
-    .modal__coll-item--already { background: #F0FAF9; cursor: default; }
-    .modal__coll-item--full { cursor: default; }
-    .modal__coll-item--already:hover { background: #F0FAF9; }
-    .modal__coll-item--full:hover { background: #F5F5F6; }
+    .modal__coll-item--already { background: #F0FAF9; cursor: pointer; }
+    .modal__coll-item--full { cursor: pointer; }
+    .modal__coll-item--already:hover { background: #e5f5f3; }
+    .modal__coll-item--full:hover { background: #F9FAFB; }
     .modal__coll-item--already .modal__coll-badge,
     .modal__coll-item--full   .modal__coll-badge { display: flex; }
     .modal__coll-item--already .modal__coll-see,
@@ -659,13 +659,13 @@
         </button>
 
         <!-- Cart -->
-        <button class="header-cart-btn" type="button" aria-label="Cart (99 items)" onclick="MP.cart.open()">
+        <button class="header-cart-btn" type="button" aria-label="Cart" onclick="MP.cart.open()">
           <svg width="24" height="24" viewBox="0 0 19.5 19.6547" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6073 17.9404C7.6336 17.9404 7.65492 17.9191 7.65492 17.8928C7.65492 17.8665 7.6336 17.8452 7.6073 17.8452C7.581 17.8452 7.55968 17.8665 7.55968 17.8928C7.55968 17.9191 7.581 17.9404 7.6073 17.9404ZM5.84539 17.8928C5.84539 16.9197 6.63422 16.1309 7.6073 16.1309C8.58037 16.1309 9.3692 16.9197 9.3692 17.8928C9.3692 18.8659 8.58037 19.6547 7.6073 19.6547C6.63422 19.6547 5.84539 18.8659 5.84539 17.8928Z" fill="currentColor"/>
             <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1785 17.9404C16.2048 17.9404 16.2261 17.9191 16.2261 17.8928C16.2261 17.8665 16.2048 17.8452 16.1785 17.8452C16.1522 17.8452 16.1309 17.8665 16.1309 17.8928C16.1309 17.9191 16.1522 17.9404 16.1785 17.9404ZM14.4166 17.8928C14.4166 16.9197 15.2054 16.1309 16.1785 16.1309C17.1516 16.1309 17.9404 16.9197 17.9404 17.8928C17.9404 18.8659 17.1516 19.6547 16.1785 19.6547C15.2054 19.6547 14.4166 18.8659 14.4166 17.8928Z" fill="currentColor"/>
             <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0.75C0 0.335786 0.335786 0 0.75 0H4.02273C4.38267 0 4.69186 0.255707 4.7594 0.609254L5.46179 4.28561H18.75C18.9724 4.28561 19.1834 4.38434 19.3259 4.55511C19.4684 4.72589 19.5277 4.95111 19.4879 5.16994L18.1788 12.3612L18.1778 12.3666C18.0718 12.9257 17.7802 13.435 17.3455 13.8016C16.9121 14.1671 16.3647 14.3662 15.7978 14.3568H7.85858C7.29169 14.3662 6.74423 14.1671 6.31085 13.8016C5.87631 13.4351 5.58476 12.926 5.47867 12.3671V12.3671L4.1112 5.20964C4.10612 5.18825 4.10196 5.16651 4.09875 5.14446L3.40245 1.5H0.75C0.335786 1.5 0 1.16421 0 0.75ZM5.74838 5.78561L6.95233 12.0872C6.99595 12.3173 7.11421 12.5169 7.27786 12.6549C7.44068 12.7922 7.63866 12.861 7.83676 12.857L7.85182 12.8568H15.8045L15.8196 12.857C16.0177 12.861 16.2157 12.7922 16.3785 12.6549C16.5416 12.5174 16.6596 12.3186 16.7036 12.0895L16.704 12.0872L17.8511 5.78561H5.74838Z" fill="currentColor"/>
           </svg>
-          <span class="cart-badge" aria-hidden="true">99</span>
+          <span class="cart-badge" aria-hidden="true">0</span>
         </button>
 
         <!-- Account -->
@@ -931,9 +931,9 @@
 
 </div><!-- /.page -->
 
-<script src="js/scenario-database.js?v=1"></script>
-<script src="js/db.js?v=2"></script>
-<script src="components/components.js?v=7"></script>
+<script src="js/scenario-database.js?v=2"></script>
+<script src="js/db.js?v=3"></script>
+<script src="components/components.js?v=8"></script>
 <script>
 
   var _currentAssetId = null; /* set on DOMContentLoaded */
@@ -1072,13 +1072,15 @@
     } else if (st === 'already') {
       cls += ' modal__coll-item--already';
       var destAlready = coll.id ? 'collection.html?id=' + coll.id : 'collection.html';
+      onclick = 'onclick="closeSaveModal();location.href=\'' + destAlready + '\'"';
       right = '<div class="modal__coll-badge modal__coll-badge--added">' + SVG_CHECK_GREEN + ' Already added</div>'
-        + '<a href="' + destAlready + '" class="modal__coll-see" onclick="closeSaveModal()">' + SVG_ARROW + ' See collection</a>';
+        + '<span class="modal__coll-see">' + SVG_ARROW + ' See collection</span>';
     } else if (st === 'full') {
       cls += ' modal__coll-item--full';
       var destFull = coll.id ? 'collection.html?id=' + coll.id : 'collection.html';
+      onclick = 'onclick="closeSaveModal();location.href=\'' + destFull + '\'"';
       right = '<div class="modal__coll-badge modal__coll-badge--full">' + SVG_WARN + ' Collection full</div>'
-        + '<a href="' + destFull + '" class="modal__coll-see" onclick="closeSaveModal()">' + SVG_ARROW + ' See collection</a>';
+        + '<span class="modal__coll-see">' + SVG_ARROW + ' See collection</span>';
     }
 
     return '<button class="' + cls + '" type="button" ' + onclick + '>'

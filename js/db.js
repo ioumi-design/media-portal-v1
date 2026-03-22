@@ -34,11 +34,12 @@
   function _saveCollections(cols) {
     try { localStorage.setItem(LS_COLLECTIONS, JSON.stringify(cols)); } catch (e) {}
   }
+  // Cart uses sessionStorage so it resets automatically each browser session/tab
   function _getCart() {
-    try { return JSON.parse(localStorage.getItem(LS_CART) || '[]'); } catch (e) { return []; }
+    try { return JSON.parse(sessionStorage.getItem(LS_CART) || '[]'); } catch (e) { return []; }
   }
   function _saveCart(ids) {
-    try { localStorage.setItem(LS_CART, JSON.stringify(ids)); } catch (e) {}
+    try { sessionStorage.setItem(LS_CART, JSON.stringify(ids)); } catch (e) {}
   }
   function _getFavs() {
     try { return JSON.parse(localStorage.getItem(LS_FAVS) || '[]'); } catch (e) { return []; }

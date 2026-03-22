@@ -492,15 +492,29 @@
   };
 
   /* ── Cart modal ─────────────────────────────────────────────────────────── */
-  var _cartItems = [
-    { id: 'ci1', name: 'Sofitel Paris – Pool view.jpg',        type: 'Image',    size: '11.3 MB', color: '#e8e4f0' },
-    { id: 'ci2', name: 'Novotel Brand Guidelines 2024.pdf',    type: 'Document', size: '4.2 MB',  color: '#e4eaf0' },
-    { id: 'ci3', name: 'Mercure Hotels – Grand Lobby.jpg',     type: 'Image',    size: '8.7 MB',  color: '#dff0e4' },
-    { id: 'ci4', name: 'ibis Summer Campaign 2024.mp4',        type: 'Video',    size: '124 MB',  color: '#f0ebe4' },
-  ];
+  // Cart uses sessionStorage (same key as db.js) — auto-cleared each new tab/session
+  var SS_CART_KEY = 'mp_cart';
+  var _cartItems = [];
+
+  function _lsGetCart() {
+    try { return JSON.parse(sessionStorage.getItem(SS_CART_KEY) || '[]'); } catch (e) { return []; }
+  }
+  function _lsSaveCart(ids) {
+    try { sessionStorage.setItem(SS_CART_KEY, JSON.stringify(ids)); } catch (e) {}
+  }
+
+  function _initCart() {
+    // sessionStorage is empty on every new tab/session — no manual clearing needed.
+    // Also clear any stale localStorage cart data left from old code.
+    try { localStorage.removeItem('mp_cart'); } catch (e) {}
+    var ids = _lsGetCart();
+    _cartItems = ids.map(function(id) {
+      return { id: id, name: id, type: 'Asset', size: '', color: '#e8e4f0' };
+    });
+  }
 
   function _cartSync() {
-    var n = _cartItems.length;
+    var n = _lsGetCart().length;
     var clearBtn = document.getElementById('mp-cart-clear-btn');
     var dlBtn = document.getElementById('mp-cart-dl-btn');
     if (clearBtn) clearBtn.hidden = (n === 0);
@@ -538,10 +552,12 @@
     },
     _remove: function (id) {
       _cartItems = _cartItems.filter(function (i) { return i.id !== id; });
+      _lsSaveCart(_cartItems.map(function(i) { return i.id; }));
       MP.cart._render();
     },
     _clearAll: function () {
       _cartItems = [];
+      _lsSaveCart([]);
       MP.cart._render();
     },
     _shareMail: function () {
@@ -565,7 +581,7 @@
   /* ── Init on DOM ready ──────────────────────────────────────────────────── */
   document.addEventListener('DOMContentLoaded', function () {
     injectModals();
-    // Sync cart badge counts with sample data
+    _initCart();
     setTimeout(_cartSync, 0);
   });
 

@@ -169,6 +169,10 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
   transition: color 120ms;
 }
 .site-nav__tab:hover { color: var(--color-accent); }
+.site-nav__tab--active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
 
 /* Header icon buttons */
 .header-icon-btn {
