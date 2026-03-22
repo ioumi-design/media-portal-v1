@@ -1772,7 +1772,7 @@
             <div class="detail-sep"></div>
             <div class="detail-row"><span class="detail-row__label">Type</span><span class="detail-row__value">${d.type}</span></div>
             <div class="detail-sep"></div>
-            <div class="detail-row"><span class="detail-row__label">Res.</span><span class="detail-row__value">${d.resolution || d.res}</span></div>
+            <div class="detail-row"><span class="detail-row__label">Res.</span><span class="detail-row__value">${d.resolution || d.res || '—'}</span></div>
           </div>
           <div class="asset-card__actions">
             <button class="btn-icon-outline" type="button" aria-label="Download">${ICON_DL}</button>
@@ -1790,7 +1790,7 @@
         : `<div style="width:100%;height:100%;background:var(--color-card-image-bg);display:flex;align-items:center;justify-content:center;"><svg width="50" height="38" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="${p.circle}"/><polygon points="0,60 44,16 80,60" fill="${p.poly1}"/><polygon points="36,60 56,30 76,60" fill="${p.poly2}"/></svg></div>`;
       return `<article class="asset-row">
         <a href="asset-detail.html?id=${d.id}" class="asset-row__thumb-link" aria-label="View ${d.title} details"><div class="asset-row__thumb">${thumbContent}</div></a>
-        <div><a href="asset-detail.html?id=${d.id}" class="asset-row__title asset-row__title--link">${d.title}</a><div class="asset-row__meta">${d.type} · ${d.sizeDisplay || d.size} · ${d.resolution || d.res}</div></div>
+        <div><a href="asset-detail.html?id=${d.id}" class="asset-row__title asset-row__title--link">${d.title}</a><div class="asset-row__meta">${d.type} · ${d.sizeDisplay || d.size} · ${d.resolution || d.res || '—'}</div></div>
         <div class="asset-row__actions">
           <button class="btn-icon-outline" type="button" aria-label="Download">${ICON_DL}</button>
           <button class="btn-icon-outline" type="button" aria-label="Email">${ICON_EMAIL}</button>
