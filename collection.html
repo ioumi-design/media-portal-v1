@@ -949,6 +949,8 @@ function collOpenRemoveFromBar(ev) {
 }
 
 /* ── Asset card data & render ────────────────────────────────────────── */
+var _IMG_ERR_HTML = '<div style="width:100%;height:100%;background:#ECEDF4;display:flex;align-items:center;justify-content:center;"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="#ECEDF4"/><path d="M8 36l10-12 7 8 5-6 10 10H8z" fill="#C4C6D0"/><circle cx="32" cy="16" r="4" fill="#E8A000"/></svg></div>';
+function _imgErr(el) { el.onerror = null; el.parentNode.innerHTML = _IMG_ERR_HTML; }
 var ASSET_COLORS = ['#C5D8E8','#D8C5E8','#C5E8D8','#E8D8C5','#C5C5E8','#E8C5D8','#D8E8C5'];
 /* Start empty to demo the empty state; populated via demoFillAssets() */
 var ASSETS = [];
@@ -964,7 +966,7 @@ var ASSETS_DEMO = [
 
 function makeThumb(i, thumbnailUrl) {
   if (thumbnailUrl) {
-    return '<img src="' + thumbnailUrl + '" alt="" style="width:100%;height:100%;object-fit:cover;">';
+    return '<img src="' + thumbnailUrl + '" alt="" style="width:100%;height:100%;object-fit:cover;" onerror="_imgErr(this)">';
   }
   var bg = ASSET_COLORS[i % ASSET_COLORS.length];
   return (

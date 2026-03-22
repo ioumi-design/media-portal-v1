@@ -1777,6 +1777,9 @@
     const ICON_HEART_OUTLINE = `<svg class="fav-icon-outline" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/></svg>`;
     const ICON_HEART_FILLED  = `<svg class="fav-icon-filled"  width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/></svg>`;
 
+    var _IMG_ERR_HTML = '<div style="width:100%;height:100%;background:#ECEDF4;display:flex;align-items:center;justify-content:center;"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="#ECEDF4"/><path d="M8 36l10-12 7 8 5-6 10 10H8z" fill="#C4C6D0"/><circle cx="32" cy="16" r="4" fill="#E8A000"/></svg></div>';
+    function _imgErr(el) { el.onerror = null; el.parentNode.innerHTML = _IMG_ERR_HTML; }
+
     function _placeholder(i) {
       const p = PLACEHOLDER_COLORS[i % PLACEHOLDER_COLORS.length];
       return `<svg width="80" height="60" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="${p.circle}"/><polygon points="0,60 44,16 80,60" fill="${p.poly1}"/><polygon points="36,60 56,30 76,60" fill="${p.poly2}"/></svg>`;
@@ -1784,7 +1787,7 @@
 
     function _buildGridCard(d, i) {
       const imgContent = d.thumbnail
-        ? `<img src="${d.thumbnail}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;">`
+        ? `<img src="${d.thumbnail}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;" onerror="_imgErr(this)">`
         : `<div class="asset-card__image-placeholder">${_placeholder(i)}</div>`;
       const inCart = DB.isInCart(d.id);
       const isFav  = DB.isInAnyCollection(d.id);
@@ -1820,7 +1823,7 @@
     function _buildListRow(d, i) {
       const p = PLACEHOLDER_COLORS[i % PLACEHOLDER_COLORS.length];
       const thumbContent = d.thumbnail
-        ? `<img src="${d.thumbnail}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;">`
+        ? `<img src="${d.thumbnail}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;" onerror="_imgErr(this)">`
         : `<div style="width:100%;height:100%;background:var(--color-card-image-bg);display:flex;align-items:center;justify-content:center;"><svg width="50" height="38" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="${p.circle}"/><polygon points="0,60 44,16 80,60" fill="${p.poly1}"/><polygon points="36,60 56,30 76,60" fill="${p.poly2}"/></svg></div>`;
       const inCart = DB.isInCart(d.id);
       const cartLabel = inCart ? 'Remove' : 'Add';
@@ -2097,7 +2100,7 @@
   function _setModalPreviews(thumbnailUrl) {
     var svgFallback = '<svg viewBox="0 0 320 213" fill="none"><rect width="320" height="213" fill="#e8e6f0"/><polygon points="60,175 165,68 270,175" fill="#3b3768" opacity="0.65"/><polygon points="30,175 115,105 200,175" fill="#9896b8" opacity="0.55"/><circle cx="220" cy="72" r="14" fill="#c9a830"/></svg>';
     var content = thumbnailUrl
-      ? '<img src="' + thumbnailUrl + '" alt="" style="height:213px;width:auto;max-width:100%;object-fit:contain;display:block;">'
+      ? '<img src="' + thumbnailUrl + '" alt="" style="height:213px;width:auto;max-width:100%;object-fit:contain;display:block;" onerror="_imgErr(this)">'
       : svgFallback;
     document.querySelectorAll('.modal__preview').forEach(function(el) { el.innerHTML = content; });
   }
@@ -2115,13 +2118,13 @@
     var _modalAssetId = (triggerBtn && triggerBtn.dataset.assetId) || null;
     Promise.all([DB.getCollections(), DB.getAssets()]).then(function (results) {
       var cols   = results[0];
-      var assets = results[1];
+      var allAssets = (window.SUMMER_ASSETS || []).concat(results[1]);
       var already = [];
       var others  = [];
       cols.forEach(function (c) {
         var hasAsset   = _modalAssetId && c.assetIds && c.assetIds.indexOf(_modalAssetId) >= 0;
         var firstAsset = c.assetIds && c.assetIds[0]
-          ? assets.find(function (a) { return a.id === c.assetIds[0]; }) : null;
+          ? allAssets.find(function (a) { return a.id === c.assetIds[0]; }) : null;
         var item = {
           id: c.id, title: c.title, count: c.assetIds ? c.assetIds.length : 0,
           thumbnailUrl: firstAsset ? firstAsset.thumbnail : null,
@@ -2183,7 +2186,7 @@
   var SVG_IMG_ICON = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.6)"/><path d="M21 15l-5-5L9 17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function _mcollThumb(url) {
     var inner = url
-      ? '<img src="' + url + '" alt="">'
+      ? '<img src="' + url + '" alt="" onerror="_imgErr(this)">'
       : SVG_IMG_ICON;
     return '<div class="mcol-thumb"><div class="mcol-thumb__inner">' + inner + '</div></div>';
   }
