@@ -894,6 +894,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      height: 213px;
       padding: 20px 40px;
       background: var(--color-surface-container-low);
       border-bottom: 1px solid var(--color-outline-low);
@@ -2030,7 +2031,7 @@
   function _setModalPreviews(thumbnailUrl) {
     var svgFallback = '<svg viewBox="0 0 320 213" fill="none"><rect width="320" height="213" fill="#e8e6f0"/><polygon points="60,175 165,68 270,175" fill="#3b3768" opacity="0.65"/><polygon points="30,175 115,105 200,175" fill="#9896b8" opacity="0.55"/><circle cx="220" cy="72" r="14" fill="#c9a830"/></svg>';
     var content = thumbnailUrl
-      ? '<img src="' + thumbnailUrl + '" alt="" style="width:100%;height:100%;object-fit:cover;">'
+      ? '<img src="' + thumbnailUrl + '" alt="" style="height:213px;width:auto;max-width:100%;object-fit:contain;display:block;">'
       : svgFallback;
     document.querySelectorAll('.modal__preview').forEach(function(el) { el.innerHTML = content; });
   }
