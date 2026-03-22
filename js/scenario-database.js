@@ -210,6 +210,14 @@ window.ScenarioManager = {
 
   getCurrentScenario() {
     return localStorage.getItem('mp_scenario') || '1';
+  },
+
+  // Reset — clear all localStorage and return to clean state
+  reset() {
+    ['mp_collections','mp_cart','mp_favorites','mp_favs','mp_scenario','mp_initial_search'].forEach(function(k) {
+      localStorage.removeItem(k);
+    });
+    window.location.href = 'index.html';
   }
 };
 

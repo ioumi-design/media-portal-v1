@@ -598,6 +598,8 @@
       <button class="scenario-btn" id="scen-btn-1" onclick="ScenarioManager.loadScenario1()">Scenario 1</button>
       <span class="scenario-sep">|</span>
       <button class="scenario-btn" id="scen-btn-2" onclick="ScenarioManager.loadScenario2()">Scenario 2</button>
+      <span class="scenario-sep">|</span>
+      <button class="scenario-btn scenario-btn--reset" onclick="ScenarioManager.reset()">Reset</button>
     </span>
   </footer>
 
@@ -1155,7 +1157,11 @@ document.addEventListener('DOMContentLoaded', function() {
   if (collId) {
     DB.getCollection(collId).then(function(col) {
       if (!col) { renderAssets(); return; }
-      DB.getAssets().then(function(assets) { applyCollection(col, assets); });
+      DB.getAssets().then(function(assets) {
+        /* Merge SUMMER_ASSETS so collections referencing summer IDs resolve correctly */
+        var allAssets = (window.SUMMER_ASSETS || []).concat(assets);
+        applyCollection(col, allAssets);
+      });
     });
   } else {
     renderAssets();

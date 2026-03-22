@@ -783,3 +783,4 @@ button { font: inherit; cursor: pointer; background: none; border: none; }
 }
 .scenario-btn.is-active { color: #6B7280; font-weight: 500; }
 .scenario-sep { font-size: 11px; color: #9CA3AF; }
+.scenario-btn--reset { color: #DC2626; }
