@@ -3,228 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <title>Sofitel Paris Baltimore Tour Eiffel – Accor Media Portal</title>
-  <meta name="viewport" content="width=1440" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="components/components.css?v=7" />
   <style>
-    /* ── Design tokens ──────────────────────────────────────────────── */
-    :root {
-      --color-surface:              #ffffff;
-      --color-surface-container-low:#ffffff;
-      --color-surface-container-mid:#f4f4f5;
-      --color-surface-container:    #f4f5f7;
-      --color-on-surface-hi:        #252339;
-      --color-on-surface-mid:       #3e3d48;
-      --color-on-surface-low:       #6f6e77;
-      --color-outline-low:          #dadadd;
-      --color-outline-hi:           #8b8a93;
-      --color-accent:               #068484;
-      --color-primary:              #1e1852;
-      --color-on-primary:           #f9f9ff;
-      --color-link:                 #1264a3;
-      --font-display:   'Montserrat', sans-serif;
-      --font-body:      'Roboto', sans-serif;
-      --font-label:     'Roboto', sans-serif;
-      --font-title:     'Roboto', sans-serif;
-      --fs-display-sm:  26px;
-      --fs-display-md:  32px;
-      --fs-title-sm:    18px;
-      --fs-label-lg:    16px;
-      --fs-body-md:     16px;
-      --fs-body-sm:     14px;
-      --lh-display-sm:  32px;
-      --lh-display-md:  40px;
-      --lh-title-sm:    24px;
-      --lh-label-lg:    24px;
-      --lh-body-md:     24px;
-      --lh-body-sm:     20px;
-      --ls-display:     0.5px;
-      --br-surface:     6px;
-      --br-full:        100px;
-      --grid-margin:    64px;
-      --panel-width:    375px;
-    }
-
-    /* ── Reset ──────────────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body {
-      font-family: var(--font-body);
-      background: var(--color-surface-container-mid);
-      color: var(--color-on-surface-hi);
-      min-width: 1440px;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; cursor: pointer; }
-
-    /* ── Page shell ─────────────────────────────────────────────────── */
-    .page {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ══════════════════════════════════════════════════════════════════
-       HEADER
-    ══════════════════════════════════════════════════════════════════ */
-    .site-header {
-      background: var(--color-surface);
-      border-bottom: 1px solid var(--color-outline-low);
-      height: 80px;
-      display: flex;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      flex-shrink: 0;
-    }
-    .site-header__inner {
-      width: 100%;
-      padding: 0 var(--grid-margin);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 100%;
-    }
-    .brand { display: flex; align-items: center; gap: 16px; }
-    .brand__logo { width: 56px; height: 46px; flex-shrink: 0; position: relative; }
-    .brand__logo svg { position: absolute; }
-    .brand__monogramme { top: 5.85px; left: 17.12px; width: 22.15px; height: 22.91px; }
-    .brand__typogramme { top: 34.27px; left: 6.11px; width: 43.78px; height: 5.88px; }
-    .brand__name {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: var(--fs-display-md);
-      line-height: var(--lh-display-md);
-      letter-spacing: var(--ls-display);
-      color: var(--color-primary);
-      white-space: nowrap;
-    }
-    .site-header__right { display: flex; align-items: center; gap: 16px; height: 100%; }
-    .site-nav { display: flex; align-items: center; gap: 20px; height: 100%; }
-    .site-nav__tab {
-      display: flex; align-items: center; justify-content: center; gap: 4px;
-      height: 100%; padding: 12px 0;
-      border: none; border-bottom: 4px solid transparent;
-      background: none;
-      font-family: var(--font-label); font-size: var(--fs-label-lg);
-      font-weight: 500; line-height: var(--lh-label-lg);
-      color: var(--color-on-surface-hi); white-space: nowrap; cursor: pointer;
-    }
-    .site-nav__tab--active { border-bottom-color: var(--color-accent); }
-
-    /* Header icon buttons */
-    .header-icon-btn {
-      width: 48px; height: 80px; border: none; background: none;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--color-on-surface-hi); border-radius: var(--br-full);
-      transition: background 120ms ease;
-    }
-    .header-icon-btn:hover { background: var(--color-primary); color: #f9f9ff; }
-    .header-icon-btn:hover svg path { fill: #f9f9ff; }
-
-    /* Cart button */
-    .header-cart-btn {
-      width: 58px; height: 80px; border: none; background: none;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--color-on-surface-hi); cursor: pointer;
-      position: relative; transition: background 120ms ease;
-    }
-    .header-cart-btn:hover { background: var(--color-primary); color: #f9f9ff; }
-    .header-cart-btn:hover svg path { fill: #f9f9ff; }
-    .cart-badge {
-      position: absolute; top: 12px; right: 8px;
-      background: var(--color-accent); color: #fff;
-      font-size: 12px; font-weight: 500; line-height: 16px;
-      min-width: 18px; height: 18px; border-radius: var(--br-full);
-      display: flex; align-items: center; justify-content: center;
-      padding: 0 3px; pointer-events: none;
-    }
-
-    /* Account / user button */
-    .header-user {
-      display: flex; align-items: center; gap: 4px;
-      padding: 12px 24px 12px 20px; border: none; background: none;
-      border-radius: 60px; cursor: pointer;
-      font-size: var(--fs-label-lg); line-height: var(--lh-label-lg);
-      color: var(--color-on-surface-hi); transition: background 120ms ease;
-      white-space: nowrap;
-    }
-    .header-user:hover { background: var(--color-surface-container); }
-    .header-user__avatar {
-      width: 24px; height: 24px; flex-shrink: 0; position: relative;
-    }
-    .header-user__avatar-dot {
-      position: absolute; top: 0; right: 0;
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--color-accent); border: 2px solid #fff;
-    }
-
-    /* ── Account popover ─────────────────────────────────────────── */
-    .account-popover {
-      position: absolute;
-      top: 80px;
-      right: 64px;
-      width: 375px;
-      background: var(--color-surface);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.16), 0 2px 8px rgba(0,0,0,.08);
-      z-index: 200;
-      padding: 20px;
-    }
-    .account-popover[hidden] { display: none; }
-    .accp__inner { display: flex; flex-direction: column; gap: 0; }
-    .accp__close-row {
-      display: flex; justify-content: flex-end;
-      height: 40px; margin-bottom: 0;
-    }
-    .accp__close {
-      width: 40px; height: 40px;
-      display: flex; align-items: center; justify-content: center;
-      background: none; border: none; border-radius: 40px;
-      color: var(--color-on-surface-hi); cursor: pointer;
-      margin-right: -8px; margin-top: -8px;
-    }
-    .accp__close:hover { background: var(--color-surface-container); }
-    .accp__greeting {
-      font-family: var(--font-label); font-weight: 500;
-      font-size: 18px; line-height: 24px;
-      color: var(--color-on-surface-hi); margin-bottom: 8px;
-    }
-    .accp__name {
-      font-family: var(--font-label); font-weight: 500;
-      font-size: 20px; line-height: 28px;
-      color: var(--color-on-surface-hi);
-      display: flex; gap: 4px; padding-bottom: 16px;
-    }
-    .accp__sep { height: 1px; background: var(--color-outline-low); margin: 0; }
-    .accp__list { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
-    .accp__item {
-      display: flex; align-items: center; gap: 8px;
-      height: 24px; cursor: pointer; color: #232136;
-      text-decoration: none; font-family: var(--font-body);
-      font-size: var(--fs-body-md); line-height: var(--lh-body-md);
-    }
-    .accp__item:hover { text-decoration: underline; color: #232136; }
-    .accp__item svg { flex-shrink: 0; }
-    .accp__actions { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; }
-    .accp__link {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: none; border: none; padding: 0;
-      font-family: var(--font-body); font-size: 14px; line-height: 20px;
-      color: var(--color-on-surface-hi); text-decoration: none; cursor: pointer; text-align: left;
-    }
-    .accp__link:hover { text-decoration: underline; color: #232136; }
-    .accp__link:hover svg path { fill: #232136; }
 
     /* ══════════════════════════════════════════════════════════════════
        PAGE BODY
     ══════════════════════════════════════════════════════════════════ */
     .page-body {
       display: flex;
+      flex-direction: row;
       flex: 1;
+      width: 100%;
+      min-width: 0;
       overflow: hidden;
       position: relative;
     }
@@ -448,8 +242,9 @@
 
     /* ── Right: asset metadata panel ─────────────────────────────── */
     .detail-panel {
+      flex: 0 0 var(--panel-width);
       width: var(--panel-width);
-      flex-shrink: 0;
+      max-width: var(--panel-width);
       background: var(--color-surface);
       border-left: 1px solid var(--color-outline-low);
       overflow-y: auto;
@@ -644,7 +439,7 @@
     .snackbar {
       position: fixed;
       top: 94px;
-      left: calc((100vw - 375px) / 2);
+      left: 50%;
       transform: translateX(-50%);
       z-index: 3000;
       display: flex;
@@ -854,7 +649,7 @@
         </button>
 
         <!-- Cart -->
-        <button class="header-cart-btn" type="button" aria-label="Cart (99 items)">
+        <button class="header-cart-btn" type="button" aria-label="Cart (99 items)" onclick="MP.cart.open()">
           <svg width="24" height="24" viewBox="0 0 19.5 19.6547" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6073 17.9404C7.6336 17.9404 7.65492 17.9191 7.65492 17.8928C7.65492 17.8665 7.6336 17.8452 7.6073 17.8452C7.581 17.8452 7.55968 17.8665 7.55968 17.8928C7.55968 17.9191 7.581 17.9404 7.6073 17.9404ZM5.84539 17.8928C5.84539 16.9197 6.63422 16.1309 7.6073 16.1309C8.58037 16.1309 9.3692 16.9197 9.3692 17.8928C9.3692 18.8659 8.58037 19.6547 7.6073 19.6547C6.63422 19.6547 5.84539 18.8659 5.84539 17.8928Z" fill="currentColor"/>
             <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1785 17.9404C16.2048 17.9404 16.2261 17.9191 16.2261 17.8928C16.2261 17.8665 16.2048 17.8452 16.1785 17.8452C16.1522 17.8452 16.1309 17.8665 16.1309 17.8928C16.1309 17.9191 16.1522 17.9404 16.1785 17.9404ZM14.4166 17.8928C14.4166 16.9197 15.2054 16.1309 16.1785 16.1309C17.1516 16.1309 17.9404 16.9197 17.9404 17.8928C17.9404 18.8659 17.1516 19.6547 16.1785 19.6547C15.2054 19.6547 14.4166 18.8659 14.4166 17.8928Z" fill="currentColor"/>
@@ -1119,23 +914,8 @@
 
 </div><!-- /.page -->
 
+<script src="components/components.js?v=7"></script>
 <script>
-  /* ── Account popover ───────────────────────────────────────────── */
-  function toggleAccountPopover() {
-    const popover = document.getElementById('account-popover');
-    const btn     = document.getElementById('account-btn');
-    const isOpen  = !popover.hidden;
-    popover.hidden = isOpen;
-    btn.setAttribute('aria-expanded', String(!isOpen));
-  }
-  document.addEventListener('click', function(e) {
-    const popover = document.getElementById('account-popover');
-    const btn     = document.getElementById('account-btn');
-    if (!popover.hidden && !popover.contains(e.target) && !btn.contains(e.target)) {
-      popover.hidden = true;
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  });
 
   /* ── Save to collection toggle ──────────────────────────────────── */
   function toggleCollect(btn) {

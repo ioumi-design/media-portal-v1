@@ -3,287 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <title>My Collections – Accor Media Portal</title>
-  <meta name="viewport" content="width=1440" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="components/components.css?v=7" />
   <style>
-    /* ── Design tokens ──────────────────────────────────────────────── */
-    :root {
-      --color-surface:               #ffffff;
-      --color-surface-container-low: #ffffff;
-      --color-surface-container-mid: #f7f9fb;
-      --color-surface-container-hi:  #f0f3f7;
-      --color-on-surface-hi:         #252339;
-      --color-on-surface-mid:        #3e3d48;
-      --color-on-surface-low:        #6f6e77;
-      --color-outline-low:           #dadadd;
-      --color-outline-hi:            #8b8a93;
-      --color-accent:                #068484;
-      --color-primary:               #1e1852;
-      --color-on-primary:            #f9f9ff;
-      --color-danger:                #ba1f1a;
-      --color-link:                  #1264a3;
-      --font-display: 'Montserrat', sans-serif;
-      --font-body:    'Roboto', sans-serif;
-      --font-label:   'Roboto', sans-serif;
-      --br-surface:   6px;
-      --br-full:      100px;
-      --grid-margin:  64px;
-      --panel-width:  375px;
-      --header-h:     80px;
-      --footer-h:     48px;
-    }
-
-    /* ── Reset ──────────────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body {
-      font-family: var(--font-body);
-      background: var(--color-surface-container-mid);
-      color: var(--color-on-surface-hi);
-      min-width: 1440px;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; cursor: pointer; background: none; border: none; }
-
-    /* ── Page shell ─────────────────────────────────────────────────── */
-    .page {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ── Header ─────────────────────────────────────────────────────── */
-    .site-header {
-      flex-shrink: 0;
-      background: var(--color-surface-container-low);
-      border-bottom: 1px solid var(--color-outline-low);
-      height: var(--header-h);
-      position: relative;
-      z-index: 100;
-    }
-    .site-header__inner {
-      max-width: 1440px;
-      height: 100%;
-      margin: 0 auto;
-      padding: 0 var(--grid-margin);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    /* Brand link */
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-    .brand:hover .brand__name { text-decoration: none; }
-    .brand__logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 56px;
-      height: 46px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .brand__monogramme { width: 22px; height: auto; flex-shrink: 0; }
-    .brand__typogramme { width: 44px; height: auto; margin-top: 4px; flex-shrink: 0; }
-    .brand__name {
-      font-family: var(--font-display);
-      font-size: 32px;
-      font-weight: 700;
-      line-height: 40px;
-      letter-spacing: 0.5px;
-      color: var(--color-primary);
-      white-space: nowrap;
-    }
-
-    /* Right nav area */
-    .site-header__right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      height: 100%;
-    }
-    .site-nav {
-      display: flex;
-      height: 100%;
-      align-items: stretch;
-      gap: 20px;
-    }
-    .site-nav__tab {
-      display: flex;
-      align-items: center;
-      padding: 12px 4px;
-      font-family: var(--font-label);
-      font-size: 16px;
-      line-height: 24px;
-      color: var(--color-on-surface-hi);
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: color 120ms;
-    }
-    .site-nav__tab:hover { color: var(--color-accent); }
-    /* No --active on Home when on this page */
-
-    /* Collections icon tab */
-    .header-icon-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 100%;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      color: var(--color-on-surface-hi);
-      cursor: pointer;
-      transition: color 120ms;
-      padding: 8px;
-      border-radius: 0;
-    }
-    .header-icon-btn:hover { color: var(--color-accent); }
-    .header-icon-btn--active {
-      border-bottom: 4px solid var(--color-accent);
-      color: var(--color-on-surface-hi);
-    }
-
-    /* Cart button */
-    .header-cart-btn {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 58px;
-      height: 100%;
-      background: none;
-      border: none;
-      color: var(--color-on-surface-hi);
-      cursor: pointer;
-      transition: color 120ms;
-    }
-    .header-cart-btn:hover { color: var(--color-accent); }
-    .cart-badge {
-      position: absolute;
-      top: 12px;
-      right: 8px;
-      width: 18px;
-      height: 18px;
-      background: var(--color-accent);
-      border-radius: 100px;
-      font-family: var(--font-label);
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 16px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Account button */
-    .header-user {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 12px 24px 12px 20px;
-      background: none;
-      border: none;
-      border-radius: 60px;
-      font-size: 16px;
-      color: var(--color-on-surface-hi);
-      cursor: pointer;
-      transition: background 120ms;
-    }
-    .header-user:hover { background: rgba(6,132,132,.08); }
-    .header-user__avatar {
-      position: relative;
-      width: 24px;
-      height: 24px;
-      flex-shrink: 0;
-    }
-    .header-user__avatar-dot {
-      position: absolute;
-      top: 0; right: 0;
-      width: 6px; height: 6px;
-      background: var(--color-accent);
-      border-radius: 50%;
-      border: 1px solid #fff;
-    }
-
-    /* ── Account popover ─────────────────────────────────────────────── */
-    .account-popover {
-      position: absolute;
-      top: 80px;
-      right: 64px;
-      width: 375px;
-      background: var(--color-surface);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.16), 0 2px 8px rgba(0,0,0,.08);
-      z-index: 200;
-      padding: 20px;
-    }
-    .account-popover[hidden] { display: none; }
-    .accp__inner { display: flex; flex-direction: column; gap: 0; }
-    .accp__close-row { display: flex; justify-content: flex-end; height: 40px; margin-bottom: 0; }
-    .accp__close {
-      width: 40px; height: 40px;
-      display: flex; align-items: center; justify-content: center;
-      background: none; border: none; border-radius: 40px;
-      color: var(--color-on-surface-hi); cursor: pointer;
-      margin-right: -8px; margin-top: -8px;
-    }
-    .accp__close:hover { background: var(--color-surface-container); }
-    .accp__greeting {
-      font-family: var(--font-label); font-weight: 500;
-      font-size: 18px; line-height: 24px;
-      color: var(--color-on-surface-hi); margin-bottom: 8px;
-    }
-    .accp__name {
-      font-family: var(--font-label); font-weight: 500;
-      font-size: 20px; line-height: 28px;
-      color: var(--color-on-surface-hi);
-      display: flex; gap: 4px; padding-bottom: 16px;
-    }
-    .accp__sep { height: 1px; background: var(--color-outline-low); margin: 0; }
-    .accp__list { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
-    .accp__item {
-      display: flex; align-items: center; gap: 8px;
-      height: 24px; cursor: pointer; color: #232136;
-      text-decoration: none; font-family: var(--font-body);
-      font-size: var(--fs-body-md); line-height: var(--lh-body-md);
-    }
-    .accp__item:hover { text-decoration: underline; color: #232136; }
-    .accp__item svg { flex-shrink: 0; }
-    .accp__actions { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; }
-    .accp__link {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: none; border: none; padding: 0;
-      font-family: var(--font-body); font-size: 14px; line-height: 20px;
-      color: var(--color-on-surface-hi); text-decoration: none; cursor: pointer; text-align: left;
-    }
-    .accp__link:hover { text-decoration: underline; color: #232136; }
-    .accp__link:hover svg path { fill: #232136; }
-
-    /* ── Page body ───────────────────────────────────────────────────── */
-    .page-body {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
+    /* Page body: side-by-side layout */
+    .page-body { flex-direction: row; overflow: hidden; }
 
     /* ── Left panel ─────────────────────────────────────────────────── */
     .hc-left {
+      flex: 0 0 var(--panel-width);
       width: var(--panel-width);
+      max-width: var(--panel-width);
       min-width: var(--panel-width);
       background: var(--color-surface-container-mid);
       overflow-y: auto;
@@ -340,6 +73,7 @@
     /* ── Right / main content ────────────────────────────────────────── */
     .hc-main {
       flex: 1;
+      min-width: 0;
       overflow-y: auto;
       background: var(--color-surface-container-low);
       padding: 36px var(--grid-margin) 80px;
@@ -427,12 +161,8 @@
 
     /* Collections grid */
     .coll-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-    .coll-row {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 24px;
     }
 
@@ -483,6 +213,10 @@
       overflow: hidden;
       min-width: 0;
     }
+    .coll-card__menu-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
     .coll-card__menu-btn {
       flex-shrink: 0;
       width: 36px;
@@ -496,9 +230,10 @@
       color: var(--color-on-surface-hi);
       cursor: pointer;
       transition: background 120ms;
-      position: relative;
     }
-    .coll-card__menu-btn:hover { background: rgba(6,132,132,.08); }
+    .coll-card__menu-btn:hover,
+    .coll-card__menu-btn--active { background: var(--color-on-surface-hi); color: #fff; }
+    .coll-card__menu-btn--active + .ctx-menu { display: block; }
     .coll-card__count {
       font-size: 16px;
       line-height: 24px;
@@ -528,39 +263,6 @@
       font-family: inherit;
     }
     .coll-card__link:hover { text-decoration: underline; }
-
-    /* Context menu popover */
-    .ctx-menu {
-      position: absolute;
-      top: calc(100% + 4px);
-      right: 0;
-      width: 220px;
-      background: var(--color-surface-container-low);
-      border-radius: var(--br-surface);
-      box-shadow: 0 8px 16px rgba(7,5,24,.08), 0 2px 6px rgba(7,5,24,.06);
-      z-index: 50;
-      overflow: hidden;
-    }
-    .ctx-menu[hidden] { display: none; }
-    .ctx-menu__item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px 16px;
-      font-size: 16px;
-      line-height: 24px;
-      color: var(--color-on-surface-mid);
-      cursor: pointer;
-      background: none;
-      border: none;
-      width: 100%;
-      text-align: left;
-      font-family: inherit;
-      transition: background 120ms;
-    }
-    .ctx-menu__item:hover { background: rgba(6,132,132,.08); }
-    .ctx-menu__item--danger { color: var(--color-danger); }
-    .ctx-menu__item--danger:hover { background: rgba(186,31,26,.06); }
 
     /* ── Empty state ────────────────────────────────────────────────── */
     .coll-empty {
@@ -607,24 +309,6 @@
       width: 100%;
     }
 
-    /* ── Footer ─────────────────────────────────────────────────────── */
-    .site-footer {
-      flex-shrink: 0;
-      height: var(--footer-h);
-      background: var(--color-surface-container-low);
-      border-top: 1px solid var(--color-outline-low);
-      box-shadow: 0 -2px 6px rgba(7,5,24,.05);
-      display: flex;
-      align-items: center;
-      padding: 0 var(--grid-margin);
-      z-index: 50;
-    }
-    .site-footer__copy {
-      font-family: var(--font-label);
-      font-size: 14px;
-      line-height: 20px;
-      color: var(--color-on-surface-low);
-    }
   </style>
 </head>
 <body>
@@ -669,7 +353,7 @@
         </button>
 
         <!-- Cart -->
-        <button class="header-cart-btn" type="button" aria-label="Cart (99 items)">
+        <button class="header-cart-btn" type="button" aria-label="Cart (99 items)" onclick="MP.cart.open()">
           <svg width="24" height="24" viewBox="0 0 19.5 19.6547" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6073 17.9404C7.6336 17.9404 7.65492 17.9191 7.65492 17.8928C7.65492 17.8665 7.6336 17.8452 7.6073 17.8452C7.581 17.8452 7.55968 17.8665 7.55968 17.8928C7.55968 17.9191 7.581 17.9404 7.6073 17.9404ZM5.84539 17.8928C5.84539 16.9197 6.63422 16.1309 7.6073 16.1309C8.58037 16.1309 9.3692 16.9197 9.3692 17.8928C9.3692 18.8659 8.58037 19.6547 7.6073 19.6547C6.63422 19.6547 5.84539 18.8659 5.84539 17.8928Z" fill="currentColor"/>
             <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1785 17.9404C16.2048 17.9404 16.2261 17.9191 16.2261 17.8928C16.2261 17.8665 16.2048 17.8452 16.1785 17.8452C16.1522 17.8452 16.1309 17.8665 16.1309 17.8928C16.1309 17.9191 16.1522 17.9404 16.1785 17.9404ZM14.4166 17.8928C14.4166 16.9197 15.2054 16.1309 16.1785 16.1309C17.1516 16.1309 17.9404 16.9197 17.9404 17.8928C17.9404 18.8659 17.1516 19.6547 16.1785 19.6547C15.2054 19.6547 14.4166 18.8659 14.4166 17.8928Z" fill="currentColor"/>
@@ -784,7 +468,7 @@
       <!-- Title row -->
       <div class="hc-title-row">
         <h1 class="hc-title">Collections</h1>
-        <button class="btn-create" type="button">
+        <button class="btn-create" type="button" onclick="hubOpenCreateModal()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -795,15 +479,15 @@
       <!-- Inner tabs -->
       <div class="hc-tabs" role="tablist">
         <button class="hc-tab hc-tab--active" role="tab" aria-selected="true" type="button">
-          My collections <span class="hc-tab__count" id="tab-count">(6)</span>
+          My collections <span class="hc-tab__count" id="tab-count">(0)</span>
         </button>
       </div>
 
       <!-- Section title (hidden in empty state) -->
       <h2 class="hc-section-title" id="section-title">My collections</h2>
 
-      <!-- Empty state (shown when no collections) -->
-      <div id="coll-empty" hidden>
+      <!-- Empty state: only when there are no collection cards (see renderCollections) -->
+      <div id="coll-empty">
         <div class="coll-empty">
           <div class="coll-empty__card">
             <div class="coll-empty__thumb">
@@ -811,7 +495,7 @@
             </div>
             <p class="coll-empty__title">You have no collection yet...</p>
           </div>
-          <button class="btn-create btn-create--accent" type="button" onclick="demoAddCollections()">
+          <button class="btn-create btn-create--accent" type="button" onclick="hubOpenCreateModal()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -820,8 +504,8 @@
         </div>
       </div>
 
-      <!-- Cards grid (shown when collections exist) -->
-      <div class="coll-grid" id="coll-grid"></div>
+      <!-- Card grid: only when collection cards exist -->
+      <div class="coll-grid" id="coll-grid" hidden></div>
 
     </main>
   </div>
@@ -833,39 +517,9 @@
 
 </div><!-- /page -->
 
+<script src="components/components.js?v=7"></script>
 <script>
-/* ── Account popover ─────────────────────────────────────────────────── */
-function toggleAccountPopover() {
-  var popover = document.getElementById('account-popover');
-  var btn     = document.getElementById('account-btn');
-  var isOpen  = !popover.hidden;
-  popover.hidden = isOpen;
-  btn.setAttribute('aria-expanded', String(!isOpen));
-}
-document.addEventListener('click', function(e) {
-  var popover = document.getElementById('account-popover');
-  var btn     = document.getElementById('account-btn');
-  if (!popover.hidden && !popover.contains(e.target) && !btn.contains(e.target)) {
-    popover.hidden = true;
-    btn.setAttribute('aria-expanded', 'false');
-  }
-});
-
-/* ── Collection card context menu ────────────────────────────────────── */
-function toggleCtxMenu(cardId, btn) {
-  var menu = document.getElementById('ctx-' + cardId);
-  var allMenus = document.querySelectorAll('.ctx-menu');
-  allMenus.forEach(function(m) {
-    if (m !== menu) m.hidden = true;
-  });
-  menu.hidden = !menu.hidden;
-  btn.setAttribute('aria-expanded', String(!menu.hidden));
-}
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.coll-card__menu-btn') && !e.target.closest('.ctx-menu')) {
-    document.querySelectorAll('.ctx-menu').forEach(function(m) { m.hidden = true; });
-  }
-});
+/* ── Collection card context menu (CSS-hover driven, no JS toggle needed) */
 
 /* ── Collection cards data & render ─────────────────────────────────── */
 /* Start empty to showcase the empty state; clicking "Create a new collection" fills demo data */
@@ -885,25 +539,25 @@ function buildCard(col, i) {
       '<div class="coll-card__body">' +
         '<div class="coll-card__title-row">' +
           '<span class="coll-card__title">' + col.title + '</span>' +
-          '<div style="position:relative;flex-shrink:0;">' +
-            '<button class="coll-card__menu-btn" type="button" aria-label="Options for ' + col.title + '" aria-expanded="false" onclick="toggleCtxMenu(\'' + col.id + '\',this)">' +
+          '<div class="coll-card__menu-wrap">' +
+            '<button class="coll-card__menu-btn" type="button" aria-label="Options for ' + col.title + '" onclick="hubToggleMenu(event,\'ctx-' + col.id + '\')">' +
               '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>' +
             '</button>' +
-            '<div class="ctx-menu" id="ctx-' + col.id + '" hidden>' +
-              '<button class="ctx-menu__item" type="button">' +
-                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            '<div class="ctx-menu" id="ctx-' + col.id + '">' +
+              '<button class="ctx-menu__item" type="button" onclick="event.stopPropagation();hubOpenEdit(\'' + col.id + '\')">' +
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
                 'Edit' +
               '</button>' +
-              '<button class="ctx-menu__item" type="button">' +
-                '<svg width="20" height="20" viewBox="0 0 12 9.33333" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M1 1.62272V8.33333H11V1.62272L6.32925 5.70962C6.14074 5.87457 5.85926 5.87457 5.67075 5.70962L1 1.62272ZM10.1931 1H1.80692L6 4.66895L10.1931 1ZM0 .666667C0 .298477.298477 0 .666667 0H11.3333C11.7015 0 12 .298477 12 .666667V8.66667C12 9.03486 11.7015 9.33333 11.3333 9.33333H.666667C.298477 9.33333 0 9.03486 0 8.66667V.666667Z" fill="currentColor"/></svg>' +
+              '<button class="ctx-menu__item" type="button" onclick="event.stopPropagation();hubOpenShare(\'' + col.id + '\')">' +
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 7l10 7 10-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
                 'Share via mail' +
               '</button>' +
-              '<button class="ctx-menu__item" type="button">' +
-                '<svg width="20" height="20" viewBox="0 0 11.5918 11.5137" fill="none"><path d="M8.907 2.469H8.876C8.72 1.769 8.33 1.142 7.77.693 7.21.245 6.514 0 5.796 0c-.718 0-1.414.245-1.974.693-.56.449-.95 1.076-1.106 1.776H2.685c-.347-.014-.694.041-1.019.164-.325.123-.622.31-.873.55-.25.241-.45.529-.586.849C.07 4.353 0 4.697 0 5.045c0 .347.07.691.206 1.011.137.32.336.609.587.849.25.241.547.428.872.552.325.122.672.178 1.019.164H4.463V6.731H2.685c-.229.012-.458-.023-.673-.103-.215-.08-.411-.202-.577-.359-.166-.158-.298-.348-.388-.558-.09-.21-.137-.437-.137-.666 0-.23.046-.456.137-.666.09-.21.222-.4.388-.558.166-.158.362-.28.577-.36.215-.079.444-.114.673-.102H3.503L3.538 2.954C3.588 2.389 3.848 1.864 4.266 1.482 4.684 1.1 5.23.887 5.796.887c.566 0 1.112.212 1.53.595.418.382.677.907.728 1.472L8.088 3.358H8.907c.229-.012.458.023.673.103.215.08.411.202.577.36.166.157.298.347.389.558.09.21.136.436.136.666 0 .229-.046.456-.136.666-.09.21-.223.4-.389.558-.166.157-.362.279-.577.359-.215.079-.444.114-.673.102H7.129V7.62H8.907c.347.015.694-.041 1.019-.164.325-.123.622-.31.873-.55.25-.24.45-.529.586-.849.136-.32.206-.664.206-1.011 0-.348-.07-.692-.206-1.011-.136-.32-.336-.609-.586-.85-.251-.24-.548-.427-.873-.55-.325-.123-.672-.178-1.019-.164z" fill="currentColor"/><path d="M8.351 8.531c-.083-.083-.196-.13-.313-.13s-.23.047-.313.13L6.24 10.016V4.505c0-.118-.047-.23-.13-.314-.084-.083-.197-.13-.314-.13-.118 0-.23.047-.314.13-.083.084-.13.196-.13.314v5.511L3.867 8.531c-.083-.083-.196-.13-.314-.13-.117 0-.23.047-.313.13-.042.042-.075.091-.097.145-.023.054-.035.112-.035.171 0 .059.012.117.035.171.022.054.055.103.097.145l2.222 2.222c.042.044.092.078.147.102.043.015.088.024.133.026h.053c.06.001.119-.011.173-.036.025-.013.049-.028.071-.045.025-.015.049-.031.071-.049l2.222-2.244c.08-.08.126-.187.129-.3.004-.113-.036-.223-.111-.308z" fill="currentColor"/></svg>' +
+              '<button class="ctx-menu__item" type="button" onclick="event.stopPropagation();hubOpenDownload(\'' + col.id + '\')">' +
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
                 'Download' +
               '</button>' +
-              '<button class="ctx-menu__item ctx-menu__item--danger" type="button">' +
-                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '<button class="ctx-menu__item ctx-menu__item--danger" type="button" onclick="event.stopPropagation();hubOpenDelete(\'' + col.id + '\')">' +
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
                 'Delete' +
               '</button>' +
             '</div>' +
@@ -933,18 +587,14 @@ function renderCollections() {
     sectionTitle.style.display = 'none';
     emptyState.hidden = false;
     grid.innerHTML = '';
+    grid.hidden = true;
   } else {
     sectionTitle.style.display = '';
     emptyState.hidden = true;
+    grid.hidden = false;
     var html = '';
-    var rows = Math.ceil(count / 3);
-    for (var r = 0; r < rows; r++) {
-      html += '<div class="coll-row">';
-      for (var c = 0; c < 3; c++) {
-        var idx = r * 3 + c;
-        if (idx < count) html += buildCard(COLLECTIONS[idx], idx);
-      }
-      html += '</div>';
+    for (var i = 0; i < count; i++) {
+      html += buildCard(COLLECTIONS[i], i);
     }
     grid.innerHTML = html;
   }
@@ -953,17 +603,103 @@ function renderCollections() {
 /* Demo helper: clicking "Create a new collection" in empty state populates sample data */
 function demoAddCollections() {
   COLLECTIONS = [
-    { id: 'c1', title: 'Accor Hotels Paris',      count: 8,  desc: 'A curated selection of Parisian hotel visuals for press and marketing campaigns across European markets.' },
-    { id: 'c2', title: 'Novotel Architecture',     count: 12, desc: 'Interior and exterior architecture shots from Novotel properties worldwide, suitable for brand guidelines.' },
-    { id: 'c3', title: 'Sofitel Branding Assets',  count: 5,  desc: 'Official brand photography for Sofitel properties, including lobby, rooms, and F&B experiences.' },
-    { id: 'c4', title: 'ibis Rooms Campaign',       count: 24, desc: 'Room photography for the global ibis rebranding campaign, covering all ibis sub-brands.' },
-    { id: 'c5', title: 'Mercure Social Media Kit',  count: 11, desc: 'Social media-ready assets for Mercure Hotels featuring regional hotels and seasonal promotions.' },
-    { id: 'c6', title: 'Pullman Lifestyle Series',  count: 7,  desc: 'Lifestyle photography series for Pullman Hotels, featuring pool, wellness, and dining environments.' },
+    { id: 'c1', title: 'Accor Hotels Paris',      count: 8,  desc: 'A curated selection of Parisian hotel visuals for press and marketing campaigns across European markets.', hasImages: true },
+    { id: 'c2', title: 'Novotel Architecture',     count: 12, desc: 'Interior and exterior architecture shots from Novotel properties worldwide, suitable for brand guidelines.', hasImages: true },
+    { id: 'c3', title: 'Sofitel Branding Assets',  count: 5,  desc: 'Official brand photography for Sofitel properties, including lobby, rooms, and F&B experiences.', hasImages: true },
+    { id: 'c4', title: 'ibis Rooms Campaign',       count: 24, desc: 'Room photography for the global ibis rebranding campaign, covering all ibis sub-brands.', hasImages: true },
+    { id: 'c5', title: 'Mercure Social Media Kit',  count: 11, desc: 'Social media-ready assets for Mercure Hotels featuring regional hotels and seasonal promotions.', hasImages: false },
+    { id: 'c6', title: 'Pullman Lifestyle Series',  count: 7,  desc: 'Lifestyle photography series for Pullman Hotels, featuring pool, wellness, and dining environments.', hasImages: true },
   ];
   renderCollections();
 }
 
-document.addEventListener('DOMContentLoaded', renderCollections);
+/* ── Hub helpers ─────────────────────────────────────────────────────── */
+function hubFindCol(id) {
+  for (var i = 0; i < COLLECTIONS.length; i++) {
+    if (COLLECTIONS[i].id === id) return COLLECTIONS[i];
+  }
+  return null;
+}
+
+function hubCloseAllMenus() {
+  document.querySelectorAll('.ctx-menu').forEach(function(m) { m.style.display = ''; });
+  document.querySelectorAll('.coll-card__menu-btn').forEach(function(b) {
+    b.setAttribute('aria-expanded', 'false');
+    b.classList.remove('coll-card__menu-btn--active');
+  });
+}
+
+function hubToggleMenu(e, menuId) {
+  e.stopPropagation();
+  var menu = document.getElementById(menuId);
+  var btn = e.currentTarget;
+  var isOpen = btn.classList.contains('coll-card__menu-btn--active');
+  hubCloseAllMenus();
+  if (!isOpen) {
+    btn.classList.add('coll-card__menu-btn--active');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function hubOpenCreateModal() {
+  MP.createCollection.open(function(title, desc) {
+    var newId = 'col-' + Date.now();
+    COLLECTIONS.push({ id: newId, title: title, desc: desc, count: 0, hasImages: false });
+    renderCollections();
+    MP.snackbar.show('Collection "' + title + '" created.');
+  });
+}
+
+function hubOpenEdit(id) {
+  hubCloseAllMenus();
+  var col = hubFindCol(id);
+  if (!col) return;
+  MP.editCollection.open(col.title, col.desc || '', function(newTitle, newDesc) {
+    col.title = newTitle;
+    col.desc = newDesc;
+    renderCollections();
+    MP.snackbar.show('Collection updated.');
+  });
+}
+
+function hubOpenShare(id) {
+  hubCloseAllMenus();
+  var col = hubFindCol(id);
+  if (!col) return;
+  MP.shareCollection.open(col.title, function() {
+    MP.snackbar.show('Mail is sent with success.');
+  });
+}
+
+function hubOpenDownload(id) {
+  hubCloseAllMenus();
+  var col = hubFindCol(id);
+  if (!col) return;
+  MP.download.open({ hasImages: col.hasImages !== false, hasOther: true, onSuccess: function() {
+    MP.snackbar.show('Download started.');
+  }});
+}
+
+function hubOpenDelete(id) {
+  hubCloseAllMenus();
+  var col = hubFindCol(id);
+  if (!col) return;
+  var colId = id;
+  var colName = col.title;
+  MP.deleteCollection.open({
+    body: 'You are about to delete the selected collection. This action cannot be undone once you confirm the deletion.',
+    onConfirm: function() {
+      COLLECTIONS = COLLECTIONS.filter(function(c) { return c.id !== colId; });
+      renderCollections();
+      MP.snackbar.show(colName + ' deleted.');
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderCollections();
+  document.addEventListener('click', function() { hubCloseAllMenus(); });
+});
 </script>
 </body>
 </html>

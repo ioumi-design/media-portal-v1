@@ -3,260 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Summer Promotion – Accor Media Portal</title>
-  <meta name="viewport" content="width=1440" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="components/components.css?v=7" />
   <style>
-    /* ── Design tokens ──────────────────────────────────────────────── */
-    :root {
-      --color-surface:               #ffffff;
-      --color-surface-container-low: #ffffff;
-      --color-surface-container-mid: #f7f9fb;
-      --color-on-surface-hi:         #252339;
-      --color-on-surface-mid:        #38364d;
-      --color-on-surface-low:        #5e5b73;
-      --color-outline-low:           #dadadd;
-      --color-outline-hi:            #8b8a93;
-      --color-accent:                #068484;
-      --color-primary:               #1e1852;
-      --color-on-primary:            #f9f9ff;
-      --color-danger:                #be003c;
-      --color-link:                  #0051ae;
-      --font-display: 'Montserrat', sans-serif;
-      --font-body:    'Roboto', sans-serif;
-      --font-label:   'Roboto', sans-serif;
-      --br-surface:   6px;
-      --br-full:      100px;
-      --grid-margin:  64px;
-      --header-h:     80px;
-      --footer-h:     48px;
-    }
-
-    /* ── Reset ──────────────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body {
-      font-family: var(--font-body);
-      background: var(--color-surface-container-low);
-      color: var(--color-on-surface-hi);
-      min-width: 1440px;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; cursor: pointer; background: none; border: none; }
-
-    /* ── Page shell ─────────────────────────────────────────────────── */
-    .page {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ── Header ─────────────────────────────────────────────────────── */
-    .site-header {
-      flex-shrink: 0;
-      background: var(--color-surface-container-low);
-      border-bottom: 1px solid var(--color-outline-low);
-      height: var(--header-h);
-      position: relative;
-      z-index: 100;
-    }
-    .site-header__inner {
-      max-width: 1440px;
-      height: 100%;
-      margin: 0 auto;
-      padding: 0 var(--grid-margin);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-    .brand:hover .brand__name { text-decoration: none; }
-    .brand__logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 56px;
-      height: 46px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .brand__monogramme { width: 22px; height: auto; }
-    .brand__typogramme { width: 44px; height: auto; margin-top: 4px; }
-    .brand__name {
-      font-family: var(--font-display);
-      font-size: 32px;
-      font-weight: 700;
-      line-height: 40px;
-      letter-spacing: 0.5px;
-      color: var(--color-primary);
-      white-space: nowrap;
-    }
-    .site-header__right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      height: 100%;
-    }
-    .site-nav {
-      display: flex;
-      height: 100%;
-      align-items: stretch;
-      gap: 20px;
-    }
-    .site-nav__tab {
-      display: flex;
-      align-items: center;
-      padding: 12px 4px;
-      font-family: var(--font-label);
-      font-size: 16px;
-      line-height: 24px;
-      color: var(--color-on-surface-hi);
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: color 120ms;
-    }
-    .site-nav__tab:hover { color: var(--color-accent); }
-    .header-icon-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 100%;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      color: var(--color-on-surface-hi);
-      cursor: pointer;
-      transition: color 120ms;
-      padding: 8px;
-    }
-    .header-icon-btn:hover { color: var(--color-accent); }
-    .header-icon-btn--active {
-      border-bottom: 4px solid var(--color-accent);
-      color: var(--color-on-surface-hi);
-    }
-    .header-cart-btn {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 58px;
-      height: 100%;
-      background: none;
-      border: none;
-      color: var(--color-on-surface-hi);
-      cursor: pointer;
-      transition: color 120ms;
-    }
-    .header-cart-btn:hover { color: var(--color-accent); }
-    .cart-badge {
-      position: absolute;
-      top: 12px; right: 8px;
-      width: 18px; height: 18px;
-      background: var(--color-accent);
-      border-radius: 100px;
-      font-size: 12px;
-      font-weight: 500;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .header-user {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 12px 24px 12px 20px;
-      background: none;
-      border: none;
-      border-radius: 60px;
-      font-size: 16px;
-      color: var(--color-on-surface-hi);
-      cursor: pointer;
-      transition: background 120ms;
-    }
-    .header-user:hover { background: rgba(6,132,132,.08); }
-    .header-user__avatar { position: relative; width: 24px; height: 24px; flex-shrink: 0; }
-    .header-user__avatar-dot {
-      position: absolute; top: 0; right: 0;
-      width: 6px; height: 6px;
-      background: var(--color-accent);
-      border-radius: 50%;
-      border: 1px solid #fff;
-    }
-
-    /* ── Account popover ─────────────────────────────────────────────── */
-    .account-popover {
-      position: absolute;
-      top: 80px;
-      right: 64px;
-      width: 375px;
-      background: var(--color-surface);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.16), 0 2px 8px rgba(0,0,0,.08);
-      z-index: 200;
-      padding: 20px;
-    }
-    .account-popover[hidden] { display: none; }
-    .accp__inner { display: flex; flex-direction: column; gap: 0; }
-    .accp__close-row { display: flex; justify-content: flex-end; height: 40px; }
-    .accp__close {
-      width: 40px; height: 40px;
-      display: flex; align-items: center; justify-content: center;
-      background: none; border: none; border-radius: 40px;
-      color: var(--color-on-surface-hi); cursor: pointer;
-      margin-right: -8px; margin-top: -8px;
-    }
-    .accp__close:hover { background: rgba(0,0,0,.06); }
-    .accp__greeting {
-      font-family: var(--font-label); font-weight: 500;
-      font-size: 18px; line-height: 24px;
-      color: var(--color-on-surface-hi); margin-bottom: 8px;
-    }
-    .accp__name {
-      font-family: var(--font-label); font-weight: 500;
-      font-size: 20px; line-height: 28px;
-      color: var(--color-on-surface-hi);
-      display: flex; gap: 4px; padding-bottom: 16px;
-    }
-    .accp__sep { height: 1px; background: var(--color-outline-low); }
-    .accp__list { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
-    .accp__item {
-      display: flex; align-items: center; gap: 8px;
-      height: 24px; cursor: pointer;
-      color: #232136; text-decoration: none;
-      font-family: var(--font-body); font-size: 16px; line-height: 24px;
-    }
-    .accp__item:hover { text-decoration: underline; color: #232136; }
-    .accp__item svg { flex-shrink: 0; }
-    .accp__actions { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; }
-    .accp__link {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: none; border: none; padding: 0;
-      font-family: var(--font-body); font-size: 14px; line-height: 20px;
-      color: var(--color-on-surface-hi); cursor: pointer; text-align: left;
-    }
-    .accp__link:hover { text-decoration: underline; color: #232136; }
-
-    /* ── Scrollable body ─────────────────────────────────────────────── */
-    .page-body {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
     /* ── Breadcrumb ──────────────────────────────────────────────────── */
     .breadcrumb {
       display: flex;
@@ -639,29 +391,7 @@
     }
     .asset-card__link:hover { text-decoration: underline; }
 
-    /* ── Footer ─────────────────────────────────────────────────────── */
-    .site-footer {
-      flex-shrink: 0;
-      height: var(--footer-h);
-      background: var(--color-surface-container-low);
-      box-shadow: 0 -2px 6px rgba(7,5,24,.05);
-      display: flex;
-      align-items: center;
-      padding: 0 var(--grid-margin);
-    }
-    .site-footer__copy {
-      font-size: 14px;
-      line-height: 20px;
-      color: var(--color-on-surface-low);
-    }
-
-    /* ── Hover on icon-btn same as secondary ────────────────────────── */
-    .btn-icon-circle:hover,
-    .header-icon-btn:hover,
-    .header-cart-btn:hover,
-    .header-user:hover {
-      background: rgba(6,132,132,.08);
-    }
+    .card-ctx-menu[hidden] { display: none; }
   </style>
 </head>
 <body>
@@ -704,7 +434,7 @@
         </button>
 
         <!-- Cart -->
-        <button class="header-cart-btn" type="button" aria-label="Cart (99 items)">
+        <button class="header-cart-btn" type="button" aria-label="Cart (99 items)" onclick="MP.cart.open()">
           <svg width="24" height="24" viewBox="0 0 19.5 19.6547" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6073 17.9404C7.6336 17.9404 7.65492 17.9191 7.65492 17.8928C7.65492 17.8665 7.6336 17.8452 7.6073 17.8452C7.581 17.8452 7.55968 17.8665 7.55968 17.8928C7.55968 17.9191 7.581 17.9404 7.6073 17.9404ZM5.84539 17.8928C5.84539 16.9197 6.63422 16.1309 7.6073 16.1309C8.58037 16.1309 9.3692 16.9197 9.3692 17.8928C9.3692 18.8659 8.58037 19.6547 7.6073 19.6547C6.63422 19.6547 5.84539 18.8659 5.84539 17.8928Z" fill="currentColor"/>
             <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1785 17.9404C16.2048 17.9404 16.2261 17.9191 16.2261 17.8928C16.2261 17.8665 16.2048 17.8452 16.1785 17.8452C16.1522 17.8452 16.1309 17.8665 16.1309 17.8928C16.1309 17.9191 16.1522 17.9404 16.1785 17.9404ZM14.4166 17.8928C14.4166 16.9197 15.2054 16.1309 16.1785 16.1309C17.1516 16.1309 17.9404 16.9197 17.9404 17.8928C17.9404 18.8659 17.1516 19.6547 16.1785 19.6547C15.2054 19.6547 14.4166 18.8659 14.4166 17.8928Z" fill="currentColor"/>
@@ -789,27 +519,27 @@
           <h1 class="coll-title">Summer promotion (Title of the collection)</h1>
           <div class="coll-actions">
             <!-- Email / Share -->
-            <button class="btn-icon-circle" id="btn-share" type="button" aria-label="Share via email" title="Share via email">
+            <button class="btn-icon-circle" id="btn-share" type="button" aria-label="Share via email" title="Share via email" onclick="collOpenCollShareModal()">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
             <!-- Upload / Download collection -->
-            <button class="btn-icon-circle" id="btn-download-coll" type="button" aria-label="Download collection" title="Download collection">
+            <button class="btn-icon-circle" id="btn-download-coll" type="button" aria-label="Download collection" title="Download collection" onclick="collOpenCollDownloadModal()">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
             <!-- Edit -->
-            <button class="btn-icon-circle" type="button" aria-label="Edit collection" title="Edit collection">
+            <button class="btn-icon-circle" type="button" aria-label="Edit collection" title="Edit collection" onclick="collOpenEditModal()">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
             <!-- Delete (danger) -->
-            <button class="btn-icon-circle btn-icon-circle--danger" type="button" aria-label="Delete collection" title="Delete collection">
+            <button class="btn-icon-circle btn-icon-circle--danger" type="button" aria-label="Delete collection" title="Delete collection" onclick="collOpenDeleteCollModal()">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -819,7 +549,7 @@
         </div>
 
         <!-- Asset count -->
-        <p class="coll-count" id="asset-count">7 assets</p>
+        <p class="coll-count" id="asset-count">0 assets</p>
 
         <!-- Description -->
         <div class="coll-desc">
@@ -841,8 +571,8 @@
         <!-- Action bar (content swapped via JS on select mode toggle) -->
         <div class="asset-action-bar" id="action-bar"></div>
 
-        <!-- Empty state (shown when ASSETS.length === 0) -->
-        <div class="coll-assets-empty" id="coll-assets-empty" hidden>
+        <!-- Empty state: only when there are no asset cards (see renderAssets) -->
+        <div class="coll-assets-empty" id="coll-assets-empty">
           <img src="assets/empty-collection-assets.png" alt="No assets illustration" class="coll-assets-empty__img"/>
           <p class="coll-assets-empty__title">You have no asset here yet...</p>
           <button class="coll-assets-empty__cta" type="button" onclick="location.href='index.html'">
@@ -854,8 +584,8 @@
           </button>
         </div>
 
-        <!-- Card grid -->
-        <div class="asset-grid" id="asset-grid"></div>
+        <!-- Card grid: only when asset cards exist -->
+        <div class="asset-grid" id="asset-grid" hidden></div>
       </div>
 
     </main>
@@ -867,26 +597,69 @@
     <p class="site-footer__copy">© 2026 Accor Media Portal</p>
   </footer>
 
+  <!-- Share asset(s) -->
+  <div class="modal-overlay" id="coll-modal-share" hidden role="dialog" aria-modal="true">
+    <div class="modal modal--wide">
+      <div class="modal__header-row">
+        <button class="modal__close-btn" type="button" aria-label="Close" onclick="collCloseShareModal()">
+          <svg width="16" height="16" viewBox="0 0 15.5 15.5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.2803 1.28033C15.5732 0.987437 15.5732 0.512563 15.2803 0.21967C14.9874 -0.0732233 14.5126 -0.0732233 14.2197 0.21967L7.75 6.68934L1.28033 0.21967C0.987437 -0.0732233 0.512564 -0.0732233 0.219671 0.21967C-0.0732227 0.512563 -0.0732227 0.987437 0.219671 1.28033L6.68934 7.75L0.21967 14.2197C-0.0732233 14.5126 -0.0732234 14.9874 0.21967 15.2803C0.512562 15.5732 0.987437 15.5732 1.28033 15.2803L7.75 8.81066L14.2197 15.2803C14.5126 15.5732 14.9874 15.5732 15.2803 15.2803C15.5732 14.9874 15.5732 14.5126 15.2803 14.2197L8.81066 7.75L15.2803 1.28033Z" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <h2 class="modal__title">Share asset</h2>
+      <div class="modal__body">
+        <div class="modal-share-split">
+          <div class="modal-share-split__col">
+            <h3>Assets</h3>
+            <div class="modal-share-assets-scroll" id="coll-share-assets-list"></div>
+          </div>
+          <div class="modal-share-split__col">
+            <h3>Recipients</h3>
+            <div class="modal__field">
+              <label class="modal__field-label" for="coll-share-email">E-mail address</label>
+              <input class="modal__input" id="coll-share-email" type="text" placeholder="Comma delimited list of e-mail addresses" autocomplete="email" />
+            </div>
+            <div class="modal__field">
+              <label class="modal__field-label modal__field-label--opt" for="coll-share-msg">Message (optional)</label>
+              <textarea class="modal__textarea" id="coll-share-msg" placeholder="Message"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="modal__btn-outline" type="button" onclick="collCloseShareModal()">Cancel</button>
+        <button class="modal__btn-primary" type="button" onclick="collSendShare()">
+          Share via mail
+          <svg width="18" height="18" viewBox="0 0 12 9.33333" fill="none" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M1 1.62272V8.33333H11V1.62272L6.32925 5.70962C6.14074 5.87457 5.85926 5.87457 5.67075 5.70962L1 1.62272ZM10.1931 1H1.80692L6 4.66895L10.1931 1ZM0 .666667C0 .298477.298477 0 .666667 0H11.3333C11.7015 0 12 .298477 12 .666667V8.66667C12 9.03486 11.7015 9.33333 11.3333 9.33333H.666667C.298477 9.33333 0 9.03486 0 8.66667V.666667Z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remove asset(s) -->
+  <div class="modal-overlay" id="coll-modal-remove" hidden role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal__header-row">
+        <button class="modal__close-btn" type="button" aria-label="Close" onclick="collCloseRemoveModal()">
+          <svg width="16" height="16" viewBox="0 0 15.5 15.5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.2803 1.28033C15.5732 0.987437 15.5732 0.512563 15.2803 0.21967C14.9874 -0.0732233 14.5126 -0.0732233 14.2197 0.21967L7.75 6.68934L1.28033 0.21967C0.987437 -0.0732233 0.512564 -0.0732233 0.219671 0.21967C-0.0732227 0.512563 -0.0732227 0.987437 0.219671 1.28033L6.68934 7.75L0.21967 14.2197C-0.0732233 14.5126 -0.0732234 14.9874 0.21967 15.2803C0.512562 15.5732 0.987437 15.5732 1.28033 15.2803L7.75 8.81066L14.2197 15.2803C14.5126 15.5732 14.9874 15.5732 15.2803 15.2803C15.5732 14.9874 15.5732 14.5126 15.2803 14.2197L8.81066 7.75L15.2803 1.28033Z" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <h2 class="modal__title" id="coll-remove-title">Remove this asset?</h2>
+      <p style="font-size:16px;line-height:24px;color:var(--color-on-surface-mid);">You are about to remove the selected asset from this collection. This action will not delete the asset.</p>
+      <div class="modal__footer" style="padding-top:24px;">
+        <button class="modal__btn-outline" type="button" onclick="collCloseRemoveModal()">Cancel</button>
+        <button class="modal__btn-danger" type="button" onclick="collConfirmRemove()">
+          Yes, remove
+          <span aria-hidden="true">🗑</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
 </div><!-- /page -->
 
+<script src="components/components.js?v=7"></script>
 <script>
-/* ── Account popover ─────────────────────────────────────────────────── */
-function toggleAccountPopover() {
-  var popover = document.getElementById('account-popover');
-  var btn = document.getElementById('account-btn');
-  var isOpen = !popover.hidden;
-  popover.hidden = isOpen;
-  btn.setAttribute('aria-expanded', String(!isOpen));
-}
-document.addEventListener('click', function(e) {
-  var popover = document.getElementById('account-popover');
-  var btn = document.getElementById('account-btn');
-  if (!popover.hidden && !popover.contains(e.target) && !btn.contains(e.target)) {
-    popover.hidden = true;
-    btn.setAttribute('aria-expanded', 'false');
-  }
-});
-
 /* ── Description toggle ──────────────────────────────────────────────── */
 function toggleDesc() {
   var text   = document.getElementById('desc-text');
@@ -933,9 +706,9 @@ function renderActionBar(selectedCount) {
     bar.innerHTML =
       '<button class="btn-asset-action" type="button" onclick="exitSelectMode()">' + SVG_CLOSE + ' Cancel</button>' +
       '<button class="btn-asset-action btn-asset-action--select-all" type="button" onclick="selectAll()">' + SVG_CHECK + ' Select all</button>' +
-      '<button class="btn-asset-action' + disabled + '" type="button">' + SVG_MAIL + ' Share</button>' +
-      '<button class="btn-asset-action' + disabled + '" type="button">' + SVG_DOWNLOAD + ' Download</button>' +
-      '<button class="btn-asset-action btn-asset-action--danger' + disabled + '" type="button">' + SVG_TRASH + ' Remove</button>' +
+      '<button class="btn-asset-action' + disabled + '" type="button" onclick="collOpenShareFromBar(event)">' + SVG_MAIL + ' Share</button>' +
+      '<button class="btn-asset-action' + disabled + '" type="button" onclick="collOpenDownloadFromBar(event)">' + SVG_DOWNLOAD + ' Download</button>' +
+      '<button class="btn-asset-action btn-asset-action--danger' + disabled + '" type="button" onclick="collOpenRemoveFromBar(event)">' + SVG_TRASH + ' Remove</button>' +
       '<div class="select-counter-sep"></div>' +
       '<span class="select-counter">' + selectedCount + ' / ' + total + ' selected</span>';
   }
@@ -982,23 +755,190 @@ function toggleCardMenu(cardId, btn) {
   btn.setAttribute('aria-expanded', String(!isOpen));
 }
 document.addEventListener('click', function(e) {
-  if (!e.target.closest('.asset-card__menu-btn')) {
+  if (!e.target.closest('.asset-card__menu-btn') && !e.target.closest('.card-ctx-menu')) {
     document.querySelectorAll('.card-ctx-menu').forEach(function(m) { m.hidden = true; });
+    document.querySelectorAll('.asset-card__menu-btn').forEach(function(b) {
+      b.setAttribute('aria-expanded', 'false');
+    });
   }
 });
+
+/* ── Modals, snackbar, clipboard ─────────────────────────────────────── */
+var collUndoRemoveEntries = null;
+var collRemoveIds = [];
+
+function collCloseAllMenus() {
+  document.querySelectorAll('.card-ctx-menu').forEach(function(m) { m.hidden = true; });
+  document.querySelectorAll('.asset-card__menu-btn').forEach(function(b) { b.setAttribute('aria-expanded', 'false'); });
+}
+
+function collFindAsset(id) {
+  for (var i = 0; i < ASSETS.length; i++) {
+    if (ASSETS[i].id === id) return ASSETS[i];
+  }
+  return null;
+}
+
+function collDismissSnackbar() { MP.snackbar.dismiss(); }
+
+function collShowSnackbar(text, opts) { MP.snackbar.show(text, opts); }
+
+function collCopyMediaUrl(id) {
+  collCloseAllMenus();
+  var a = collFindAsset(id);
+  if (!a) return;
+  var url = a.mediaUrl || '';
+  function done() {
+    collShowSnackbar('Media name is copied to clipboard.');
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(done).catch(done);
+  } else {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    } catch (err) {}
+    done();
+  }
+}
+
+function collPopulateShareList(ids) {
+  var list = document.getElementById('coll-share-assets-list');
+  list.innerHTML = '';
+  var docSvg = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  ids.forEach(function(id) {
+    var asset = collFindAsset(id);
+    if (!asset) return;
+    var row = document.createElement('div');
+    row.className = 'modal-share-split__row';
+    row.innerHTML = docSvg + '<span></span>';
+    row.lastElementChild.textContent = asset.title;
+    list.appendChild(row);
+  });
+}
+
+function collOpenShareModal(ids) {
+  collCloseAllMenus();
+  if (!ids || !ids.length) return;
+  collPopulateShareList(ids);
+  document.getElementById('coll-share-email').value = '';
+  document.getElementById('coll-share-msg').value = '';
+  document.getElementById('coll-modal-share').hidden = false;
+}
+
+function collCloseShareModal() {
+  document.getElementById('coll-modal-share').hidden = true;
+}
+
+function collSendShare() {
+  collCloseShareModal();
+  MP.snackbar.show('Mail is sent with success.');
+}
+
+function collOpenRemoveModal(ids) {
+  collCloseAllMenus();
+  if (!ids || !ids.length) return;
+  collRemoveIds = ids.slice();
+  document.getElementById('coll-remove-title').textContent =
+    collRemoveIds.length > 1 ? 'Remove these assets?' : 'Remove this asset?';
+  document.getElementById('coll-modal-remove').hidden = false;
+}
+
+function collCloseRemoveModal() {
+  document.getElementById('coll-modal-remove').hidden = true;
+  collRemoveIds = [];
+}
+
+function collConfirmRemove() {
+  if (!collRemoveIds.length) return;
+  var n = collRemoveIds.length;
+  var entries = [];
+  collRemoveIds.forEach(function(id) {
+    var idx = -1;
+    for (var i = 0; i < ASSETS.length; i++) {
+      if (ASSETS[i].id === id) { idx = i; break; }
+    }
+    if (idx >= 0) entries.push({ asset: ASSETS[idx], index: idx });
+  });
+  entries.sort(function(a, b) { return b.index - a.index; });
+  entries.forEach(function(e) { ASSETS.splice(e.index, 1); });
+  collUndoRemoveEntries = entries.slice().sort(function(a, b) { return a.index - b.index; });
+  collCloseRemoveModal();
+  renderAssets();
+  var msg = n === 1 ? '1 asset removed from the collection.' : (n + ' assets removed from the collection.');
+  collShowSnackbar(msg, { undo: true, onUndo: collUndoRemove });
+}
+
+function collUndoRemove() {
+  if (!collUndoRemoveEntries || !collUndoRemoveEntries.length) return;
+  collUndoRemoveEntries.forEach(function(e) {
+    ASSETS.splice(e.index, 0, e.asset);
+  });
+  collUndoRemoveEntries = null;
+  renderAssets();
+}
+
+function collOpenDownloadModal(ids) {
+  collCloseAllMenus();
+  if (!ids || !ids.length) return;
+  window.collDownloadTargetIds = ids.slice();
+  var hasImg = false, hasOther = false;
+  ids.forEach(function(id) {
+    var a = collFindAsset(id);
+    if (a) { if (a.isImage) hasImg = true; else hasOther = true; }
+  });
+  MP.download.open({ hasImages: hasImg, hasOther: hasOther, onSuccess: function() {
+    MP.snackbar.show('Download started.');
+  }});
+}
+
+function collSelectedIdsFromBar() {
+  var out = [];
+  document.querySelectorAll('.asset-card.is-selected').forEach(function(c) {
+    out.push(c.getAttribute('data-asset-id'));
+  });
+  return out;
+}
+
+function collOpenShareFromBar(ev) {
+  if (ev) ev.stopPropagation();
+  var ids = collSelectedIdsFromBar();
+  if (!ids.length) return;
+  collOpenShareModal(ids);
+}
+
+function collOpenDownloadFromBar(ev) {
+  if (ev) ev.stopPropagation();
+  var ids = collSelectedIdsFromBar();
+  if (!ids.length) return;
+  collOpenDownloadModal(ids);
+}
+
+function collOpenRemoveFromBar(ev) {
+  if (ev) ev.stopPropagation();
+  var ids = collSelectedIdsFromBar();
+  if (!ids.length) return;
+  collOpenRemoveModal(ids);
+}
 
 /* ── Asset card data & render ────────────────────────────────────────── */
 var ASSET_COLORS = ['#C5D8E8','#D8C5E8','#C5E8D8','#E8D8C5','#C5C5E8','#E8C5D8','#D8E8C5'];
 /* Start empty to demo the empty state; populated via demoFillAssets() */
 var ASSETS = [];
 var ASSETS_DEMO = [
-  { id: 'a1', title: 'Grand Hotel Paris – Exterior Facade at Dusk' },
-  { id: 'a2', title: 'Sofitel Lyon Bellecour – Lobby Interior' },
-  { id: 'a3', title: 'Novotel Berlin Mitte – Standard Room' },
-  { id: 'a4', title: 'Mercure Bordeaux – Rooftop Terrace' },
-  { id: 'a5', title: 'ibis Paris Gare de Lyon – Reception Area' },
-  { id: 'a6', title: 'Pullman Paris Tour Eiffel – Restaurant' },
-  { id: 'a7', title: 'Swissôtel Kolkata – Swimming Pool' },
+  { id: 'a1', title: 'Grand Hotel Paris – Exterior Facade at Dusk', mediaUrl: 'https://media.accor.com/portal/asset/a1/original', isImage: true },
+  { id: 'a2', title: 'Sofitel Lyon Bellecour – Lobby Interior', mediaUrl: 'https://media.accor.com/portal/asset/a2/original', isImage: true },
+  { id: 'a3', title: 'Novotel Berlin Mitte – Standard Room', mediaUrl: 'https://media.accor.com/portal/asset/a3/original', isImage: true },
+  { id: 'a4', title: 'Mercure Bordeaux – Rooftop Terrace', mediaUrl: 'https://media.accor.com/portal/asset/a4/original', isImage: true },
+  { id: 'a5', title: 'ibis Paris Gare de Lyon – Reception Area', mediaUrl: 'https://media.accor.com/portal/asset/a5/original', isImage: true },
+  { id: 'a6', title: 'Pullman Paris Tour Eiffel – Restaurant', mediaUrl: 'https://media.accor.com/portal/asset/a6/original', isImage: true },
+  { id: 'a7', title: 'Brand guidelines – PDF summary', mediaUrl: 'https://media.accor.com/portal/asset/a7/document', isImage: false },
 ];
 
 function makeThumb(i) {
@@ -1017,7 +957,7 @@ function makeThumb(i) {
 
 function buildCard(asset, i) {
   return (
-    '<div class="asset-card" id="card-' + asset.id + '" onclick="handleCardClick(this, event)">' +
+    '<div class="asset-card" id="card-' + asset.id + '" data-asset-id="' + asset.id + '" onclick="handleCardClick(this, event)">' +
       '<div class="asset-card__thumb">' +
         makeThumb(i) +
         '<div class="asset-card__checkbox" aria-hidden="true"></div>' +
@@ -1030,21 +970,17 @@ function buildCard(asset, i) {
               '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>' +
             '</button>' +
             '<div class="card-ctx-menu" id="cm-' + asset.id + '" hidden>' +
-              '<button class="card-ctx-menu__item" type="button">' +
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-                'Copy Media URL' +
+              '<button class="card-ctx-menu__item" type="button" onclick="event.stopPropagation();collCopyMediaUrl(\'' + asset.id + '\')">' +
+                '<span aria-hidden="true">🔗</span> Copy Media URL' +
               '</button>' +
-              '<button class="card-ctx-menu__item" type="button">' +
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-                'Share via mail' +
+              '<button class="card-ctx-menu__item" type="button" onclick="event.stopPropagation();collOpenShareModal([\'' + asset.id + '\'])">' +
+                '<span aria-hidden="true">✉</span> Share via mail' +
               '</button>' +
-              '<button class="card-ctx-menu__item" type="button">' +
-                '<svg width="24" height="24" viewBox="0 0 11.5918 11.5137" fill="none"><path d="M8.907 2.469H8.876C8.72 1.769 8.33 1.142 7.77.693 7.21.245 6.514 0 5.796 0c-.718 0-1.414.245-1.974.693-.56.449-.95 1.076-1.106 1.776H2.685c-.347-.014-.694.041-1.019.164-.325.123-.622.31-.873.55-.25.241-.45.529-.586.849C.07 4.353 0 4.697 0 5.045c0 .347.07.691.206 1.011.137.32.336.609.587.849.25.241.547.428.872.552.325.122.672.178 1.019.164H4.463V6.731H2.685c-.229.012-.458-.023-.673-.103-.215-.08-.411-.202-.577-.359-.166-.158-.298-.348-.388-.558-.09-.21-.137-.437-.137-.666 0-.23.046-.456.137-.666.09-.21.222-.4.388-.558.166-.158.362-.28.577-.36.215-.079.444-.114.673-.102H3.503L3.538 2.954C3.588 2.389 3.848 1.864 4.266 1.482 4.684 1.1 5.23.887 5.796.887c.566 0 1.112.212 1.53.595.418.382.677.907.728 1.472L8.088 3.358H8.907c.229-.012.458.023.673.103.215.08.411.202.577.36.166.157.298.347.389.558.09.21.136.436.136.666 0 .229-.046.456-.136.666-.09.21-.223.4-.389.558-.166.157-.362.279-.577.359-.215.079-.444.114-.673.102H7.129V7.62H8.907c.347.015.694-.041 1.019-.164.325-.123.622-.31.873-.55.25-.24.45-.529.586-.849.136-.32.206-.664.206-1.011 0-.348-.07-.692-.206-1.011-.136-.32-.336-.609-.586-.85-.251-.24-.548-.427-.873-.55-.325-.123-.672-.178-1.019-.164z" fill="currentColor"/><path d="M8.351 8.531c-.083-.083-.196-.13-.313-.13s-.23.047-.313.13L6.24 10.016V4.505c0-.118-.047-.23-.13-.314-.084-.083-.197-.13-.314-.13-.118 0-.23.047-.314.13-.083.084-.13.196-.13.314v5.511L3.867 8.531c-.083-.083-.196-.13-.314-.13-.117 0-.23.047-.313.13-.042.042-.075.091-.097.145-.023.054-.035.112-.035.171 0 .059.012.117.035.171.022.054.055.103.097.145l2.222 2.222c.042.044.092.078.147.102.043.015.088.024.133.026h.053c.06.001.119-.011.173-.036.025-.013.049-.028.071-.045.025-.015.049-.031.071-.049l2.222-2.244c.08-.08.126-.187.129-.3.004-.113-.036-.223-.111-.308z" fill="currentColor"/></svg>' +
-                'Download' +
+              '<button class="card-ctx-menu__item" type="button" onclick="event.stopPropagation();collOpenDownloadModal([\'' + asset.id + '\'])">' +
+                '<span aria-hidden="true">↓</span> Download' +
               '</button>' +
-              '<button class="card-ctx-menu__item card-ctx-menu__item--danger" type="button">' +
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-                'Remove' +
+              '<button class="card-ctx-menu__item card-ctx-menu__item--danger" type="button" onclick="event.stopPropagation();collOpenRemoveModal([\'' + asset.id + '\'])">' +
+                '<span aria-hidden="true">🗑</span> Remove' +
               '</button>' +
             '</div>' +
           '</div>' +
@@ -1080,9 +1016,11 @@ function renderAssets() {
   if (isEmpty) {
     emptyEl.hidden = false;
     grid.innerHTML = '';
+    grid.hidden = true;
     actionBar.innerHTML = '';
   } else {
     emptyEl.hidden = true;
+    grid.hidden = false;
     var html = '';
     var cols = 4;
     var rows = Math.ceil(ASSETS.length / cols);
@@ -1097,6 +1035,47 @@ function renderAssets() {
     grid.innerHTML = html;
     renderActionBar(0);
   }
+}
+
+/* ── Collection-level button modals ──────────────────────────────────── */
+
+function collOpenCollShareModal() {
+  var collName = document.querySelector('.coll-title').textContent.trim();
+  MP.shareCollection.open(collName, function() {
+    MP.snackbar.show('Mail is sent with success.');
+  });
+}
+
+function collOpenCollDownloadModal() {
+  var ids = ASSETS.map(function(a) { return a.id; });
+  collOpenDownloadModal(ids);
+}
+
+function collOpenEditModal() {
+  var title = document.querySelector('.coll-title').textContent.trim();
+  var desc = document.getElementById('desc-text').textContent.trim();
+  MP.editCollection.open(title, desc, function(newTitle, newDesc) {
+    if (newTitle) {
+      document.querySelector('.coll-title').textContent = newTitle;
+      document.title = newTitle + ' – Accor Media Portal';
+    }
+    var descText = document.getElementById('desc-text');
+    var descWrap = document.querySelector('.coll-desc');
+    if (newDesc) {
+      descText.textContent = newDesc;
+      descWrap.style.display = '';
+      updateDescToggleVisibility();
+    } else {
+      descWrap.style.display = 'none';
+    }
+    MP.snackbar.show('Collection updated.');
+  });
+}
+
+function collOpenDeleteCollModal() {
+  MP.deleteCollection.open({
+    onConfirm: function() { location.href = 'hub-collection.html'; }
+  });
 }
 
 /* Demo helper: "Find assets" CTA on this page links to index.html,
@@ -1137,7 +1116,12 @@ document.addEventListener('DOMContentLoaded', function() {
       /* Add saved asset */
       if (data.asset && data.asset.title) {
         var id = 'saved-' + Date.now();
-        ASSETS = [{ id: id, title: data.asset.title }];
+        ASSETS = [{
+          id: id,
+          title: data.asset.title,
+          mediaUrl: data.asset.mediaUrl || ('https://media.accor.com/portal/asset/' + id + '/original'),
+          isImage: true
+        }];
       } else {
         ASSETS = [];
       }
