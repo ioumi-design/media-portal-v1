@@ -127,6 +127,7 @@
       white-space: nowrap;
     }
     .coll-desc__toggle:hover { text-decoration: underline; }
+    .coll-desc__toggle[hidden] { display: none !important; }
 
     /* ── Asset section ───────────────────────────────────────────────── */
     .coll-assets {
@@ -675,14 +676,18 @@ function updateDescToggleVisibility() {
   var text   = document.getElementById('desc-text');
   var toggle = document.getElementById('desc-toggle');
   if (!text || !toggle) return;
-  /* scrollHeight > clientHeight means text is clamped/overflowing */
-  if (text.scrollHeight > text.clientHeight + 2) {
-    toggle.hidden = false;
-  } else {
-    toggle.hidden = true;
-    /* If text was previously expanded and we hide the toggle, collapse it back */
-    text.classList.remove('is-expanded');
-  }
+  /* Measure natural (unclamped) height vs clamped clientHeight.
+     -webkit-line-clamp makes scrollHeight unreliable, so we
+     temporarily override inline to get the real full height. */
+  var clampedH = text.clientHeight;
+  var saved = text.style.cssText;
+  text.style.webkitLineClamp = 'unset';
+  text.style.display = 'block';
+  var fullH = text.scrollHeight;
+  text.style.cssText = saved;
+  var overflows = fullH > clampedH + 2;
+  toggle.hidden = !overflows;
+  if (!overflows) text.classList.remove('is-expanded');
 }
 
 /* ── Action bar render ───────────────────────────────────────────────── */
