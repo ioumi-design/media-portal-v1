@@ -1231,6 +1231,10 @@
     _currentAssetId = assetId;
 
     DB.getAsset(assetId).then(function(asset) {
+      /* Fall back to SUMMER_ASSETS for scenario assets (ids starting with "s") */
+      if (!asset && window.SUMMER_ASSETS) {
+        asset = window.SUMMER_ASSETS.find(function(a) { return a.id === assetId; }) || null;
+      }
       if (!asset) return;
 
       /* Initialize cart/fav button states */
@@ -1255,11 +1259,9 @@
       /* Preview */
       var preview = document.getElementById('detail-preview');
       if (preview) {
+        _currentAssetThumbnail = asset.thumbnail || null;
         if (asset.thumbnail) {
-          _currentAssetThumbnail = asset.thumbnail;
-          preview.innerHTML = '<img src="' + asset.thumbnail + '" alt="' + asset.title + '" style="max-width:100%;max-height:100%;object-fit:contain;" onerror="_imgErr(this)">';
-        } else {
-          preview.querySelector('.detail-preview__placeholder') && (preview.querySelector('.detail-preview__placeholder').textContent = asset.title);
+          preview.innerHTML = '<img src="' + asset.thumbnail + '" alt="' + asset.title + '" style="width:100%;height:100%;object-fit:contain;background:#F4F4F4;" onerror="this.parentElement.innerHTML=\'<span style=&quot;color:#9CA3AF;font-size:24px&quot;>Zone de preview</span>\'">';
         }
       }
 
@@ -1270,6 +1272,25 @@
           var label = r.indexOf(':') >= 0 ? r.replace(':', ' : ') : r;
           return '<button class="chip' + (i === 0 ? ' chip--active' : '') + '" data-ratio="' + r + '">' + label + '</button>';
         }).join('');
+
+        /* Chip click → change preview container aspect ratio */
+        chipGrid.addEventListener('click', function(e) {
+          var btn = e.target.closest('.chip');
+          if (!btn) return;
+          chipGrid.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('chip--active'); });
+          btn.classList.add('chip--active');
+          var ratio = btn.dataset.ratio;
+          var previewEl = document.getElementById('detail-preview');
+          if (!previewEl) return;
+          if (!ratio || ratio === 'Original') {
+            previewEl.style.aspectRatio = '';
+            previewEl.style.height = '550px';
+          } else {
+            var parts = ratio.split(':');
+            previewEl.style.aspectRatio = parts[0] + '/' + parts[1];
+            previewEl.style.height = 'auto';
+          }
+        });
       }
 
       /* Metadata panel */
