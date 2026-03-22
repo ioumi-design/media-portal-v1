@@ -1778,7 +1778,12 @@
     const ICON_HEART_FILLED  = `<svg class="fav-icon-filled"  width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/></svg>`;
 
     var _IMG_ERR_HTML = '<div style="width:100%;height:100%;background:#ECEDF4;display:flex;align-items:center;justify-content:center;"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="#ECEDF4"/><path d="M8 36l10-12 7 8 5-6 10 10H8z" fill="#C4C6D0"/><circle cx="32" cy="16" r="4" fill="#E8A000"/></svg></div>';
-    function _imgErr(el) { el.onerror = null; el.parentNode.innerHTML = _IMG_ERR_HTML; }
+    function _imgErr(el) {
+      el.onerror = null;
+      var card = el.closest('.asset-card');
+      if (card) card.classList.add('img-broken');
+      el.parentNode.innerHTML = _IMG_ERR_HTML;
+    }
 
     function _placeholder(i) {
       const p = PLACEHOLDER_COLORS[i % PLACEHOLDER_COLORS.length];
@@ -1851,6 +1856,23 @@
       }
       if (gridEl) gridEl.innerHTML = gridHTML;
       if (listEl) listEl.innerHTML = listHTML;
+      if (gridEl) _scheduleResortBroken(gridEl, '.asset-card');
+    }
+
+    function _scheduleResortBroken(container, selector) {
+      setTimeout(function() {
+        var broken = Array.from(container.querySelectorAll(selector + '.img-broken'));
+        if (!broken.length) return;
+        broken.forEach(function(c) { c.style.opacity = '0'; });
+        setTimeout(function() {
+          broken.forEach(function(c) {
+            container.appendChild(c);
+            c.style.transition = 'opacity 300ms ease';
+            c.style.opacity = '';
+          });
+          setTimeout(function() { broken.forEach(function(c) { c.style.transition = ''; }); }, 350);
+        }, 200);
+      }, 1500);
     }
 
     function updateCartBadge() {

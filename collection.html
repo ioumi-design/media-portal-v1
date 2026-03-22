@@ -256,6 +256,7 @@
       width: 100%;
       aspect-ratio: 309 / 213;
       border-radius: var(--br-surface);
+      cursor: pointer;
       overflow: hidden;
       position: relative;
       flex-shrink: 0;
@@ -851,6 +852,7 @@ function collCloseShareModal() {
 
 function collSendShare() {
   collCloseShareModal();
+  if (selectMode) exitSelectMode();
   MP.snackbar.show('Mail is sent with success.');
 }
 
@@ -887,6 +889,7 @@ function collConfirmRemove() {
   }
   collUndoRemoveEntries = entries.slice().sort(function(a, b) { return a.index - b.index; });
   collCloseRemoveModal();
+  if (selectMode) exitSelectMode();
   renderAssets();
   var msg = n === 1 ? '1 asset removed from the collection.' : (n + ' assets removed from the collection.');
   collShowSnackbar(msg, { undo: true, onUndo: collUndoRemove });
@@ -915,6 +918,7 @@ function collOpenDownloadModal(ids) {
     if (a) { if (a.type === 'Image' || a.format === 'Image' || a.isImage) hasImg = true; else hasOther = true; }
   });
   MP.download.open({ hasImages: hasImg, hasOther: hasOther, onSuccess: function() {
+    if (selectMode) exitSelectMode();
     MP.snackbar.show('Download started.');
   }});
 }
@@ -950,7 +954,12 @@ function collOpenRemoveFromBar(ev) {
 
 /* ── Asset card data & render ────────────────────────────────────────── */
 var _IMG_ERR_HTML = '<div style="width:100%;height:100%;background:#ECEDF4;display:flex;align-items:center;justify-content:center;"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="#ECEDF4"/><path d="M8 36l10-12 7 8 5-6 10 10H8z" fill="#C4C6D0"/><circle cx="32" cy="16" r="4" fill="#E8A000"/></svg></div>';
-function _imgErr(el) { el.onerror = null; el.parentNode.innerHTML = _IMG_ERR_HTML; }
+function _imgErr(el) {
+  el.onerror = null;
+  var card = el.closest('.asset-card') || el.closest('.coll-card');
+  if (card) card.classList.add('img-broken');
+  el.parentNode.innerHTML = _IMG_ERR_HTML;
+}
 var ASSET_COLORS = ['#C5D8E8','#D8C5E8','#C5E8D8','#E8D8C5','#C5C5E8','#E8C5D8','#D8E8C5'];
 /* Start empty to demo the empty state; populated via demoFillAssets() */
 var ASSETS = [];
@@ -1022,7 +1031,12 @@ function buildCard(asset, i) {
 
 function handleCardClick(card, e) {
   if (e.target.closest('.asset-card__menu-btn') || e.target.closest('.card-ctx-menu') || e.target.closest('.asset-card__link') || e.target.closest('.asset-card__title')) return;
-  if (selectMode) toggleCardSelect(card);
+  if (selectMode) {
+    toggleCardSelect(card);
+  } else if (e.target.closest('.asset-card__thumb')) {
+    var id = card.getAttribute('data-asset-id');
+    if (id) window.open('asset-detail.html?id=' + id, '_blank');
+  }
 }
 
 function renderAssets() {
@@ -1060,7 +1074,34 @@ function renderAssets() {
     }
     grid.innerHTML = html;
     renderActionBar(0);
+    _scheduleResortBroken(grid);
   }
+}
+
+function _scheduleResortBroken(grid) {
+  setTimeout(function() {
+    var allCards = Array.from(grid.querySelectorAll('.asset-card'));
+    var brokenCards = allCards.filter(function(c) { return c.classList.contains('img-broken'); });
+    if (!brokenCards.length) return;
+    var brokenSet = brokenCards.reduce(function(s, c) { s.add(c); return s; }, new Set ? new Set() : { _m: [], has: function(x) { return this._m.indexOf(x) >= 0; }, add: function(x) { this._m.push(x); } });
+    var sortedCards = allCards.filter(function(c) { return !brokenSet.has(c); }).concat(brokenCards);
+    brokenCards.forEach(function(c) { c.style.opacity = '0'; });
+    setTimeout(function() {
+      grid.innerHTML = '';
+      var cols = 4;
+      for (var i = 0; i < sortedCards.length; i += cols) {
+        var row = document.createElement('div');
+        row.className = 'asset-row';
+        for (var j = i; j < Math.min(i + cols, sortedCards.length); j++) {
+          sortedCards[j].style.transition = 'opacity 300ms ease';
+          sortedCards[j].style.opacity = '';
+          row.appendChild(sortedCards[j]);
+        }
+        grid.appendChild(row);
+      }
+      setTimeout(function() { sortedCards.forEach(function(c) { c.style.transition = ''; }); }, 350);
+    }, 200);
+  }, 1500);
 }
 
 /* ── Collection-level button modals ──────────────────────────────────── */
