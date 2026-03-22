@@ -920,7 +920,7 @@
 
 </div><!-- /.page -->
 
-<script src="js/db.js"></script>
+<script src="js/db.js?v=2"></script>
 <script src="components/components.js?v=7"></script>
 <script>
 
@@ -1214,7 +1214,7 @@
 
       /* Initialize cart/fav button states */
       var collectBtn = document.querySelector('.btn-collect');
-      if (collectBtn && DB.isFavorited(assetId)) {
+      if (collectBtn && DB.isInAnyCollection(assetId)) {
         collectBtn.classList.add('is-saved');
         collectBtn.setAttribute('aria-label', 'See saved collection');
       }

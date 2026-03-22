@@ -1742,7 +1742,7 @@
     <div class="site-footer__inner">© 2026 Accor Media Portal</div>
   </footer>
 
-<script src="js/db.js"></script>
+<script src="js/db.js?v=2"></script>
 <script src="components/components.js?v=7"></script>
   <script>
     /* ── Card data & rendering (loaded from DB) ───────────────────── */
@@ -1774,7 +1774,7 @@
         ? `<img src="${d.thumbnail}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;">`
         : `<div class="asset-card__image-placeholder">${_placeholder(i)}</div>`;
       const inCart = DB.isInCart(d.id);
-      const isFav  = DB.isFavorited(d.id);
+      const isFav  = DB.isInAnyCollection(d.id);
       const favCls = isFav ? ' is-added' : '';
       const favTip = isFav ? 'See saved collection' : 'Save to collection';
       const cartLabel = inCart ? 'Remove' : 'Add';

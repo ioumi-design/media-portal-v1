@@ -187,7 +187,12 @@
     isFavorited:     function (id) { return _getFavs().indexOf(id) >= 0; },
     /* Alias */
     addToFavorites:    function (id) { DB.addFavorite(id); },
-    removeFromFavorites: function (id) { DB.removeFavorite(id); }
+    removeFromFavorites: function (id) { DB.removeFavorite(id); },
+
+    /* ── Heart-fill source of truth: in ANY collection ──────────────── */
+    isInAnyCollection: function (id) {
+      return _getCollections().some(function (c) { return c.assetIds.indexOf(id) >= 0; });
+    }
   };
 
   global.DB = DB;

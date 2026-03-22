@@ -238,17 +238,15 @@
 
     /* ── Asset card grid ─────────────────────────────────────────────── */
     .asset-grid {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 24px;
     }
     .asset-row {
-      display: flex;
-      gap: 24px;
+      display: contents; /* transparent to grid — keeps JS structure unchanged */
     }
     .asset-card {
-      width: 309px;
-      flex-shrink: 0;
+      width: auto;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -659,7 +657,7 @@
 
 </div><!-- /page -->
 
-<script src="js/db.js"></script>
+<script src="js/db.js?v=2"></script>
 <script src="components/components.js?v=7"></script>
 <script>
 /* ── Description toggle ──────────────────────────────────────────────── */
