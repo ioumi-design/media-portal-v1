@@ -927,11 +927,8 @@
 
   /* ── Save to collection toggle ──────────────────────────────────── */
   function toggleCollect(btn) {
-    if (!btn.classList.contains('is-saved')) {
-      openSaveModal(btn);
-    } else {
-      location.href = 'hub-collection.html';
-    }
+    /* Always open modal — filled state shows "Already added" collections at top */
+    openSaveModal(btn);
   }
 
   /* ── Modal state ───────────────────────────────────────────────── */
@@ -947,10 +944,18 @@
     document.getElementById('modal-validate-save').hidden = true;
     document.getElementById('save-modal').hidden = false;
     document.body.style.overflow = 'hidden';
+    /* Mark collections that already contain this asset and sort them to top */
     DB.getCollections().then(function(cols) {
-      _dbCollections = cols.map(function(c) {
-        return { id: c.id, title: c.title, count: c.assetIds ? c.assetIds.length : 0, _status: 'default' };
+      var assetId = _currentAssetId;
+      var already = [];
+      var others  = [];
+      cols.forEach(function(c) {
+        var hasAsset = assetId && c.assetIds && c.assetIds.indexOf(assetId) >= 0;
+        var item = { id: c.id, title: c.title, count: c.assetIds ? c.assetIds.length : 0,
+                     _status: hasAsset ? 'already' : 'default' };
+        if (hasAsset) already.push(item); else others.push(item);
       });
+      _dbCollections = already.concat(others);
       renderModalCollections();
     });
   }

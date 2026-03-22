@@ -1883,14 +1883,8 @@
     /* ── Favorite (heart) button toggle ─────────────────────────── */
 
     function toggleFav(btn) {
-      const added = btn.classList.contains('is-added');
-      if (!added) {
-        /* Outline → open modal to pick/create collection */
-        openSaveModal(btn);
-      } else {
-        /* Filled → navigate to collections */
-        location.href = 'hub-collection.html';
-      }
+      /* Always open modal — filled state shows "Already added" collections at top */
+      openSaveModal(btn);
     }
     /* Called after user saves (e.g. creates collection) to mark heart filled */
     function markFavAdded(btn) {
@@ -2065,11 +2059,18 @@
     _setModalPreviews(_saveModalThumbnail);
     document.getElementById('save-modal').hidden = false;
     document.body.style.overflow = 'hidden';
-    /* Load real collections from DB */
+    /* Load real collections from DB; mark ones that already contain this asset */
+    var _modalAssetId = (triggerBtn && triggerBtn.dataset.assetId) || null;
     DB.getCollections().then(function (cols) {
-      _dbCollections = cols.map(function (c) {
-        return { id: c.id, title: c.title, count: c.assetIds ? c.assetIds.length : 0, _status: 'default' };
+      var already = [];
+      var others  = [];
+      cols.forEach(function (c) {
+        var hasAsset = _modalAssetId && c.assetIds && c.assetIds.indexOf(_modalAssetId) >= 0;
+        var item = { id: c.id, title: c.title, count: c.assetIds ? c.assetIds.length : 0,
+                     _status: hasAsset ? 'already' : 'default' };
+        if (hasAsset) already.push(item); else others.push(item);
       });
+      _dbCollections = already.concat(others);
       renderModalCollections();
     });
   }
