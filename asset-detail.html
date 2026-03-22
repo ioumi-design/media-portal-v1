@@ -732,7 +732,7 @@
       </div>
 
       <!-- Preview -->
-      <div class="detail-preview">
+      <div class="detail-preview" id="detail-preview">
         <span class="detail-preview__placeholder">Zone de preview</span>
       </div>
 
@@ -745,7 +745,7 @@
             <p class="detail-section-title">Renditions</p>
             <div class="detail-separator" style="margin-top:4px;"></div>
           </div>
-          <div class="chip-grid">
+          <div class="chip-grid" id="chip-grid">
             <button class="chip chip--active">1 : 1</button>
             <button class="chip">3 : 2</button>
             <button class="chip">4 : 3</button>
@@ -821,7 +821,7 @@
     </main>
 
     <!-- ── Right: metadata panel ──────────────────────────────────── -->
-    <aside class="detail-panel">
+    <aside class="detail-panel" id="detail-panel">
 
       <div class="dp-field">
         <p class="dp-label">Format</p>
@@ -914,6 +914,7 @@
 
 </div><!-- /.page -->
 
+<script src="js/db.js"></script>
 <script src="components/components.js?v=7"></script>
 <script>
 
@@ -1121,11 +1122,106 @@
     if (_snackbarTimer) { clearTimeout(_snackbarTimer); _snackbarTimer = null; }
   }
 
-  /* ── Rendition chip toggle ─────────────────────────────────────── */
-  document.querySelectorAll('.chip').forEach(function(chip) {
-    chip.addEventListener('click', function() {
-      document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('chip--active'); });
-      chip.classList.add('chip--active');
+  /* ── Rendition chip toggle (event delegation) ──────────────────── */
+  var RATIO_CSS = {'1:1':'1/1','3:2':'3/2','4:3':'4/3','6:5':'6/5','8:10':'8/10',
+                   '9:16':'9/16','11:5':'11/5','13:5':'13/5','16:9':'16/9'};
+  document.addEventListener('click', function(e) {
+    var chip = e.target.closest && e.target.closest('.chip');
+    if (!chip) return;
+    document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('chip--active'); });
+    chip.classList.add('chip--active');
+    var ratio = (chip.getAttribute('data-ratio') || chip.textContent.trim()).replace(/ /g, '');
+    var preview = document.getElementById('detail-preview');
+    if (!preview) return;
+    if (ratio && ratio !== 'Original' && RATIO_CSS[ratio]) {
+      preview.style.aspectRatio = RATIO_CSS[ratio];
+      preview.style.height = 'auto';
+      preview.style.maxHeight = '600px';
+    } else {
+      preview.style.aspectRatio = '';
+      preview.style.height = '550px';
+      preview.style.maxHeight = '';
+    }
+  });
+
+  /* ── Load asset from DB when ?id= is present ───────────────────── */
+  document.addEventListener('DOMContentLoaded', function() {
+    var params = new URLSearchParams(window.location.search);
+    var assetId = params.get('id');
+    if (!assetId) return;
+
+    DB.getAsset(assetId).then(function(asset) {
+      if (!asset) return;
+
+      /* Page & title */
+      document.title = asset.title + ' \u2013 Accor Media Portal';
+      var titleEl = document.querySelector('.detail-title');
+      if (titleEl) titleEl.textContent = asset.title;
+
+      /* Preview */
+      var preview = document.getElementById('detail-preview');
+      if (preview) {
+        if (asset.thumbnail) {
+          preview.innerHTML = '<img src="' + asset.thumbnail + '" alt="' + asset.title + '" style="max-width:100%;max-height:100%;object-fit:contain;">';
+        } else {
+          preview.querySelector('.detail-preview__placeholder') && (preview.querySelector('.detail-preview__placeholder').textContent = asset.title);
+        }
+      }
+
+      /* Rendition chips */
+      var chipGrid = document.getElementById('chip-grid');
+      if (chipGrid && asset.renditions && asset.renditions.length) {
+        chipGrid.innerHTML = asset.renditions.map(function(r, i) {
+          var label = r.indexOf(':') >= 0 ? r.replace(':', ' : ') : r;
+          return '<button class="chip' + (i === 0 ? ' chip--active' : '') + '" data-ratio="' + r + '">' + label + '</button>';
+        }).join('');
+      }
+
+      /* Metadata panel */
+      var panel = document.getElementById('detail-panel');
+      if (!panel) return;
+
+      function _row(label, value, opts) {
+        opts = opts || {};
+        if (opts.tags) {
+          if (!value || !value.length) return '';
+          return '<div class="dp-field dp-field--tags"><p class="dp-label">' + label + '</p>'
+            + '<div class="dp-tags">' + value.map(function(t) { return '<a href="#" class="dp-tag">' + t + '</a>'; }).join('') + '</div></div>';
+        }
+        if (!value) return '';
+        if (opts.box) {
+          return '<div class="dp-field"><p class="dp-label">' + label + '</p><div class="dp-rights-box">' + value + '</div></div>';
+        }
+        if (opts.link) {
+          return '<div class="dp-field"><p class="dp-label">' + label + '</p><a href="#" class="dp-link">' + value + '</a></div>';
+        }
+        return '<div class="dp-field"><p class="dp-label">' + label + '</p><p class="dp-value">' + value + '</p></div>';
+      }
+
+      function _fmt(d) {
+        if (!d) return null;
+        var p = d.split('-');
+        if (p.length !== 3) return d;
+        var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        return p[2] + ' ' + m[parseInt(p[1], 10) - 1] + ' ' + p[0];
+      }
+
+      panel.innerHTML =
+        _row('Format', asset.format || asset.type)
+        + _row('Size', asset.sizeDisplay)
+        + _row('Shooting date', _fmt(asset.shootingDate))
+        + _row('Expiration date', _fmt(asset.expiresAt))
+        + _row('Location', asset.location, { link: true })
+        + _row('Hotel name', asset.hotelName, { link: true })
+        + _row('Channel scope', asset.channelScope)
+        + _row('Geographic scope', asset.geographicScope, { link: true })
+        + _row('Type of rights', asset.typeOfRights, { box: true })
+        + _row('Asset source', asset.assetSource)
+        + _row('Copyright', asset.copyright, { link: asset.copyright === 'See preview' })
+        + _row('Smart tags', asset.smartTags, { tags: true })
+        + _row('Descriptors', asset.tags, { tags: true })
+        + '<div class="dp-field"><p class="dp-label">Description</p>'
+        + '<p class="dp-value" style="white-space:pre-wrap;">' + (asset.description || '') + '</p></div>';
     });
   });
 </script>

@@ -517,6 +517,7 @@
 
 </div><!-- /page -->
 
+<script src="js/db.js"></script>
 <script src="components/components.js?v=7"></script>
 <script>
 /* ── Collection card context menu (CSS-hover driven, no JS toggle needed) */
@@ -527,7 +528,10 @@ var COLLECTIONS = [];
 
 var COLORS = ['#C5D8E8','#D8C5E8','#C5E8D8','#E8D8C5','#C5C5E8','#E8C5D8'];
 
-function makeThumb(i) {
+function makeThumb(i, thumbnailUrl) {
+  if (thumbnailUrl) {
+    return '<img src="' + thumbnailUrl + '" alt="" style="width:100%;height:100%;object-fit:cover;">';
+  }
   var bg = COLORS[i % COLORS.length];
   return '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 309 213" preserveAspectRatio="xMidYMid slice"><rect width="309" height="213" fill="' + bg + '"/><text x="154.5" y="113" text-anchor="middle" dominant-baseline="middle" font-family="Roboto,sans-serif" font-size="14" fill="#7a7a8c">Image placeholder</text></svg>';
 }
@@ -535,7 +539,7 @@ function makeThumb(i) {
 function buildCard(col, i) {
   return (
     '<div class="coll-card">' +
-      '<div class="coll-card__thumb">' + makeThumb(i) + '</div>' +
+      '<div class="coll-card__thumb">' + makeThumb(i, col.thumbnailUrl) + '</div>' +
       '<div class="coll-card__body">' +
         '<div class="coll-card__title-row">' +
           '<span class="coll-card__title">' + col.title + '</span>' +
@@ -565,7 +569,7 @@ function buildCard(col, i) {
         '</div>' +
         '<p class="coll-card__count">Assets (' + col.count + ')</p>' +
         '<p class="coll-card__desc">' + col.desc + '</p>' +
-        '<button class="coll-card__link" type="button" onclick="location.href=\'collection.html\'">' +
+        '<button class="coll-card__link" type="button" onclick="location.href=\'collection.html?id=' + col.id + '\'">' +
           'See this collection' +
           '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M12 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
         '</button>' +
@@ -643,10 +647,11 @@ function hubToggleMenu(e, menuId) {
 
 function hubOpenCreateModal() {
   MP.createCollection.open(function(title, desc) {
-    var newId = 'col-' + Date.now();
-    COLLECTIONS.push({ id: newId, title: title, desc: desc, count: 0, hasImages: false });
-    renderCollections();
-    MP.snackbar.show('Collection "' + title + '" created.');
+    DB.createCollection(title, desc || '').then(function(newCol) {
+      COLLECTIONS.push({ id: newCol.id, title: title, desc: desc || '', count: 0, thumbnailUrl: null });
+      renderCollections();
+      MP.snackbar.show('Collection "' + title + '" created.');
+    });
   });
 }
 
@@ -689,6 +694,7 @@ function hubOpenDelete(id) {
   MP.deleteCollection.open({
     body: 'You are about to delete the selected collection. This action cannot be undone once you confirm the deletion.',
     onConfirm: function() {
+      DB.deleteCollection(colId);
       COLLECTIONS = COLLECTIONS.filter(function(c) { return c.id !== colId; });
       renderCollections();
       MP.snackbar.show(colName + ' deleted.');
@@ -697,7 +703,22 @@ function hubOpenDelete(id) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  renderCollections();
+  DB.getCollections().then(function(collections) {
+    DB.getAssets().then(function(assets) {
+      COLLECTIONS = collections.map(function(col) {
+        var firstAsset = col.assetIds && col.assetIds[0]
+          ? assets.find(function(a) { return a.id === col.assetIds[0]; }) : null;
+        return {
+          id: col.id,
+          title: col.title,
+          count: col.assetCount,
+          desc: col.description,
+          thumbnailUrl: firstAsset ? firstAsset.thumbnail : null
+        };
+      });
+      renderCollections();
+    });
+  });
   document.addEventListener('click', function() { hubCloseAllMenus(); });
 });
 </script>

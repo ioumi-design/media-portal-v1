@@ -1726,31 +1726,10 @@
     <div class="site-footer__inner">© 2026 Accor Media Portal</div>
   </footer>
 
+<script src="js/db.js"></script>
 <script src="components/components.js?v=7"></script>
   <script>
-    /* ── Card data & rendering ────────────────────────────────────── */
-    const CARD_ASSETS = [
-      { title: 'Sofitel New York',          size: '7.1 M',  type: 'Image', res: '3700 x 2081' },
-      { title: 'Novotel Paris Les Halles',  size: '4.3 M',  type: 'Image', res: '4032 x 3024' },
-      { title: 'Mercure London Bridge',     size: '12.8 M', type: 'Video', res: '1920 x 1080' },
-      { title: 'ibis Barcelona Meridiana',  size: '2.1 M',  type: 'Image', res: '3000 x 2000' },
-      { title: 'Pullman Sydney Hyde Park',  size: '8.5 M',  type: 'Image', res: '5472 x 3648' },
-      { title: 'MGallery Florence',         size: '3.7 M',  type: 'PDF',   res: 'A4' },
-      { title: 'Fairmont Dubai',            size: '15.2 M', type: 'Video', res: '3840 x 2160' },
-      { title: 'Swissôtel Geneva',          size: '6.9 M',  type: 'Image', res: '4000 x 2667' },
-      { title: 'Raffles Singapore',         size: '5.4 M',  type: 'Image', res: '3456 x 2304' },
-      { title: 'Banyan Tree Phuket',        size: '9.2 M',  type: 'Image', res: '5184 x 3456' },
-      { title: 'SO/ Paris',                 size: '11.3 M', type: 'Video', res: '1920 x 1080' },
-      { title: 'Rixos Premium Dubai',       size: '4.8 M',  type: 'Image', res: '4608 x 3072' },
-      { title: 'Mövenpick Hotel Amsterdam', size: '3.2 M',  type: 'Image', res: '3648 x 2736' },
-      { title: 'Anantara Bangkok',          size: '7.6 M',  type: 'Image', res: '4800 x 3200' },
-      { title: 'Mama Shelter Lyon',         size: '2.9 M',  type: 'Image', res: '2560 x 1707' },
-      { title: 'Hyde Hotel London',         size: '6.1 M',  type: 'Video', res: '1920 x 1080' },
-      { title: 'Delano Las Vegas',          size: '18.4 M', type: 'Image', res: '6000 x 4000' },
-      { title: 'SLS Miami Beach',           size: '5.0 M',  type: 'Image', res: '4928 x 3264' },
-      { title: '25hours Hotel Vienna',      size: '3.6 M',  type: 'Image', res: '3456 x 2304' },
-      { title: 'Peppers Cradle Mountain',   size: '8.8 M',  type: 'Image', res: '5184 x 3456' },
-    ];
+    /* ── Card data & rendering (loaded from DB) ───────────────────── */
 
     const PLACEHOLDER_COLORS = [
       { circle: '#c4b8e8', poly1: '#8b7fc4', poly2: '#4a3f8c' },
@@ -1775,24 +1754,25 @@
     }
 
     function _buildGridCard(d, i) {
+      const imgContent = d.thumbnail
+        ? `<img src="${d.thumbnail}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;">`
+        : `<div class="asset-card__image-placeholder">${_placeholder(i)}</div>`;
       return `<article class="asset-card">
-        <a href="asset-detail.html" class="asset-card__image-link" aria-label="View ${d.title} details">
-          <div class="asset-card__image">
-            <div class="asset-card__image-placeholder">${_placeholder(i)}</div>
-          </div>
+        <a href="asset-detail.html?id=${d.id}" class="asset-card__image-link" aria-label="View ${d.title} details">
+          <div class="asset-card__image">${imgContent}</div>
         </a>
         <button class="asset-card__fav" type="button" aria-label="Save to collection" onclick="event.preventDefault();event.stopPropagation();toggleFav(this)">
           ${ICON_HEART_OUTLINE}${ICON_HEART_FILLED}
           <span class="tooltip">Save to collection</span>
         </button>
         <div class="asset-card__body">
-          <a href="asset-detail.html" class="asset-card__title asset-card__title--link">${d.title}</a>
+          <a href="asset-detail.html?id=${d.id}" class="asset-card__title asset-card__title--link">${d.title}</a>
           <div class="asset-card__details">
-            <div class="detail-row"><span class="detail-row__label">Size</span><span class="detail-row__value">${d.size}</span></div>
+            <div class="detail-row"><span class="detail-row__label">Size</span><span class="detail-row__value">${d.sizeDisplay || d.size}</span></div>
             <div class="detail-sep"></div>
             <div class="detail-row"><span class="detail-row__label">Type</span><span class="detail-row__value">${d.type}</span></div>
             <div class="detail-sep"></div>
-            <div class="detail-row"><span class="detail-row__label">Res.</span><span class="detail-row__value">${d.res}</span></div>
+            <div class="detail-row"><span class="detail-row__label">Res.</span><span class="detail-row__value">${d.resolution || d.res}</span></div>
           </div>
           <div class="asset-card__actions">
             <button class="btn-icon-outline" type="button" aria-label="Download">${ICON_DL}</button>
@@ -1805,10 +1785,12 @@
 
     function _buildListRow(d, i) {
       const p = PLACEHOLDER_COLORS[i % PLACEHOLDER_COLORS.length];
-      const thumb = `<svg width="50" height="38" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="${p.circle}"/><polygon points="0,60 44,16 80,60" fill="${p.poly1}"/><polygon points="36,60 56,30 76,60" fill="${p.poly2}"/></svg>`;
+      const thumbContent = d.thumbnail
+        ? `<img src="${d.thumbnail}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;">`
+        : `<div style="width:100%;height:100%;background:var(--color-card-image-bg);display:flex;align-items:center;justify-content:center;"><svg width="50" height="38" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="${p.circle}"/><polygon points="0,60 44,16 80,60" fill="${p.poly1}"/><polygon points="36,60 56,30 76,60" fill="${p.poly2}"/></svg></div>`;
       return `<article class="asset-row">
-        <a href="asset-detail.html" class="asset-row__thumb-link" aria-label="View ${d.title} details"><div class="asset-row__thumb"><div style="width:100%;height:100%;background:var(--color-card-image-bg);display:flex;align-items:center;justify-content:center;">${thumb}</div></div></a>
-        <div><a href="asset-detail.html" class="asset-row__title asset-row__title--link">${d.title}</a><div class="asset-row__meta">${d.type} · ${d.size} · ${d.res}</div></div>
+        <a href="asset-detail.html?id=${d.id}" class="asset-row__thumb-link" aria-label="View ${d.title} details"><div class="asset-row__thumb">${thumbContent}</div></a>
+        <div><a href="asset-detail.html?id=${d.id}" class="asset-row__title asset-row__title--link">${d.title}</a><div class="asset-row__meta">${d.type} · ${d.sizeDisplay || d.size} · ${d.resolution || d.res}</div></div>
         <div class="asset-row__actions">
           <button class="btn-icon-outline" type="button" aria-label="Download">${ICON_DL}</button>
           <button class="btn-icon-outline" type="button" aria-label="Email">${ICON_EMAIL}</button>
@@ -1817,23 +1799,33 @@
       </article>`;
     }
 
-    function renderCards() {
+    function renderCards(assets) {
       const countEl = document.querySelector('.results-count');
-      const count = countEl ? parseInt(countEl.textContent) || 0 : 0;
+      if (countEl) countEl.textContent = assets.length + ' results';
       const gridEl = document.getElementById('view-grid');
       const listEl = document.getElementById('view-list');
       let gridHTML = '';
       let listHTML = '';
-      for (let i = 0; i < count; i++) {
-        const d = CARD_ASSETS[i % CARD_ASSETS.length];
-        gridHTML += _buildGridCard(d, i);
-        listHTML += _buildListRow(d, i);
+      for (let i = 0; i < assets.length; i++) {
+        gridHTML += _buildGridCard(assets[i], i);
+        listHTML += _buildListRow(assets[i], i);
       }
       if (gridEl) gridEl.innerHTML = gridHTML;
       if (listEl) listEl.innerHTML = listHTML;
     }
 
-    document.addEventListener('DOMContentLoaded', renderCards);
+    document.addEventListener('DOMContentLoaded', function () {
+      function doSearch() {
+        var inp = document.querySelector('.search-input');
+        var q = inp ? inp.value.trim() : '';
+        DB.searchAssets(q).then(renderCards);
+      }
+      var btn = document.querySelector('.btn-search');
+      var inp = document.querySelector('.search-input');
+      if (btn) btn.addEventListener('click', doSearch);
+      if (inp) inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+      DB.getAssets().then(renderCards);
+    });
 
     /* ── View mode toggle ─────────────────────────────────────────── */
     function setView(mode) {

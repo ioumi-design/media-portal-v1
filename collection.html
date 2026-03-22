@@ -658,6 +658,7 @@
 
 </div><!-- /page -->
 
+<script src="js/db.js"></script>
 <script src="components/components.js?v=7"></script>
 <script>
 /* ── Description toggle ──────────────────────────────────────────────── */
@@ -891,7 +892,7 @@ function collOpenDownloadModal(ids) {
   var hasImg = false, hasOther = false;
   ids.forEach(function(id) {
     var a = collFindAsset(id);
-    if (a) { if (a.isImage) hasImg = true; else hasOther = true; }
+    if (a) { if (a.type === 'Image' || a.format === 'Image' || a.isImage) hasImg = true; else hasOther = true; }
   });
   MP.download.open({ hasImages: hasImg, hasOther: hasOther, onSuccess: function() {
     MP.snackbar.show('Download started.');
@@ -941,7 +942,10 @@ var ASSETS_DEMO = [
   { id: 'a7', title: 'Brand guidelines – PDF summary', mediaUrl: 'https://media.accor.com/portal/asset/a7/document', isImage: false },
 ];
 
-function makeThumb(i) {
+function makeThumb(i, thumbnailUrl) {
+  if (thumbnailUrl) {
+    return '<img src="' + thumbnailUrl + '" alt="" style="width:100%;height:100%;object-fit:cover;">';
+  }
   var bg = ASSET_COLORS[i % ASSET_COLORS.length];
   return (
     '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 309 213" preserveAspectRatio="xMidYMid slice">' +
@@ -959,12 +963,12 @@ function buildCard(asset, i) {
   return (
     '<div class="asset-card" id="card-' + asset.id + '" data-asset-id="' + asset.id + '" onclick="handleCardClick(this, event)">' +
       '<div class="asset-card__thumb">' +
-        makeThumb(i) +
+        makeThumb(i, asset.thumbnail) +
         '<div class="asset-card__checkbox" aria-hidden="true"></div>' +
       '</div>' +
       '<div class="asset-card__body">' +
         '<div class="asset-card__title-row">' +
-          '<span class="asset-card__title" onclick="if(!selectMode)location.href=\'asset-detail.html\'">' + asset.title + '</span>' +
+          '<span class="asset-card__title" onclick="if(!selectMode)location.href=\'asset-detail.html?id=' + asset.id + '\'">' + asset.title + '</span>' +
           '<div style="position:relative;flex-shrink:0;">' +
             '<button class="asset-card__menu-btn" type="button" aria-label="Options for ' + asset.title + '" aria-expanded="false" onclick="event.stopPropagation();toggleCardMenu(\'' + asset.id + '\',this)">' +
               '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>' +
@@ -985,7 +989,7 @@ function buildCard(asset, i) {
             '</div>' +
           '</div>' +
         '</div>' +
-        '<button class="asset-card__link" type="button" onclick="location.href=\'asset-detail.html\'">' +
+        '<button class="asset-card__link" type="button" onclick="location.href=\'asset-detail.html?id=' + asset.id + '\'">' +
           'See asset details' +
           '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M12 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
         '</button>' +
@@ -1086,51 +1090,50 @@ function demoFillAssets() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  /* ── Load collection data from sessionStorage (navigated via "See collection") ── */
-  try {
-    var saved = sessionStorage.getItem('savedCollection');
-    if (saved) {
-      var data = JSON.parse(saved);
-      sessionStorage.removeItem('savedCollection');
+  var params = new URLSearchParams(window.location.search);
+  var collId = params.get('id');
 
-      /* Update collection title */
-      if (data.title) {
-        document.querySelector('.coll-title').textContent = data.title;
-        document.title = data.title + ' – Accor Media Portal';
-      }
-
-      /* Update description */
-      var descText = document.getElementById('desc-text');
-      var descWrap = document.querySelector('.coll-desc');
-      if (data.desc && data.desc.trim()) {
-        descText.textContent = data.desc;
-        descWrap.style.display = '';
-      } else {
-        descWrap.style.display = 'none';
-      }
-      /* Reset toggle state when desc is replaced */
-      descText.classList.remove('is-expanded');
-      var dt = document.getElementById('desc-toggle');
-      if (dt) dt.innerHTML = 'Show more <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-      /* Add saved asset */
-      if (data.asset && data.asset.title) {
-        var id = 'saved-' + Date.now();
-        ASSETS = [{
-          id: id,
-          title: data.asset.title,
-          mediaUrl: data.asset.mediaUrl || ('https://media.accor.com/portal/asset/' + id + '/original'),
-          isImage: true
-        }];
-      } else {
-        ASSETS = [];
-      }
+  function applyCollection(col, allAssets) {
+    if (col.title) {
+      document.querySelector('.coll-title').textContent = col.title;
+      document.title = col.title + ' \u2013 Accor Media Portal';
     }
-  } catch(e) {}
+    var descText = document.getElementById('desc-text');
+    var descWrap = document.querySelector('.coll-desc');
+    if (col.description && col.description.trim()) {
+      descText.textContent = col.description;
+      descWrap.style.display = '';
+    } else {
+      descWrap.style.display = 'none';
+    }
+    descText.classList.remove('is-expanded');
+    var dt = document.getElementById('desc-toggle');
+    if (dt) dt.innerHTML = 'Show more <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  renderAssets();
-  updateDescToggleVisibility();
-  window.addEventListener('resize', updateDescToggleVisibility);
+    ASSETS = (col.assetIds || []).map(function(id) {
+      var a = allAssets.find(function(x) { return x.id === id; });
+      if (!a) return null;
+      return Object.assign({}, a, {
+        isImage: a.format === 'Image' || a.type === 'Image',
+        mediaUrl: a.thumbnail || (a.path || '') + a.id
+      });
+    }).filter(Boolean);
+
+    renderAssets();
+    updateDescToggleVisibility();
+    window.addEventListener('resize', updateDescToggleVisibility);
+  }
+
+  if (collId) {
+    DB.getCollection(collId).then(function(col) {
+      if (!col) { renderAssets(); return; }
+      DB.getAssets().then(function(assets) { applyCollection(col, assets); });
+    });
+  } else {
+    renderAssets();
+    updateDescToggleVisibility();
+    window.addEventListener('resize', updateDescToggleVisibility);
+  }
 });
 </script>
 </body>
