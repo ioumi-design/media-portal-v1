@@ -918,6 +918,13 @@
 <script src="components/components.js?v=7"></script>
 <script>
 
+  var _currentAssetId = null; /* set on DOMContentLoaded */
+
+  function updateCartBadge() {
+    var n = DB.getCartCount();
+    document.querySelectorAll('.cart-badge').forEach(function (b) { b.textContent = n; });
+  }
+
   /* ── Save to collection toggle ──────────────────────────────────── */
   function toggleCollect(btn) {
     if (!btn.classList.contains('is-saved')) {
@@ -929,24 +936,23 @@
 
   /* ── Modal state ───────────────────────────────────────────────── */
   var _saveModalTriggerBtn = null;
-  var _createdCollections = [];
-
-  var _demoCollections = [
-    { title: 'Summer sale 2026',        count: 0,   status: 'default' },
-    { title: 'Winter campaign 2024-25', count: 16,  status: 'already' },
-    { title: 'Winter campaign 2024-25', count: 100, status: 'full'    }
-  ];
+  var _createdCollections  = [];
+  var _dbCollections       = [];
 
   function openSaveModal(triggerBtn) {
     _saveModalTriggerBtn = triggerBtn || null;
-    _createdCollections = [];
-    _demoCollections[0].status = 'default';
+    _createdCollections  = [];
     document.getElementById('modal-view-save').hidden = false;
     document.getElementById('modal-view-create').hidden = true;
     document.getElementById('modal-validate-save').hidden = true;
-    renderModalCollections();
     document.getElementById('save-modal').hidden = false;
     document.body.style.overflow = 'hidden';
+    DB.getCollections().then(function(cols) {
+      _dbCollections = cols.map(function(c) {
+        return { id: c.id, title: c.title, count: c.assetIds ? c.assetIds.length : 0, _status: 'default' };
+      });
+      renderModalCollections();
+    });
   }
   function closeSaveModal() {
     document.getElementById('save-modal').hidden = true;
@@ -1022,12 +1028,14 @@
       onclick = 'onclick="toggleColl(\'' + type + '\',' + idx + ')"';
     } else if (st === 'already') {
       cls += ' modal__coll-item--already';
+      var destAlready = coll.id ? 'collection.html?id=' + coll.id : 'collection.html';
       right = '<div class="modal__coll-badge modal__coll-badge--added">' + SVG_CHECK_GREEN + ' Already added</div>'
-        + '<a href="collection.html" class="modal__coll-see" onclick="closeSaveModal()">' + SVG_ARROW + ' See collection</a>';
+        + '<a href="' + destAlready + '" class="modal__coll-see" onclick="closeSaveModal()">' + SVG_ARROW + ' See collection</a>';
     } else if (st === 'full') {
       cls += ' modal__coll-item--full';
+      var destFull = coll.id ? 'collection.html?id=' + coll.id : 'collection.html';
       right = '<div class="modal__coll-badge modal__coll-badge--full">' + SVG_WARN + ' Collection full</div>'
-        + '<a href="collection.html" class="modal__coll-see" onclick="closeSaveModal()">' + SVG_ARROW + ' See collection</a>';
+        + '<a href="' + destFull + '" class="modal__coll-see" onclick="closeSaveModal()">' + SVG_ARROW + ' See collection</a>';
     }
 
     return '<button class="' + cls + '" type="button" ' + onclick + '>'
@@ -1044,9 +1052,9 @@
     if (type === 'created') {
       _createdCollections[idx].selected = !_createdCollections[idx].selected;
     } else {
-      var c = _demoCollections[idx];
-      if (c.status === 'default') c.status = 'selected';
-      else if (c.status === 'selected') c.status = 'default';
+      var c = _dbCollections[idx];
+      if (c._status === 'default') c._status = 'selected';
+      else if (c._status === 'selected') c._status = 'default';
     }
     renderModalCollections();
     _syncValidateBtn();
@@ -1054,7 +1062,7 @@
 
   function _syncValidateBtn() {
     var anySelected = _createdCollections.some(function(c) { return c.selected; })
-      || _demoCollections.some(function(c) { return c.status === 'selected'; });
+      || _dbCollections.some(function(c) { return c._status === 'selected'; });
     document.getElementById('modal-validate-save').hidden = !anySelected;
   }
 
@@ -1062,37 +1070,44 @@
     var list = document.getElementById('modal-coll-list');
     var html = '';
     _createdCollections.forEach(function(coll, idx) {
-      var st = coll.selected ? 'selected' : 'default';
-      html += _collItemHtml({ title: coll.title, count: 0, status: st }, 'created', idx);
+      html += _collItemHtml({ title: coll.title, count: 0, status: coll.selected ? 'selected' : 'default' }, 'created', idx);
     });
-    _demoCollections.forEach(function(coll, idx) {
-      html += _collItemHtml(coll, 'demo', idx);
+    _dbCollections.forEach(function(coll, idx) {
+      html += _collItemHtml({ id: coll.id, title: coll.title, count: coll.count, status: coll._status }, 'db', idx);
     });
     list.innerHTML = html;
   }
 
   function onValidateSave() {
+    var assetId = _currentAssetId;
+
+    var collName = 'collection';
+    var collId   = null;
+
+    _createdCollections.forEach(function(c) {
+      if (!c.selected) return;
+      collName = collName === 'collection' ? c.title : collName;
+      DB.createCollection(c.title, c.desc || '').then(function(newCol) {
+        if (assetId) DB.addAssetToCollection(assetId, newCol.id);
+      });
+    });
+
+    _dbCollections.forEach(function(c) {
+      if (c._status !== 'selected') return;
+      collName = collName === 'collection' ? c.title : collName;
+      collId   = collId || c.id;
+      if (assetId) DB.addAssetToCollection(assetId, c.id);
+    });
+
+    if (assetId) DB.addFavorite(assetId);
     if (_saveModalTriggerBtn) {
       _saveModalTriggerBtn.classList.add('is-saved');
       var tip = _saveModalTriggerBtn.querySelector('.tooltip');
       if (tip) tip.textContent = 'See saved collection';
       _saveModalTriggerBtn.setAttribute('aria-label', 'See saved collection');
     }
-    var selectedColl = _createdCollections.find(function(c) { return c.selected; })
-      || _demoCollections.find(function(c) { return c.status === 'selected'; });
-    var collName = selectedColl ? selectedColl.title : 'collection';
-    var collDesc = selectedColl ? (selectedColl.desc || '') : '';
-    /* Get asset title from the detail page */
-    var assetTitle = (document.querySelector('.detail-title') || {}).textContent || '';
-    try {
-      sessionStorage.setItem('savedCollection', JSON.stringify({
-        title: collName,
-        desc: collDesc,
-        asset: assetTitle.trim() ? { title: assetTitle.trim() } : null
-      }));
-    } catch(e) {}
     closeSaveModal();
-    showSnackbar(collName);
+    showSnackbar(collName, collId);
   }
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('save-modal').addEventListener('click', function(e) {
@@ -1105,10 +1120,10 @@
 
   /* ── Snackbar ──────────────────────────────────────────────────── */
   var _snackbarTimer = null;
-  function showSnackbar(collName) {
+  function showSnackbar(collName, collId) {
     var sb = document.getElementById('snackbar');
     document.getElementById('snackbar-text').innerHTML = 'Asset added in<br>' + collName;
-    document.getElementById('snackbar-see-link').href = 'collection.html';
+    document.getElementById('snackbar-see-link').href = collId ? 'collection.html?id=' + collId : 'hub-collection.html';
     sb.hidden = false;
     sb.offsetHeight;
     sb.classList.add('is-visible');
@@ -1144,14 +1159,54 @@
     }
   });
 
+  /* ── Wire cart button ───────────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', function() {
+    updateCartBadge();
+    var cartBtn = document.querySelector('.btn-action--secondary[aria-label="Add to cart"]');
+    if (cartBtn) {
+      cartBtn.addEventListener('click', function() {
+        if (!_currentAssetId) return;
+        if (DB.isInCart(_currentAssetId)) {
+          DB.removeFromCart(_currentAssetId);
+          cartBtn.setAttribute('aria-label', 'Add to cart');
+          var tip = cartBtn.querySelector('.tooltip');
+          if (tip) tip.textContent = 'Add to cart';
+          cartBtn.classList.remove('btn-action--cart-active');
+        } else {
+          DB.addToCart(_currentAssetId);
+          cartBtn.setAttribute('aria-label', 'Remove from cart');
+          var tip2 = cartBtn.querySelector('.tooltip');
+          if (tip2) tip2.textContent = 'Remove from cart';
+          cartBtn.classList.add('btn-action--cart-active');
+        }
+        updateCartBadge();
+      });
+    }
+  });
+
   /* ── Load asset from DB when ?id= is present ───────────────────── */
   document.addEventListener('DOMContentLoaded', function() {
     var params = new URLSearchParams(window.location.search);
     var assetId = params.get('id');
     if (!assetId) return;
+    _currentAssetId = assetId;
 
     DB.getAsset(assetId).then(function(asset) {
       if (!asset) return;
+
+      /* Initialize cart/fav button states */
+      var collectBtn = document.querySelector('.btn-collect');
+      if (collectBtn && DB.isFavorited(assetId)) {
+        collectBtn.classList.add('is-saved');
+        collectBtn.setAttribute('aria-label', 'See saved collection');
+      }
+      var cartBtn2 = document.querySelector('.btn-action--secondary[aria-label="Add to cart"]');
+      if (cartBtn2 && DB.isInCart(assetId)) {
+        cartBtn2.setAttribute('aria-label', 'Remove from cart');
+        var tip3 = cartBtn2.querySelector('.tooltip');
+        if (tip3) tip3.textContent = 'Remove from cart';
+        cartBtn2.classList.add('btn-action--cart-active');
+      }
 
       /* Page & title */
       document.title = asset.title + ' \u2013 Accor Media Portal';

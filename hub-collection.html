@@ -661,7 +661,8 @@ function hubOpenEdit(id) {
   if (!col) return;
   MP.editCollection.open(col.title, col.desc || '', function(newTitle, newDesc) {
     col.title = newTitle;
-    col.desc = newDesc;
+    col.desc  = newDesc;
+    DB.updateCollection(id, newTitle, newDesc);
     renderCollections();
     MP.snackbar.show('Collection updated.');
   });
@@ -694,10 +695,11 @@ function hubOpenDelete(id) {
   MP.deleteCollection.open({
     body: 'You are about to delete the selected collection. This action cannot be undone once you confirm the deletion.',
     onConfirm: function() {
-      DB.deleteCollection(colId);
-      COLLECTIONS = COLLECTIONS.filter(function(c) { return c.id !== colId; });
-      renderCollections();
-      MP.snackbar.show(colName + ' deleted.');
+      DB.deleteCollection(colId).then(function() {
+        COLLECTIONS = COLLECTIONS.filter(function(c) { return c.id !== colId; });
+        renderCollections();
+        MP.snackbar.show(colName + ' deleted.');
+      });
     }
   });
 }
@@ -711,7 +713,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return {
           id: col.id,
           title: col.title,
-          count: col.assetCount,
+          count: col.assetIds ? col.assetIds.length : 0,
           desc: col.description,
           thumbnailUrl: firstAsset ? firstAsset.thumbnail : null
         };

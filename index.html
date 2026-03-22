@@ -1758,13 +1758,18 @@
       const imgContent = d.thumbnail
         ? `<img src="${d.thumbnail}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;">`
         : `<div class="asset-card__image-placeholder">${_placeholder(i)}</div>`;
-      return `<article class="asset-card">
+      const inCart = DB.isInCart(d.id);
+      const isFav  = DB.isFavorited(d.id);
+      const favCls = isFav ? ' is-added' : '';
+      const favTip = isFav ? 'See saved collection' : 'Save to collection';
+      const cartLabel = inCart ? 'Remove' : 'Add';
+      return `<article class="asset-card" data-asset-id="${d.id}">
         <a href="asset-detail.html?id=${d.id}" class="asset-card__image-link" aria-label="View ${d.title} details">
           <div class="asset-card__image">${imgContent}</div>
         </a>
-        <button class="asset-card__fav" type="button" aria-label="Save to collection" data-thumbnail="${d.thumbnail || ''}" onclick="event.preventDefault();event.stopPropagation();toggleFav(this)">
+        <button class="asset-card__fav${favCls}" type="button" aria-label="${favTip}" data-asset-id="${d.id}" data-thumbnail="${d.thumbnail || ''}" onclick="event.preventDefault();event.stopPropagation();toggleFav(this)">
           ${ICON_HEART_OUTLINE}${ICON_HEART_FILLED}
-          <span class="tooltip">Save to collection</span>
+          <span class="tooltip">${favTip}</span>
         </button>
         <div class="asset-card__body">
           <a href="asset-detail.html?id=${d.id}" class="asset-card__title asset-card__title--link">${d.title}</a>
@@ -1778,7 +1783,7 @@
           <div class="asset-card__actions">
             <button class="btn-icon-outline" type="button" aria-label="Download">${ICON_DL}</button>
             <button class="btn-icon-outline" type="button" aria-label="Email">${ICON_EMAIL}</button>
-            <button class="btn-add" type="button">${ICON_CART} Add</button>
+            <button class="btn-add${inCart ? ' btn-add--active' : ''}" type="button" data-asset-id="${d.id}" onclick="event.stopPropagation();toggleCart(this,'${d.id}')">${ICON_CART} ${cartLabel}</button>
           </div>
         </div>
       </article>`;
@@ -1789,13 +1794,15 @@
       const thumbContent = d.thumbnail
         ? `<img src="${d.thumbnail}" alt="${d.title}" style="width:100%;height:100%;object-fit:cover;">`
         : `<div style="width:100%;height:100%;background:var(--color-card-image-bg);display:flex;align-items:center;justify-content:center;"><svg width="50" height="38" viewBox="0 0 80 60" fill="none"><circle cx="32" cy="16" r="8" fill="${p.circle}"/><polygon points="0,60 44,16 80,60" fill="${p.poly1}"/><polygon points="36,60 56,30 76,60" fill="${p.poly2}"/></svg></div>`;
-      return `<article class="asset-row">
+      const inCart = DB.isInCart(d.id);
+      const cartLabel = inCart ? 'Remove' : 'Add';
+      return `<article class="asset-row" data-asset-id="${d.id}">
         <a href="asset-detail.html?id=${d.id}" class="asset-row__thumb-link" aria-label="View ${d.title} details"><div class="asset-row__thumb">${thumbContent}</div></a>
         <div><a href="asset-detail.html?id=${d.id}" class="asset-row__title asset-row__title--link">${d.title}</a><div class="asset-row__meta">${d.type} · ${d.sizeDisplay || d.size} · ${d.resolution || d.res || '—'}</div></div>
         <div class="asset-row__actions">
           <button class="btn-icon-outline" type="button" aria-label="Download">${ICON_DL}</button>
           <button class="btn-icon-outline" type="button" aria-label="Email">${ICON_EMAIL}</button>
-          <button class="btn-add" style="flex:none;padding:8px 16px;" type="button">${ICON_CART} Add</button>
+          <button class="btn-add${inCart ? ' btn-add--active' : ''}" style="flex:none;padding:8px 16px;" type="button" data-asset-id="${d.id}" onclick="event.stopPropagation();toggleCart(this,'${d.id}')">${ICON_CART} ${cartLabel}</button>
         </div>
       </article>`;
     }
@@ -1815,7 +1822,26 @@
       if (listEl) listEl.innerHTML = listHTML;
     }
 
+    function updateCartBadge() {
+      var n = DB.getCartCount();
+      document.querySelectorAll('.cart-badge').forEach(function (b) { b.textContent = n; });
+    }
+
+    function toggleCart(btn, assetId) {
+      if (DB.isInCart(assetId)) {
+        DB.removeFromCart(assetId);
+        btn.innerHTML = ICON_CART + ' Add';
+        btn.classList.remove('btn-add--active');
+      } else {
+        DB.addToCart(assetId);
+        btn.innerHTML = ICON_CART + ' Remove';
+        btn.classList.add('btn-add--active');
+      }
+      updateCartBadge();
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
+      updateCartBadge();
       function doSearch() {
         var inp = document.querySelector('.search-input');
         var q = inp ? inp.value.trim() : '';
@@ -2018,15 +2044,9 @@
 
 <script>
   var _saveModalTriggerBtn = null;
-  var _saveModalThumbnail = '';
-  var _createdCollections = [];
-
-  /* Demo existing collections shown in the save modal */
-  var _demoCollections = [
-    { title: 'Summer sale 2026',        count: 0,   status: 'default' },
-    { title: 'Winter campaign 2024-25', count: 16,  status: 'already' },
-    { title: 'Winter campaign 2024-25', count: 100, status: 'full'    }
-  ];
+  var _saveModalThumbnail  = '';
+  var _createdCollections  = [];
+  var _dbCollections       = []; /* loaded from DB when modal opens */
 
   function _setModalPreviews(thumbnailUrl) {
     var svgFallback = '<svg viewBox="0 0 320 213" fill="none"><rect width="320" height="213" fill="#e8e6f0"/><polygon points="60,175 165,68 270,175" fill="#3b3768" opacity="0.65"/><polygon points="30,175 115,105 200,175" fill="#9896b8" opacity="0.55"/><circle cx="220" cy="72" r="14" fill="#c9a830"/></svg>';
@@ -2037,17 +2057,21 @@
   }
   function openSaveModal(triggerBtn) {
     _saveModalTriggerBtn = triggerBtn || null;
-    _saveModalThumbnail = (triggerBtn && triggerBtn.dataset.thumbnail) || '';
-    _createdCollections = [];
-    /* Reset demo collections to their original statuses */
-    _demoCollections[0].status = 'default';
+    _saveModalThumbnail  = (triggerBtn && triggerBtn.dataset.thumbnail) || '';
+    _createdCollections  = [];
     document.getElementById('modal-view-save').hidden = false;
     document.getElementById('modal-view-create').hidden = true;
     document.getElementById('modal-validate-save').hidden = true;
-    renderModalCollections();
     _setModalPreviews(_saveModalThumbnail);
     document.getElementById('save-modal').hidden = false;
     document.body.style.overflow = 'hidden';
+    /* Load real collections from DB */
+    DB.getCollections().then(function (cols) {
+      _dbCollections = cols.map(function (c) {
+        return { id: c.id, title: c.title, count: c.assetIds ? c.assetIds.length : 0, _status: 'default' };
+      });
+      renderModalCollections();
+    });
   }
   function closeSaveModal() {
     document.getElementById('save-modal').hidden = true;
@@ -2115,12 +2139,14 @@
       cls += ' modal__coll-item--already';
       right = '<span class="mcol-badge mcol-badge--added">' + SVG_CHECK_GREEN + ' Already added</span>'
         + '<span class="mcol-see">' + SVG_ARROW_RIGHT + ' See collection</span>';
-      onclick = 'onclick="closeSaveModal();location.href=\'collection.html\'"';
+      var destAlready = coll.id ? 'collection.html?id=' + coll.id : 'collection.html';
+      onclick = 'onclick="closeSaveModal();location.href=\'' + destAlready + '\'"';
     } else if (st === 'full') {
       cls += ' modal__coll-item--full';
       right = '<span class="mcol-badge mcol-badge--full">' + SVG_WARN + ' Collection full</span>'
         + '<span class="mcol-see">' + SVG_ARROW_RIGHT + ' See collection</span>';
-      onclick = 'onclick="closeSaveModal();location.href=\'collection.html\'"';
+      var destFull = coll.id ? 'collection.html?id=' + coll.id : 'collection.html';
+      onclick = 'onclick="closeSaveModal();location.href=\'' + destFull + '\'"';
     }
 
     return '<button class="' + cls + '" type="button" ' + onclick + '>'
@@ -2137,9 +2163,9 @@
     if (type === 'created') {
       _createdCollections[idx].selected = !_createdCollections[idx].selected;
     } else {
-      var c = _demoCollections[idx];
-      if (c.status === 'default') c.status = 'selected';
-      else if (c.status === 'selected') c.status = 'default';
+      var c = _dbCollections[idx];
+      if (c._status === 'default') c._status = 'selected';
+      else if (c._status === 'selected') c._status = 'default';
     }
     renderModalCollections();
     _syncValidateBtn();
@@ -2147,7 +2173,7 @@
 
   function _syncValidateBtn() {
     var anySelected = _createdCollections.some(function(c) { return c.selected; })
-      || _demoCollections.some(function(c) { return c.status === 'selected'; });
+      || _dbCollections.some(function(c) { return c._status === 'selected'; });
     document.getElementById('modal-validate-save').hidden = !anySelected;
   }
 
@@ -2155,42 +2181,57 @@
     var list = document.getElementById('modal-coll-list');
     var html = '';
     _createdCollections.forEach(function(coll, idx) {
-      var st = coll.selected ? 'selected' : 'default';
-      html += _collItemHtml({ title: coll.title, count: 0, status: st }, 'created', idx);
+      html += _collItemHtml({ title: coll.title, count: 0, status: coll.selected ? 'selected' : 'default' }, 'created', idx);
     });
-    _demoCollections.forEach(function(coll, idx) {
-      html += _collItemHtml(coll, 'demo', idx);
+    _dbCollections.forEach(function(coll, idx) {
+      html += _collItemHtml({ id: coll.id, title: coll.title, count: coll.count, status: coll._status }, 'db', idx);
     });
     list.innerHTML = html;
   }
+
   function onValidateSave() {
+    var assetId = _saveModalTriggerBtn ? (_saveModalTriggerBtn.dataset.assetId || null) : null;
+    if (!assetId && _saveModalTriggerBtn) {
+      var card = _saveModalTriggerBtn.closest('[data-asset-id]');
+      if (card) assetId = card.dataset.assetId;
+    }
+
+    var collName = 'collection';
+    var collId   = null;
+
+    /* Persist newly-created collections + add asset */
+    var promises = [];
+    _createdCollections.forEach(function(c) {
+      if (!c.selected) return;
+      collName = collName === 'collection' ? c.title : collName;
+      promises.push(
+        DB.createCollection(c.title, c.desc || '').then(function(newCol) {
+          if (assetId) return DB.addAssetToCollection(assetId, newCol.id);
+        })
+      );
+    });
+
+    /* Persist asset → existing DB collections */
+    _dbCollections.forEach(function(c) {
+      if (c._status !== 'selected') return;
+      collName = collName === 'collection' ? c.title : collName;
+      collId   = collId || c.id;
+      if (assetId) promises.push(DB.addAssetToCollection(assetId, c.id));
+    });
+
+    if (assetId) DB.addFavorite(assetId);
     if (_saveModalTriggerBtn) markFavAdded(_saveModalTriggerBtn);
-    /* Find the selected collection (created or demo) */
-    var selectedColl = _createdCollections.find(function(c) { return c.selected; })
-      || _demoCollections.find(function(c) { return c.status === 'selected'; });
-    var collName = selectedColl ? selectedColl.title : 'collection';
-    var collDesc = selectedColl ? (selectedColl.desc || '') : '';
-    /* Get asset title from the card */
-    var card = _saveModalTriggerBtn ? _saveModalTriggerBtn.closest('.asset-card') : null;
-    var assetTitleEl = card ? card.querySelector('.asset-card__title') : null;
-    var assetTitle = assetTitleEl ? assetTitleEl.textContent.trim() : '';
-    try {
-      sessionStorage.setItem('savedCollection', JSON.stringify({
-        title: collName,
-        desc: collDesc,
-        asset: assetTitle ? { title: assetTitle } : null
-      }));
-    } catch(e) {}
+
     closeSaveModal();
-    showSnackbar(collName);
+    showSnackbar(collName, collId);
   }
 
   /* ── Snackbar ──────────────────────────────────────────────────── */
   var _snackbarTimer = null;
-  function showSnackbar(collName) {
+  function showSnackbar(collName, collId) {
     var sb = document.getElementById('snackbar');
     document.getElementById('snackbar-text').innerHTML = 'Asset added in<br>' + collName;
-    document.getElementById('snackbar-see-link').href = 'collection.html';
+    document.getElementById('snackbar-see-link').href = collId ? 'collection.html?id=' + collId : 'hub-collection.html';
     sb.hidden = false;
     sb.offsetHeight; /* force reflow */
     sb.classList.add('is-visible');

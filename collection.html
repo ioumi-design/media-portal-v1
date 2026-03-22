@@ -765,6 +765,7 @@ document.addEventListener('click', function(e) {
 });
 
 /* ── Modals, snackbar, clipboard ─────────────────────────────────────── */
+var _currentCollId = null;   /* set on DOMContentLoaded from ?id= param */
 var collUndoRemoveEntries = null;
 var collRemoveIds = [];
 
@@ -869,6 +870,10 @@ function collConfirmRemove() {
   });
   entries.sort(function(a, b) { return b.index - a.index; });
   entries.forEach(function(e) { ASSETS.splice(e.index, 1); });
+  /* Persist removals to DB */
+  if (_currentCollId) {
+    entries.forEach(function(e) { DB.removeAssetFromCollection(e.asset.id, _currentCollId); });
+  }
   collUndoRemoveEntries = entries.slice().sort(function(a, b) { return a.index - b.index; });
   collCloseRemoveModal();
   renderAssets();
@@ -881,6 +886,10 @@ function collUndoRemove() {
   collUndoRemoveEntries.forEach(function(e) {
     ASSETS.splice(e.index, 0, e.asset);
   });
+  /* Restore in DB */
+  if (_currentCollId) {
+    collUndoRemoveEntries.forEach(function(e) { DB.addAssetToCollection(e.asset.id, _currentCollId); });
+  }
   collUndoRemoveEntries = null;
   renderAssets();
 }
@@ -1057,11 +1066,12 @@ function collOpenCollDownloadModal() {
 
 function collOpenEditModal() {
   var title = document.querySelector('.coll-title').textContent.trim();
-  var desc = document.getElementById('desc-text').textContent.trim();
+  var desc  = document.getElementById('desc-text').textContent.trim();
   MP.editCollection.open(title, desc, function(newTitle, newDesc) {
+    if (_currentCollId) DB.updateCollection(_currentCollId, newTitle, newDesc);
     if (newTitle) {
       document.querySelector('.coll-title').textContent = newTitle;
-      document.title = newTitle + ' – Accor Media Portal';
+      document.title = newTitle + ' \u2013 Accor Media Portal';
     }
     var descText = document.getElementById('desc-text');
     var descWrap = document.querySelector('.coll-desc');
@@ -1078,7 +1088,15 @@ function collOpenEditModal() {
 
 function collOpenDeleteCollModal() {
   MP.deleteCollection.open({
-    onConfirm: function() { location.href = 'hub-collection.html'; }
+    onConfirm: function() {
+      if (_currentCollId) {
+        DB.deleteCollection(_currentCollId).then(function() {
+          location.href = 'hub-collection.html';
+        });
+      } else {
+        location.href = 'hub-collection.html';
+      }
+    }
   });
 }
 
@@ -1092,6 +1110,7 @@ function demoFillAssets() {
 document.addEventListener('DOMContentLoaded', function() {
   var params = new URLSearchParams(window.location.search);
   var collId = params.get('id');
+  _currentCollId = collId;
 
   function applyCollection(col, allAssets) {
     if (col.title) {
