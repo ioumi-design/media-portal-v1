@@ -1126,6 +1126,9 @@
       font-family: var(--font-body);
       font-size: var(--fs-body-sm);
       color: var(--color-on-surface-low);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   </style>
 </head>
@@ -1739,9 +1742,17 @@
 
   <!-- ══ FOOTER ══════════════════════════════════════════════════════ -->
   <footer class="site-footer">
-    <div class="site-footer__inner">© 2026 Accor Media Portal</div>
+    <div class="site-footer__inner">
+      <span>© 2026 Accor Media Portal</span>
+      <span class="scenario-switcher">
+        <button class="scenario-btn" id="scen-btn-1" onclick="ScenarioManager.loadScenario1()">Scenario 1</button>
+        <span class="scenario-sep">|</span>
+        <button class="scenario-btn" id="scen-btn-2" onclick="ScenarioManager.loadScenario2()">Scenario 2</button>
+      </span>
+    </div>
   </footer>
 
+<script src="js/scenario-database.js?v=1"></script>
 <script src="js/db.js?v=2"></script>
 <script src="components/components.js?v=7"></script>
   <script>
@@ -1857,16 +1868,40 @@
 
     document.addEventListener('DOMContentLoaded', function () {
       updateCartBadge();
-      function doSearch() {
-        var inp = document.querySelector('.search-input');
-        var q = inp ? inp.value.trim() : '';
-        DB.searchAssets(q).then(renderCards);
-      }
-      var btn = document.querySelector('.btn-search');
+
       var inp = document.querySelector('.search-input');
+
+      /* Search within active dataset */
+      function doSearch() {
+        var q = inp ? inp.value.trim() : '';
+        var isScen1 = localStorage.getItem('mp_scenario') === '1' && window.SUMMER_ASSETS;
+        if (isScen1) {
+          var ql = q.toLowerCase();
+          var filtered = q ? window.SUMMER_ASSETS.filter(function (a) {
+            return (a.title && a.title.toLowerCase().indexOf(ql) >= 0)
+              || (a.description && a.description.toLowerCase().indexOf(ql) >= 0)
+              || (a.brand && a.brand.toLowerCase().indexOf(ql) >= 0)
+              || (a.smartTags && a.smartTags.some(function (t) { return t.toLowerCase().indexOf(ql) >= 0; }))
+              || (a.tags && a.tags.some(function (t) { return t.toLowerCase().indexOf(ql) >= 0; }));
+          }) : window.SUMMER_ASSETS;
+          renderCards(filtered);
+        } else {
+          DB.searchAssets(q).then(renderCards);
+        }
+      }
+
+      var btn = document.querySelector('.btn-search');
       if (btn) btn.addEventListener('click', doSearch);
       if (inp) inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
-      DB.getAssets().then(renderCards);
+
+      /* Initial load — check for summer scenario */
+      var initialSearch = localStorage.getItem('mp_initial_search');
+      if (initialSearch === 'summer' && window.SUMMER_ASSETS) {
+        if (inp) inp.value = 'summer';
+        renderCards(window.SUMMER_ASSETS);
+      } else {
+        DB.getAssets().then(renderCards);
+      }
     });
 
     /* ── View mode toggle ─────────────────────────────────────────── */
@@ -2298,5 +2333,6 @@
     </svg>
   </button>
 </div>
+<script>(function(){var s=localStorage.getItem('mp_scenario')||'1';var b=document.getElementById('scen-btn-'+s);if(b)b.classList.add('is-active');})()</script>
 </body>
 </html>

@@ -513,10 +513,16 @@
   <!-- ══ FOOTER ═══════════════════════════════════════════════════════════ -->
   <footer class="site-footer">
     <p class="site-footer__copy">© 2026 Accor Media Portal</p>
+    <span class="scenario-switcher">
+      <button class="scenario-btn" id="scen-btn-1" onclick="ScenarioManager.loadScenario1()">Scenario 1</button>
+      <span class="scenario-sep">|</span>
+      <button class="scenario-btn" id="scen-btn-2" onclick="ScenarioManager.loadScenario2()">Scenario 2</button>
+    </span>
   </footer>
 
 </div><!-- /page -->
 
+<script src="js/scenario-database.js?v=1"></script>
 <script src="js/db.js?v=2"></script>
 <script src="components/components.js?v=7"></script>
 <script>
@@ -707,9 +713,11 @@ function hubOpenDelete(id) {
 document.addEventListener('DOMContentLoaded', function() {
   DB.getCollections().then(function(collections) {
     DB.getAssets().then(function(assets) {
+      /* Merge DB assets with SUMMER_ASSETS for thumbnail lookup */
+      var allAssets = (window.SUMMER_ASSETS || []).concat(assets);
       COLLECTIONS = collections.map(function(col) {
         var firstAsset = col.assetIds && col.assetIds[0]
-          ? assets.find(function(a) { return a.id === col.assetIds[0]; }) : null;
+          ? allAssets.find(function(a) { return a.id === col.assetIds[0]; }) : null;
         return {
           id: col.id,
           title: col.title,
@@ -724,5 +732,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('click', function() { hubCloseAllMenus(); });
 });
 </script>
+<script>(function(){var s=localStorage.getItem('mp_scenario')||'1';var b=document.getElementById('scen-btn-'+s);if(b)b.classList.add('is-active');})()</script>
 </body>
 </html>

@@ -916,10 +916,16 @@
   <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
   <footer class="site-footer">
     <p class="site-footer__copy">© 2026 Accor Media Portal</p>
+    <span class="scenario-switcher">
+      <button class="scenario-btn" id="scen-btn-1" onclick="ScenarioManager.loadScenario1()">Scenario 1</button>
+      <span class="scenario-sep">|</span>
+      <button class="scenario-btn" id="scen-btn-2" onclick="ScenarioManager.loadScenario2()">Scenario 2</button>
+    </span>
   </footer>
 
 </div><!-- /.page -->
 
+<script src="js/scenario-database.js?v=1"></script>
 <script src="js/db.js?v=2"></script>
 <script src="components/components.js?v=7"></script>
 <script>
@@ -1416,5 +1422,6 @@
     </svg>
   </button>
 </div>
+<script>(function(){var s=localStorage.getItem('mp_scenario')||'1';var b=document.getElementById('scen-btn-'+s);if(b)b.classList.add('is-active');})()</script>
 </body>
 </html>
