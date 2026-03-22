@@ -164,29 +164,43 @@
 
     /* ── Account popover ─────────────────────────────────────────── */
     .account-popover {
-      position: absolute; top: 80px; right: 64px;
-      width: 264px; z-index: 200;
+      position: absolute;
+      top: 80px;
+      right: 64px;
+      width: 375px;
       background: var(--color-surface);
-      border-radius: var(--br-surface);
-      box-shadow: 0 8px 16px 0 rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.08);
-      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.16), 0 2px 8px rgba(0,0,0,.08);
+      z-index: 200;
+      padding: 20px;
     }
     .account-popover[hidden] { display: none; }
-    .accp__inner { padding: 8px 12px 16px; }
-    .accp__close-row { display: flex; justify-content: flex-end; padding-bottom: 4px; }
+    .accp__inner { display: flex; flex-direction: column; gap: 0; }
+    .accp__close-row {
+      display: flex; justify-content: flex-end;
+      height: 40px; margin-bottom: 0;
+    }
     .accp__close {
-      border: none; background: none; padding: 4px; cursor: pointer;
-      color: var(--color-on-surface-hi); border-radius: 4px;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; border-radius: 40px;
+      color: var(--color-on-surface-hi); cursor: pointer;
+      margin-right: -8px; margin-top: -8px;
     }
     .accp__close:hover { background: var(--color-surface-container); }
-    .accp__greeting { font-size: 14px; color: var(--color-on-surface-low); line-height: 20px; }
-    .accp__name {
-      font-family: var(--font-display); font-weight: 700;
-      font-size: 18px; line-height: 24px; color: var(--color-primary);
-      display: flex; gap: 6px; flex-wrap: wrap;
+    .accp__greeting {
+      font-family: var(--font-label); font-weight: 500;
+      font-size: 18px; line-height: 24px;
+      color: var(--color-on-surface-hi); margin-bottom: 8px;
     }
-    .accp__sep { height: 1px; background: var(--color-outline-low); margin: 12px -12px; }
-    .accp__list { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
+    .accp__name {
+      font-family: var(--font-label); font-weight: 500;
+      font-size: 20px; line-height: 28px;
+      color: var(--color-on-surface-hi);
+      display: flex; gap: 4px; padding-bottom: 16px;
+    }
+    .accp__sep { height: 1px; background: var(--color-outline-low); margin: 0; }
+    .accp__list { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
     .accp__item {
       display: flex; align-items: center; gap: 8px;
       height: 24px; cursor: pointer; color: #232136;
@@ -195,12 +209,12 @@
     }
     .accp__item:hover { text-decoration: underline; color: #232136; }
     .accp__item svg { flex-shrink: 0; }
-    .accp__actions { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
+    .accp__actions { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; }
     .accp__link {
       display: inline-flex; align-items: center; gap: 6px;
       background: none; border: none; padding: 0;
       font-family: var(--font-body); font-size: 14px; line-height: 20px;
-      color: #232136; text-decoration: none; cursor: pointer; text-align: left;
+      color: var(--color-on-surface-hi); text-decoration: none; cursor: pointer; text-align: left;
     }
     .accp__link:hover { text-decoration: underline; color: #232136; }
     .accp__link:hover svg path { fill: #232136; }

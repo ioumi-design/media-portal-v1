@@ -223,63 +223,56 @@
     /* ── Account popover ─────────────────────────────────────────────── */
     .account-popover {
       position: absolute;
-      top: var(--header-h);
-      right: var(--grid-margin);
-      width: 280px;
+      top: 80px;
+      right: 64px;
+      width: 375px;
       background: var(--color-surface);
-      border-radius: var(--br-surface);
-      box-shadow: 0 8px 16px rgba(7,5,24,.08), 0 2px 6px rgba(7,5,24,.06);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.16), 0 2px 8px rgba(0,0,0,.08);
       z-index: 200;
+      padding: 20px;
     }
     .account-popover[hidden] { display: none; }
-    .accp__inner { padding: 16px; }
-    .accp__close-row { display: flex; justify-content: flex-end; margin-bottom: 4px; }
+    .accp__inner { display: flex; flex-direction: column; gap: 0; }
+    .accp__close-row { display: flex; justify-content: flex-end; height: 40px; margin-bottom: 0; }
     .accp__close {
-      background: none; border: none; cursor: pointer;
-      color: var(--color-on-surface-low);
-      width: 32px; height: 32px;
+      width: 40px; height: 40px;
       display: flex; align-items: center; justify-content: center;
-      border-radius: 100px;
-      transition: background 120ms;
+      background: none; border: none; border-radius: 40px;
+      color: var(--color-on-surface-hi); cursor: pointer;
+      margin-right: -8px; margin-top: -8px;
     }
-    .accp__close:hover { background: rgba(6,132,132,.08); }
+    .accp__close:hover { background: var(--color-surface-container); }
     .accp__greeting {
-      font-size: 14px; line-height: 20px;
-      color: var(--color-on-surface-mid); margin-bottom: 2px;
+      font-family: var(--font-label); font-weight: 500;
+      font-size: 18px; line-height: 24px;
+      color: var(--color-on-surface-hi); margin-bottom: 8px;
     }
     .accp__name {
-      display: flex; gap: 4px;
-      font-size: 16px; font-weight: 500; line-height: 24px;
-      color: var(--color-on-surface-hi); margin-bottom: 12px;
-    }
-    .accp__sep {
-      height: 1px; background: var(--color-outline-low);
-      margin: 8px 0;
-    }
-    .accp__list { display: flex; flex-direction: column; gap: 2px; }
-    .accp__item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 16px;
-      border-radius: var(--br-surface);
-      font-size: 16px; line-height: 24px;
+      font-family: var(--font-label); font-weight: 500;
+      font-size: 20px; line-height: 28px;
       color: var(--color-on-surface-hi);
-      text-decoration: none;
-      transition: background 120ms;
+      display: flex; gap: 4px; padding-bottom: 16px;
     }
-    .accp__item:hover {
-      background: rgba(6,132,132,.08);
-      text-decoration: underline;
+    .accp__sep { height: 1px; background: var(--color-outline-low); margin: 0; }
+    .accp__list { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
+    .accp__item {
+      display: flex; align-items: center; gap: 8px;
+      height: 24px; cursor: pointer; color: #232136;
+      text-decoration: none; font-family: var(--font-body);
+      font-size: var(--fs-body-md); line-height: var(--lh-body-md);
     }
-    .accp__actions { display: flex; flex-direction: column; gap: 8px; padding: 4px 16px; }
+    .accp__item:hover { text-decoration: underline; color: #232136; }
+    .accp__item svg { flex-shrink: 0; }
+    .accp__actions { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; }
     .accp__link {
-      display: flex; align-items: center; gap: 6px;
-      background: none; border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: none; padding: 0;
       font-family: var(--font-body); font-size: 14px; line-height: 20px;
-      color: var(--color-on-surface-mid);
-      padding: 0;
-      text-align: left;
+      color: var(--color-on-surface-hi); text-decoration: none; cursor: pointer; text-align: left;
     }
-    .accp__link:hover { text-decoration: underline; }
+    .accp__link:hover { text-decoration: underline; color: #232136; }
+    .accp__link:hover svg path { fill: #232136; }
 
     /* ── Page body ───────────────────────────────────────────────────── */
     .page-body {
