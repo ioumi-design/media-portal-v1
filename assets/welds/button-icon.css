@@ -1,0 +1,149 @@
+/*
+ * welDS ButtonIcon — driven by data-variant / data-size / data-state
+ * Source: components/button-icon.ai-ready.json (web.button-icon-bb) + variant_diffs
+ * NO !important — les variant colors sont appliquées via CSS (pas d'inline JS).
+ */
+
+/* ============================================================
+   Base
+   ============================================================ */
+.welds-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-width: var(--border-default);
+  border-radius: var(--radius-element-full);
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, outline-color 0.15s ease;
+}
+
+.welds-btn-icon__slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+/* ============================================================
+   Sizes — padding + icon size
+   ============================================================ */
+.welds-btn-icon[data-size="xs"] {
+  padding: var(--spacing-inset-xs);
+}
+.welds-btn-icon[data-size="xs"] .welds-btn-icon__slot {
+  width: var(--icon-size-2xs);
+  height: var(--icon-size-2xs);
+}
+
+.welds-btn-icon[data-size="sm"] {
+  padding: var(--spacing-inset-xs);
+}
+.welds-btn-icon[data-size="sm"] .welds-btn-icon__slot {
+  width: var(--icon-size-2xs);
+  height: var(--icon-size-2xs);
+}
+
+.welds-btn-icon[data-size="md"] {
+  padding: var(--spacing-inset-sm);
+}
+.welds-btn-icon[data-size="md"] .welds-btn-icon__slot {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.welds-btn-icon[data-size="lg"] {
+  padding: var(--spacing-inset-md);
+}
+.welds-btn-icon[data-size="lg"] .welds-btn-icon__slot {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+/* ============================================================
+   Variants — default state
+   ============================================================ */
+.welds-btn-icon[data-variant="primary"] {
+  background: linear-gradient(75deg,
+    var(--comp-btn-primary-bg-gradient-start),
+    var(--comp-btn-primary-bg-gradient-end));
+  border-color: var(--comp-btn-primary-border-color);
+  color: var(--comp-btn-primary-fg-color);
+}
+.welds-btn-icon[data-variant="secondary"] {
+  background: var(--comp-btn-secondary-bg-color);
+  border-color: var(--comp-btn-secondary-border-color);
+  color: var(--comp-btn-secondary-fg-color);
+}
+.welds-btn-icon[data-variant="tertiary"] {
+  background: var(--comp-btn-tertiary-bg-color);
+  border-color: var(--comp-btn-tertiary-border-color);
+  color: var(--comp-btn-tertiary-fg-color);
+}
+
+/* ============================================================
+   Hover (pseudo + data-state)
+   ============================================================ */
+.welds-btn-icon[data-variant="primary"]:hover:not(:disabled):not([data-state="disabled"]),
+.welds-btn-icon[data-variant="primary"][data-state="hover"] {
+  background: linear-gradient(75deg,
+    var(--comp-btn-primary-hover-bg-gradient-start),
+    var(--comp-btn-primary-hover-bg-gradient-end));
+  border-color: var(--comp-btn-primary-hover-border-color);
+  color: var(--comp-btn-primary-hover-fg-color);
+}
+.welds-btn-icon[data-variant="secondary"]:hover:not(:disabled):not([data-state="disabled"]),
+.welds-btn-icon[data-variant="secondary"][data-state="hover"] {
+  background: linear-gradient(75deg,
+    var(--comp-btn-secondary-hover-bg-gradient-start),
+    var(--comp-btn-secondary-hover-bg-gradient-end));
+  border-color: var(--comp-btn-secondary-hover-border-color);
+  color: var(--comp-btn-secondary-hover-fg-color);
+}
+.welds-btn-icon[data-variant="tertiary"]:hover:not(:disabled):not([data-state="disabled"]),
+.welds-btn-icon[data-variant="tertiary"][data-state="hover"] {
+  background: var(--comp-btn-tertiary-hover-bg-color);
+  border-color: var(--comp-btn-tertiary-hover-border-color);
+  color: var(--comp-btn-tertiary-hover-fg-color);
+}
+
+/* ============================================================
+   Pressed (pseudo + data-state)
+   ============================================================ */
+.welds-btn-icon[data-variant="primary"]:active:not(:disabled):not([data-state="disabled"]),
+.welds-btn-icon[data-variant="primary"][data-state="pressed"] {
+  background: var(--comp-btn-primary-pressed-bg-color);
+  border-color: var(--comp-btn-primary-pressed-border-color);
+  color: var(--comp-btn-primary-pressed-fg-color);
+}
+.welds-btn-icon[data-variant="secondary"]:active:not(:disabled):not([data-state="disabled"]),
+.welds-btn-icon[data-variant="secondary"][data-state="pressed"] {
+  background: var(--comp-btn-secondary-pressed-bg-color);
+  border-color: var(--comp-btn-secondary-pressed-border-color);
+  color: var(--comp-btn-secondary-pressed-fg-color);
+}
+.welds-btn-icon[data-variant="tertiary"]:active:not(:disabled):not([data-state="disabled"]),
+.welds-btn-icon[data-variant="tertiary"][data-state="pressed"] {
+  background: var(--comp-btn-tertiary-pressed-bg-color);
+  border-color: var(--comp-btn-tertiary-pressed-border-color);
+  color: var(--comp-btn-tertiary-pressed-fg-color);
+}
+
+/* ============================================================
+   Focus + Disabled
+   ============================================================ */
+.welds-btn-icon:focus-visible,
+.welds-btn-icon[data-state="focus"] {
+  outline: var(--border-strong) solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.welds-btn-icon:disabled,
+.welds-btn-icon[data-state="disabled"] {
+  opacity: var(--disabled-opacity, 0.38);
+  cursor: not-allowed;
+}

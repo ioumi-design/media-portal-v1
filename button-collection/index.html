@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>mp.button-collection — component display</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- welDS: Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- welDS: foundation -->
+  <link rel="stylesheet" href="../assets/welds/base.css" />
+  <link rel="stylesheet" href="../assets/welds/brands-all.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f0f5;
+      color: #1f1b4b;
+      min-height: 100vh;
+      padding: 48px 64px;
+    }
+
+    /* ── Page header ─────────────────────────────────── */
+    .display-header { margin-bottom: 12px; }
+    .display-header__breadcrumb {
+      font-size: 12px;
+      color: #6f6e77;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    .display-header__title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #050033;
+      margin-bottom: 4px;
+    }
+    .display-header__meta {
+      font-size: 13px;
+      color: #6f6e77;
+    }
+    .display-header__meta code {
+      background: #e8edff;
+      color: #1f1b4b;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 11px;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .display-divider {
+      height: 1px;
+      background: #dadadd;
+      margin: 24px 0 36px;
+    }
+
+    /* ── Section ─────────────────────────────────────── */
+    .display-section { margin-bottom: 48px; }
+    .display-section__label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6f6e77;
+      margin-bottom: 24px;
+    }
+    .display-section__label span {
+      background: #050033;
+      color: #f9f9ff;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* ── Grid of variants ────────────────────────────── */
+    .variant-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    /* ── Variant cell ────────────────────────────────── */
+    .variant-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .variant-cell__label {
+      font-size: 11px;
+      color: #6f6e77;
+      text-align: center;
+      line-height: 16px;
+    }
+    .variant-cell__label strong {
+      display: block;
+      font-weight: 600;
+      color: #252339;
+      margin-bottom: 2px;
+    }
+
+    /* ── Dark canvas to show white-bg buttons ────────── */
+    .canvas-dark {
+      background: #2d2d3f;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .canvas-light {
+      background: #e8e4f0;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    /* ══════════════════════════════════════════════════
+       mp.button-collection
+       Base: button-icon tertiary sm (40×40, r=100, p=12)
+       Figma node: 75:3687
+    ══════════════════════════════════════════════════ */
+    .mp-btn-collection {
+      /* reset */
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+
+      /* layout */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      padding: 12px;
+      border-radius: 100px;
+      flex-shrink: 0;
+
+      /* default state — collection=not added */
+      background: #ffffff;
+      color: #1e1852;
+      transition:
+        background 120ms ease,
+        color 120ms ease,
+        opacity 120ms ease;
+    }
+
+    .mp-btn-collection svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ── :collection=added — filled heart ──────────── */
+    .mp-btn-collection[data-collection="added"] {
+      background: #ffffff;
+      color: #1e1852;
+    }
+
+    /* ── :state=hover ──────────────────────────────── */
+    .mp-btn-collection:hover:not(:disabled),
+    .mp-btn-collection[data-state="hover"] {
+      background: #1e1852;
+      color: #ffffff;
+    }
+
+    /* ── :state=pressed ────────────────────────────── */
+    .mp-btn-collection:active:not(:disabled),
+    .mp-btn-collection[data-state="pressed"] {
+      background: #544e85;
+      color: #ffffff;
+    }
+
+    /* ── :state=disabled ───────────────────────────── */
+    .mp-btn-collection:disabled,
+    .mp-btn-collection[data-state="disabled"] {
+      background: #ffffff;
+      color: #1e1852;
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
+
+    /* ── Tooltip ─────────────────────────────────────── */
+    .mp-btn-collection-wrap {
+      position: relative;
+      display: inline-flex;
+    }
+    .mp-btn-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      color: #1e1852;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
+      white-space: nowrap;
+      padding: 8px 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.18);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 120ms ease;
+      z-index: 10;
+    }
+    .mp-btn-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #ffffff;
+    }
+    .mp-btn-collection-wrap:hover .mp-btn-tooltip {
+      opacity: 1;
+    }
+
+    /* ── Spec box ────────────────────────────────────── */
+    .spec-box {
+      background: #fff;
+      border: 1px solid #dadadd;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-size: 12px;
+      color: #3e3d48;
+      line-height: 20px;
+      max-width: 300px;
+    }
+    .spec-box__title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6f6e77;
+      margin-bottom: 12px;
+    }
+    .spec-box__row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 4px 0;
+      border-bottom: 1px solid #f0f0f5;
+    }
+    .spec-box__row:last-child { border-bottom: none; }
+    .spec-box__key { color: #6f6e77; }
+    .spec-box__val { font-weight: 500; color: #050033; text-align: right; }
+    .spec-box__val code {
+      background: #e8edff;
+      border-radius: 3px;
+      padding: 0 4px;
+      font-size: 10px;
+      font-family: monospace;
+    }
+
+    /* ── State table ─────────────────────────────────── */
+    .state-table {
+      border-collapse: collapse;
+      font-size: 12px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #dadadd;
+    }
+    .state-table th, .state-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid #f0f0f5;
+      text-align: left;
+      vertical-align: middle;
+    }
+    .state-table th {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6f6e77;
+      background: #f8f8fc;
+    }
+    .state-table tr:last-child td { border-bottom: none; }
+    .state-table .swatch {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid #dadadd;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    .state-table code {
+      background: #e8edff;
+      border-radius: 3px;
+      padding: 0 4px;
+      font-size: 10px;
+      font-family: monospace;
+      color: #1f1b4b;
+    }
+  </style>
+</head>
+<body class="brand-all">
+
+  <!-- Page header -->
+  <div class="display-header">
+    <div class="display-header__breadcrumb">welDS · Component display &nbsp;/&nbsp; Media Portal</div>
+    <h1 class="display-header__title">mp.button-collection</h1>
+    <p class="display-header__meta">
+      Figma node <code>75:3687</code> &nbsp;·&nbsp;
+      COMPONENT_SET &nbsp;·&nbsp;
+      variant <code>:state</code> × <code>:collection</code> &nbsp;·&nbsp;
+      base: <code>web.button-icon</code> tertiary sm &nbsp;·&nbsp;
+      brand <code>all</code>
+    </p>
+  </div>
+
+  <div class="display-divider"></div>
+
+  <!-- ── Section 1: collection=not added ──────────── -->
+  <div class="display-section">
+    <div class="display-section__label">:collection = not added <span>outline heart</span></div>
+
+    <div class="variant-grid">
+
+      <!-- default -->
+      <div class="variant-cell">
+        <div class="canvas-dark">
+          <div class="mp-btn-collection-wrap">
+            <button class="mp-btn-collection" data-state="default" data-collection="not added" aria-label="Add to collection">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <span class="mp-btn-tooltip" role="tooltip">Add to collection</span>
+          </div>
+        </div>
+        <div class="variant-cell__label">
+          <strong>default</strong>
+          not added
+        </div>
+      </div>
+
+      <!-- hover -->
+      <div class="variant-cell">
+        <div class="canvas-dark">
+          <div class="mp-btn-collection-wrap">
+            <button class="mp-btn-collection" data-state="hover" data-collection="not added" aria-label="Add to collection">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <span class="mp-btn-tooltip" role="tooltip">Add to collection</span>
+          </div>
+        </div>
+        <div class="variant-cell__label">
+          <strong>hover</strong>
+          not added
+        </div>
+      </div>
+
+      <!-- pressed -->
+      <div class="variant-cell">
+        <div class="canvas-dark">
+          <div class="mp-btn-collection-wrap">
+            <button class="mp-btn-collection" data-state="pressed" data-collection="not added" aria-label="Add to collection">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <span class="mp-btn-tooltip" role="tooltip">Add to collection</span>
+          </div>
+        </div>
+        <div class="variant-cell__label">
+          <strong>pressed</strong>
+          not added
+        </div>
+      </div>
+
+      <!-- disabled -->
+      <div class="variant-cell">
+        <div class="canvas-dark">
+          <div class="mp-btn-collection-wrap">
+            <button class="mp-btn-collection" data-state="disabled" data-collection="not added" disabled aria-label="Add to collection" aria-disabled="true">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="variant-cell__label">
+          <strong>disabled</strong>
+          not added
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Section 2: collection=added ──────────────── -->
+  <div class="display-section">
+    <div class="display-section__label">:collection = added <span>filled heart</span></div>
+
+    <div class="variant-grid">
+
+      <!-- default -->
+      <div class="variant-cell">
+        <div class="canvas-dark">
+          <div class="mp-btn-collection-wrap">
+            <button class="mp-btn-collection" data-state="default" data-collection="added" aria-label="Add to collection">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <span class="mp-btn-tooltip" role="tooltip">Add to collection</span>
+          </div>
+        </div>
+        <div class="variant-cell__label">
+          <strong>default</strong>
+          added
+        </div>
+      </div>
+
+      <!-- hover -->
+      <div class="variant-cell">
+        <div class="canvas-dark">
+          <div class="mp-btn-collection-wrap">
+            <button class="mp-btn-collection" data-state="hover" data-collection="added" aria-label="Add to collection">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <span class="mp-btn-tooltip" role="tooltip">Add to collection</span>
+          </div>
+        </div>
+        <div class="variant-cell__label">
+          <strong>hover</strong>
+          added
+        </div>
+      </div>
+
+      <!-- pressed -->
+      <div class="variant-cell">
+        <div class="canvas-dark">
+          <div class="mp-btn-collection-wrap">
+            <button class="mp-btn-collection" data-state="pressed" data-collection="added" aria-label="Add to collection">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <span class="mp-btn-tooltip" role="tooltip">Add to collection</span>
+          </div>
+        </div>
+        <div class="variant-cell__label">
+          <strong>pressed</strong>
+          added
+        </div>
+      </div>
+
+      <!-- disabled -->
+      <div class="variant-cell">
+        <div class="canvas-dark">
+          <div class="mp-btn-collection-wrap">
+            <button class="mp-btn-collection" data-state="disabled" data-collection="added" disabled aria-label="Add to collection" aria-disabled="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="variant-cell__label">
+          <strong>disabled</strong>
+          added
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Section 3: Interactive demo ──────────────── -->
+  <div class="display-section">
+    <div class="display-section__label">Interactive demo <span>live</span></div>
+
+    <div class="variant-grid" style="align-items: center;">
+      <div class="canvas-dark" style="padding: 20px 24px; gap: 0;">
+        <div class="mp-btn-collection-wrap">
+          <button
+            class="mp-btn-collection"
+            id="demo-btn"
+            data-collection="not added"
+            aria-label="Add to collection"
+            onclick="toggleCollection(this)"
+          >
+            <svg id="demo-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path id="demo-path" d="M12 21C12 21 3 15.5 3 9.5C3 7.01 5.01 5 7.5 5C9.24 5 10.76 5.96 11.56 7.36L12 8.11L12.44 7.36C13.24 5.96 14.76 5 16.5 5C18.99 5 21 7.01 21 9.5C21 15.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </button>
+          <span class="mp-btn-tooltip" role="tooltip">Add to collection</span>
+        </div>
+      </div>
+      <p style="font-size: 13px; color: #6f6e77; max-width: 220px; line-height: 20px;">
+        Click to simulate a collection state toggle (outline → filled).
+        Tooltip always reads <strong>"Add to collection"</strong> — clicking opens the collection modal.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Section 4: Spec ───────────────────────────── -->
+  <div class="display-section">
+    <div class="display-section__label">Specs</div>
+
+    <div style="display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start;">
+
+      <div class="spec-box">
+        <div class="spec-box__title">Anatomy</div>
+        <div class="spec-box__row"><span class="spec-box__key">Base</span><span class="spec-box__val">web.button-icon · tertiary · sm</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Size</span><span class="spec-box__val">40 × 40 px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Padding</span><span class="spec-box__val">12 px all sides</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Border-radius</span><span class="spec-box__val">100 px (full circle)</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon size</span><span class="spec-box__val"><code>--icon-size-2xs</code> · 16px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon (not added)</span><span class="spec-box__val">favorite-24 (outline)</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon (added)</span><span class="spec-box__val">favorite-filled-24</span></div>
+      </div>
+
+      <div class="spec-box">
+        <div class="spec-box__title">Typography — tooltip</div>
+        <div class="spec-box__row"><span class="spec-box__key">Family</span><span class="spec-box__val"><code>--font-family-body</code></span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Size</span><span class="spec-box__val"><code>--font-size-body-sm</code> · 14px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Weight</span><span class="spec-box__val"><code>--font-weight-body-default</code> · 400</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Line-height</span><span class="spec-box__val"><code>--line-height-body-sm</code> · 20px</span></div>
+      </div>
+
+      <table class="state-table">
+        <thead>
+          <tr>
+            <th>:state</th>
+            <th>Background</th>
+            <th>Icon color</th>
+            <th>Opacity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>default</td>
+            <td><span class="swatch" style="background:#ffffff;"></span><code>#ffffff</code></td>
+            <td><span class="swatch" style="background:#1e1852;"></span><code>#1e1852</code></td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>hover</td>
+            <td><span class="swatch" style="background:#1e1852;"></span><code>#1e1852</code></td>
+            <td><span class="swatch" style="background:#ffffff; border-color:#aaa;"></span><code>#ffffff</code></td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>pressed</td>
+            <td><span class="swatch" style="background:#544e85;"></span><code>#544e85</code></td>
+            <td><span class="swatch" style="background:#ffffff; border-color:#aaa;"></span><code>#ffffff</code></td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>disabled</td>
+            <td><span class="swatch" style="background:#ffffff;"></span><code>#ffffff</code></td>
+            <td><span class="swatch" style="background:#1e1852;"></span><code>#1e1852</code></td>
+            <td>0.38</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <script>
+    function toggleCollection(btn) {
+      const isAdded = btn.dataset.collection === 'added';
+      const path = btn.querySelector('#demo-path');
+      const icon = btn.querySelector('#demo-icon');
+      // Tooltip always stays "Add to collection" — clicking opens the collection modal in production
+      if (isAdded) {
+        btn.dataset.collection = 'not added';
+        icon.setAttribute('fill', 'none');
+        path.setAttribute('fill', 'none');
+      } else {
+        btn.dataset.collection = 'added';
+        icon.setAttribute('fill', 'currentColor');
+        path.setAttribute('fill', 'currentColor');
+      }
+    }
+  </script>
+
+</body>
+</html>
