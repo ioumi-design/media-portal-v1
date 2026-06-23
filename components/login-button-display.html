@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>aem.login-connect — welDS component display</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- welDS: Google Fonts (brand: all) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Unna:ital,wght@0,400;0,700;1,400&family=Noto+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Gloock&family=Darker+Grotesque:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- welDS: foundation tokens + component CSS -->
+  <link rel="stylesheet" href="../assets/welds/base.css" />
+  <link rel="stylesheet" href="../assets/welds/brands-all.css" />
+
+  <style>
+    /* ── Page shell ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f0f5;
+      color: #1f1b4b;
+      min-height: 100vh;
+      padding: 48px 64px;
+    }
+
+    /* ── Page header ────────────────────────────────────────────── */
+    .display-header {
+      margin-bottom: 12px;
+    }
+    .display-header__breadcrumb {
+      font-size: 12px;
+      color: #6f6e77;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    .display-header__title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #050033;
+      margin-bottom: 4px;
+    }
+    .display-header__meta {
+      font-size: 13px;
+      color: #6f6e77;
+    }
+    .display-header__meta code {
+      background: #e8edff;
+      color: #1f1b4b;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 11px;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    /* ── Divider ────────────────────────────────────────────────── */
+    .display-divider {
+      height: 1px;
+      background: #dadadd;
+      margin: 24px 0 36px;
+    }
+
+    /* ── Variant section ────────────────────────────────────────── */
+    .display-section {
+      margin-bottom: 52px;
+    }
+    .display-section__label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6f6e77;
+      margin-bottom: 20px;
+    }
+    .display-section__label span {
+      background: #050033;
+      color: #f9f9ff;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* ── Canvas ─────────────────────────────────────────────────── */
+    .display-canvas {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    /* ── Spec row ───────────────────────────────────────────────── */
+    .display-spec-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .spec-box {
+      background: #ffffff;
+      border: 1px solid #e4e4e8;
+      border-radius: 8px;
+      padding: 16px 20px;
+      min-width: 200px;
+    }
+    .spec-box__title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #9998a3;
+      margin-bottom: 10px;
+    }
+    .spec-box__row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 12px;
+      line-height: 20px;
+    }
+    .spec-box__key {
+      color: #6f6e77;
+      white-space: nowrap;
+    }
+    .spec-box__val {
+      color: #1f1b4b;
+      font-weight: 500;
+      text-align: right;
+    }
+    .spec-box__val code {
+      background: #e8edff;
+      color: #1f1b4b;
+      border-radius: 3px;
+      padding: 0 5px;
+      font-size: 11px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       aem.login-connect · web.button (login=true)
+       Figma node 388:2019 · inside 🧩 mp.navigation bar-v2
+       Anatomy: 💠 web.button [ 💠 account-connected-24 + label ]
+    ═══════════════════════════════════════════════════════════════ */
+
+    /* ── Button base ─────────────────────────────────────────────── */
+    .login-btn {
+      /* 💠 web.button: px=insetsquish/md-h=16px, py=insetsquish/md-v=12px */
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      padding: 12px 16px;
+      border-radius: var(--wel\/sem\/borderRadius\/element\/interactive-high, 100px);
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: background 120ms ease;
+    }
+
+    /* ── state=default: ghost → hover=navy → active=pressed → focus=ring ── */
+    .login-btn--default:hover {
+      background: var(--wel\/sem\/color\/primary, #1e1852);
+    }
+    .login-btn--default:active {
+      background: var(--wel\/sem\/color\/pressed\/primary, #544e85);
+    }
+    .login-btn--default:focus-visible {
+      outline: none;
+      background: none;
+    }
+    .login-btn--default:focus-visible::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border: 2px solid var(--wel\/sem\/color\/focus, #3470df);
+      border-radius: 100px;
+      pointer-events: none;
+    }
+    .login-btn--default:hover .login-btn__label,
+    .login-btn--default:active .login-btn__label {
+      color: var(--wel\/sem\/color\/on-primary, #ffffff);
+    }
+    .login-btn--default:hover .login-btn__body path,
+    .login-btn--default:active .login-btn__body path {
+      fill: var(--wel\/sem\/color\/on-primary, #ffffff);
+    }
+
+    /* ── state=hover: filled navy ─────────────────────────────────── */
+    .login-btn--hover {
+      background: var(--wel\/sem\/color\/primary, #1e1852);
+    }
+    .login-btn--hover:hover {
+      background: var(--wel\/sem\/color\/primary, #1e1852);
+    }
+
+    /* ── state=pressed ────────────────────────────────────────────── */
+    .login-btn--pressed {
+      background: var(--wel\/sem\/color\/pressed\/primary, #544e85);
+    }
+    .login-btn--pressed:hover {
+      background: var(--wel\/sem\/color\/pressed\/primary, #544e85);
+    }
+
+    /* ── state=focus: ghost + ring ────────────────────────────────── */
+    .login-btn--focus:hover {
+      background: none;
+    }
+    .login-btn--focus::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border: 2px solid var(--wel\/sem\/color\/focus, #3470df);
+      border-radius: 100px;
+      pointer-events: none;
+    }
+
+    /* ── 💠 account-connected-24 icon ─────────────────────────────── */
+    .login-btn__icon {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    /* ellipse: teal dot top-right — inset 8.33% 8.33% 66.67% 66.67% */
+    .login-btn__dot {
+      position: absolute;
+      top: 8.33%;
+      right: 8.33%;
+      bottom: 66.67%;
+      left: 66.67%;
+    }
+    /* body vector: inset 12.5% all sides */
+    .login-btn__body {
+      position: absolute;
+      inset: 12.5%;
+    }
+    .login-btn__dot svg,
+    .login-btn__body svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── label wrapper ────────────────────────────────────────────── */
+    .login-btn__label-wrap {
+      display: flex;
+      align-items: flex-start;
+      padding: 0 4px;
+    }
+    .login-btn__label {
+      /* label-default-01: Roboto 400 16/24 */
+      font-family: var(--wel\/sem\/fontFamilies\/label, 'Roboto'), sans-serif;
+      font-size: var(--wel\/sem\/fontSizes\/label\/lg, 16px);
+      font-weight: 400;
+      line-height: var(--wel\/sem\/lineHeights\/label\/lg, 24px);
+      letter-spacing: var(--wel\/sem\/letterSpacing\/label, 0px);
+      color: var(--wel\/sem\/color\/primary, #1e1852);
+      white-space: nowrap;
+    }
+    /* label on dark bg (hover / pressed) */
+    .login-btn--hover .login-btn__label,
+    .login-btn--pressed .login-btn__label {
+      color: var(--wel\/sem\/color\/on-primary, #ffffff);
+    }
+  </style>
+</head>
+<body class="brand-all">
+
+  <!-- Page header -->
+  <div class="display-header">
+    <div class="display-header__breadcrumb">welDS · Component display</div>
+    <h1 class="display-header__title">aem.login-connect · web.button</h1>
+    <p class="display-header__meta">
+      Figma node <code>388:2019</code> &nbsp;·&nbsp;
+      login <code>true</code> &nbsp;·&nbsp;
+      inside <code>mp.navigation bar-v2</code> &nbsp;·&nbsp;
+      brand <code>all</code>
+    </p>
+  </div>
+
+  <div class="display-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       state=default · ghost
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="display-section">
+    <div class="display-section__label">state=default <span>ghost</span></div>
+    <div class="display-canvas">
+      <button class="login-btn login-btn--default" type="button" aria-label="User menu">
+        <div class="login-btn__icon" aria-hidden="true">
+          <div class="login-btn__dot">
+            <svg viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="3" cy="4" rx="3" ry="4" fill="#068484"/>
+            </svg>
+          </div>
+          <div class="login-btn__body">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7788 0.437173C10.9036 0.153369 9.96973 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18C13.9706 18 18 13.9706 18 9C18 8.03027 17.8466 7.09636 17.5628 6.22121C17.0976 6.3935 16.5962 6.4911 16.073 6.49942C16.3495 7.28153 16.5 8.12319 16.5 9C16.5 11.1673 15.5807 13.12 14.1107 14.4892C13.9844 14.0735 13.8658 13.7296 13.7416 13.4525C13.5892 13.1127 13.3957 12.7968 13.0951 12.5732C12.7807 12.3393 12.4425 12.2753 12.1515 12.2549C11.97 12.2422 11.7454 12.245 11.5262 12.2477C11.4355 12.2489 11.3455 12.25 11.26 12.25H6.74002C6.65456 12.25 6.56477 12.2489 6.47407 12.2477C6.25483 12.245 6.03005 12.2422 5.84849 12.2549C5.55751 12.2753 5.21936 12.3393 4.90491 12.5732C4.60432 12.7968 4.41084 13.1127 4.25848 13.4525C4.13421 13.7296 4.01567 14.0735 3.88933 14.4892C2.41934 13.12 1.5 11.1674 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C9.87681 1.5 10.7185 1.65046 11.5006 1.92697C11.5089 1.40383 11.6065 0.902377 11.7788 0.437173ZM12.8298 15.4498C11.7088 16.1169 10.3991 16.5 9 16.5C7.60087 16.5 6.29122 16.1169 5.17024 15.4498L5.24017 15.2095C5.39911 14.6631 5.51968 14.306 5.62719 14.0662C5.73537 13.8249 5.79814 13.7782 5.80013 13.7768L5.80107 13.7762C5.80107 13.7762 5.80539 13.7741 5.8143 13.7714C5.83412 13.7655 5.87462 13.7568 5.95342 13.7513C6.07262 13.7429 6.19616 13.7446 6.37109 13.747C6.47336 13.7483 6.5932 13.75 6.74002 13.75H11.26C11.4068 13.75 11.5267 13.7483 11.629 13.747C11.8039 13.7446 11.9274 13.7429 12.0466 13.7513C12.1254 13.7568 12.1659 13.7655 12.1857 13.7714C12.1946 13.7741 12.199 13.7762 12.199 13.7762L12.1999 13.7768C12.2019 13.7782 12.2647 13.8249 12.3729 14.0662C12.4804 14.306 12.6009 14.6631 12.7599 15.2095L12.8298 15.4498Z" fill="#1E1852"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3.25C6.92893 3.25 5.25 4.92893 5.25 7C5.25 9.07107 6.92893 10.75 9 10.75C11.0711 10.75 12.75 9.07107 12.75 7C12.75 4.92893 11.0711 3.25 9 3.25ZM6.75 7C6.75 5.75736 7.75736 4.75 9 4.75C10.2426 4.75 11.25 5.75736 11.25 7C11.25 8.24264 10.2426 9.25 9 9.25C7.75736 9.25 6.75 8.24264 6.75 7Z" fill="#1E1852"/>
+            </svg>
+          </div>
+        </div>
+        <div class="login-btn__label-wrap">
+          <span class="login-btn__label">Steven PICARD</span>
+        </div>
+      </button>
+    </div>
+    <div class="display-spec-row">
+      <div class="spec-box">
+        <div class="spec-box__title">web.button · default</div>
+        <div class="spec-box__row"><span class="spec-box__key">Background</span><span class="spec-box__val">none (ghost)</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Padding</span><span class="spec-box__val">12px 16px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Border radius</span><span class="spec-box__val">100px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon</span><span class="spec-box__val">account-connected-24</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon color</span><span class="spec-box__val"><code>primary</code> #1e1852</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Dot color</span><span class="spec-box__val"><code>accent</code> #068484</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Label</span><span class="spec-box__val">label-default-01 · 400</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Label color</span><span class="spec-box__val"><code>primary</code> #1e1852</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       state=hover · filled navy
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="display-section">
+    <div class="display-section__label">state=hover <span>filled</span></div>
+    <div class="display-canvas">
+      <button class="login-btn login-btn--hover" type="button" aria-label="User menu">
+        <div class="login-btn__icon" aria-hidden="true">
+          <div class="login-btn__dot">
+            <svg viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="3" cy="4" rx="3" ry="4" fill="#068484"/>
+            </svg>
+          </div>
+          <div class="login-btn__body">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7788 0.437173C10.9036 0.153369 9.96973 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18C13.9706 18 18 13.9706 18 9C18 8.03027 17.8466 7.09636 17.5628 6.22121C17.0976 6.3935 16.5962 6.4911 16.073 6.49942C16.3495 7.28153 16.5 8.12319 16.5 9C16.5 11.1673 15.5807 13.12 14.1107 14.4892C13.9844 14.0735 13.8658 13.7296 13.7416 13.4525C13.5892 13.1127 13.3957 12.7968 13.0951 12.5732C12.7807 12.3393 12.4425 12.2753 12.1515 12.2549C11.97 12.2422 11.7454 12.245 11.5262 12.2477C11.4355 12.2489 11.3455 12.25 11.26 12.25H6.74002C6.65456 12.25 6.56477 12.2489 6.47407 12.2477C6.25483 12.245 6.03005 12.2422 5.84849 12.2549C5.55751 12.2753 5.21936 12.3393 4.90491 12.5732C4.60432 12.7968 4.41084 13.1127 4.25848 13.4525C4.13421 13.7296 4.01567 14.0735 3.88933 14.4892C2.41934 13.12 1.5 11.1674 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C9.87681 1.5 10.7185 1.65046 11.5006 1.92697C11.5089 1.40383 11.6065 0.902377 11.7788 0.437173ZM12.8298 15.4498C11.7088 16.1169 10.3991 16.5 9 16.5C7.60087 16.5 6.29122 16.1169 5.17024 15.4498L5.24017 15.2095C5.39911 14.6631 5.51968 14.306 5.62719 14.0662C5.73537 13.8249 5.79814 13.7782 5.80013 13.7768L5.80107 13.7762C5.80107 13.7762 5.80539 13.7741 5.8143 13.7714C5.83412 13.7655 5.87462 13.7568 5.95342 13.7513C6.07262 13.7429 6.19616 13.7446 6.37109 13.747C6.47336 13.7483 6.5932 13.75 6.74002 13.75H11.26C11.4068 13.75 11.5267 13.7483 11.629 13.747C11.8039 13.7446 11.9274 13.7429 12.0466 13.7513C12.1254 13.7568 12.1659 13.7655 12.1857 13.7714C12.1946 13.7741 12.199 13.7762 12.199 13.7762L12.1999 13.7768C12.2019 13.7782 12.2647 13.8249 12.3729 14.0662C12.4804 14.306 12.6009 14.6631 12.7599 15.2095L12.8298 15.4498Z" fill="#ffffff"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3.25C6.92893 3.25 5.25 4.92893 5.25 7C5.25 9.07107 6.92893 10.75 9 10.75C11.0711 10.75 12.75 9.07107 12.75 7C12.75 4.92893 11.0711 3.25 9 3.25ZM6.75 7C6.75 5.75736 7.75736 4.75 9 4.75C10.2426 4.75 11.25 5.75736 11.25 7C11.25 8.24264 10.2426 9.25 9 9.25C7.75736 9.25 6.75 8.24264 6.75 7Z" fill="#ffffff"/>
+            </svg>
+          </div>
+        </div>
+        <div class="login-btn__label-wrap">
+          <span class="login-btn__label">Steven PICARD</span>
+        </div>
+      </button>
+    </div>
+    <div class="display-spec-row">
+      <div class="spec-box">
+        <div class="spec-box__title">web.button · hover</div>
+        <div class="spec-box__row"><span class="spec-box__key">Background</span><span class="spec-box__val"><code>primary</code> #1e1852</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon color</span><span class="spec-box__val"><code>on-primary</code> #ffffff</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Label color</span><span class="spec-box__val"><code>on-primary</code> #ffffff</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       state=pressed
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="display-section">
+    <div class="display-section__label">state=pressed <span>pressed</span></div>
+    <div class="display-canvas">
+      <button class="login-btn login-btn--pressed" type="button" aria-label="User menu">
+        <div class="login-btn__icon" aria-hidden="true">
+          <div class="login-btn__dot">
+            <svg viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="3" cy="4" rx="3" ry="4" fill="#068484"/>
+            </svg>
+          </div>
+          <div class="login-btn__body">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7788 0.437173C10.9036 0.153369 9.96973 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18C13.9706 18 18 13.9706 18 9C18 8.03027 17.8466 7.09636 17.5628 6.22121C17.0976 6.3935 16.5962 6.4911 16.073 6.49942C16.3495 7.28153 16.5 8.12319 16.5 9C16.5 11.1673 15.5807 13.12 14.1107 14.4892C13.9844 14.0735 13.8658 13.7296 13.7416 13.4525C13.5892 13.1127 13.3957 12.7968 13.0951 12.5732C12.7807 12.3393 12.4425 12.2753 12.1515 12.2549C11.97 12.2422 11.7454 12.245 11.5262 12.2477C11.4355 12.2489 11.3455 12.25 11.26 12.25H6.74002C6.65456 12.25 6.56477 12.2489 6.47407 12.2477C6.25483 12.245 6.03005 12.2422 5.84849 12.2549C5.55751 12.2753 5.21936 12.3393 4.90491 12.5732C4.60432 12.7968 4.41084 13.1127 4.25848 13.4525C4.13421 13.7296 4.01567 14.0735 3.88933 14.4892C2.41934 13.12 1.5 11.1674 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C9.87681 1.5 10.7185 1.65046 11.5006 1.92697C11.5089 1.40383 11.6065 0.902377 11.7788 0.437173ZM12.8298 15.4498C11.7088 16.1169 10.3991 16.5 9 16.5C7.60087 16.5 6.29122 16.1169 5.17024 15.4498L5.24017 15.2095C5.39911 14.6631 5.51968 14.306 5.62719 14.0662C5.73537 13.8249 5.79814 13.7782 5.80013 13.7768L5.80107 13.7762C5.80107 13.7762 5.80539 13.7741 5.8143 13.7714C5.83412 13.7655 5.87462 13.7568 5.95342 13.7513C6.07262 13.7429 6.19616 13.7446 6.37109 13.747C6.47336 13.7483 6.5932 13.75 6.74002 13.75H11.26C11.4068 13.75 11.5267 13.7483 11.629 13.747C11.8039 13.7446 11.9274 13.7429 12.0466 13.7513C12.1254 13.7568 12.1659 13.7655 12.1857 13.7714C12.1946 13.7741 12.199 13.7762 12.199 13.7762L12.1999 13.7768C12.2019 13.7782 12.2647 13.8249 12.3729 14.0662C12.4804 14.306 12.6009 14.6631 12.7599 15.2095L12.8298 15.4498Z" fill="#ffffff"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3.25C6.92893 3.25 5.25 4.92893 5.25 7C5.25 9.07107 6.92893 10.75 9 10.75C11.0711 10.75 12.75 9.07107 12.75 7C12.75 4.92893 11.0711 3.25 9 3.25ZM6.75 7C6.75 5.75736 7.75736 4.75 9 4.75C10.2426 4.75 11.25 5.75736 11.25 7C11.25 8.24264 10.2426 9.25 9 9.25C7.75736 9.25 6.75 8.24264 6.75 7Z" fill="#ffffff"/>
+            </svg>
+          </div>
+        </div>
+        <div class="login-btn__label-wrap">
+          <span class="login-btn__label">Steven PICARD</span>
+        </div>
+      </button>
+    </div>
+    <div class="display-spec-row">
+      <div class="spec-box">
+        <div class="spec-box__title">web.button · pressed</div>
+        <div class="spec-box__row"><span class="spec-box__key">Background</span><span class="spec-box__val"><code>pressed/primary</code> #544e85</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon color</span><span class="spec-box__val"><code>on-primary</code> #ffffff</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Label color</span><span class="spec-box__val"><code>on-primary</code> #ffffff</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       state=focus · ghost + ring
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="display-section">
+    <div class="display-section__label">state=focus <span>focus ring</span></div>
+    <div class="display-canvas">
+      <button class="login-btn login-btn--focus" type="button" aria-label="User menu">
+        <div class="login-btn__icon" aria-hidden="true">
+          <div class="login-btn__dot">
+            <svg viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="3" cy="4" rx="3" ry="4" fill="#068484"/>
+            </svg>
+          </div>
+          <div class="login-btn__body">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7788 0.437173C10.9036 0.153369 9.96973 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18C13.9706 18 18 13.9706 18 9C18 8.03027 17.8466 7.09636 17.5628 6.22121C17.0976 6.3935 16.5962 6.4911 16.073 6.49942C16.3495 7.28153 16.5 8.12319 16.5 9C16.5 11.1673 15.5807 13.12 14.1107 14.4892C13.9844 14.0735 13.8658 13.7296 13.7416 13.4525C13.5892 13.1127 13.3957 12.7968 13.0951 12.5732C12.7807 12.3393 12.4425 12.2753 12.1515 12.2549C11.97 12.2422 11.7454 12.245 11.5262 12.2477C11.4355 12.2489 11.3455 12.25 11.26 12.25H6.74002C6.65456 12.25 6.56477 12.2489 6.47407 12.2477C6.25483 12.245 6.03005 12.2422 5.84849 12.2549C5.55751 12.2753 5.21936 12.3393 4.90491 12.5732C4.60432 12.7968 4.41084 13.1127 4.25848 13.4525C4.13421 13.7296 4.01567 14.0735 3.88933 14.4892C2.41934 13.12 1.5 11.1674 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C9.87681 1.5 10.7185 1.65046 11.5006 1.92697C11.5089 1.40383 11.6065 0.902377 11.7788 0.437173ZM12.8298 15.4498C11.7088 16.1169 10.3991 16.5 9 16.5C7.60087 16.5 6.29122 16.1169 5.17024 15.4498L5.24017 15.2095C5.39911 14.6631 5.51968 14.306 5.62719 14.0662C5.73537 13.8249 5.79814 13.7782 5.80013 13.7768L5.80107 13.7762C5.80107 13.7762 5.80539 13.7741 5.8143 13.7714C5.83412 13.7655 5.87462 13.7568 5.95342 13.7513C6.07262 13.7429 6.19616 13.7446 6.37109 13.747C6.47336 13.7483 6.5932 13.75 6.74002 13.75H11.26C11.4068 13.75 11.5267 13.7483 11.629 13.747C11.8039 13.7446 11.9274 13.7429 12.0466 13.7513C12.1254 13.7568 12.1659 13.7655 12.1857 13.7714C12.1946 13.7741 12.199 13.7762 12.199 13.7762L12.1999 13.7768C12.2019 13.7782 12.2647 13.8249 12.3729 14.0662C12.4804 14.306 12.6009 14.6631 12.7599 15.2095L12.8298 15.4498Z" fill="#1E1852"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3.25C6.92893 3.25 5.25 4.92893 5.25 7C5.25 9.07107 6.92893 10.75 9 10.75C11.0711 10.75 12.75 9.07107 12.75 7C12.75 4.92893 11.0711 3.25 9 3.25ZM6.75 7C6.75 5.75736 7.75736 4.75 9 4.75C10.2426 4.75 11.25 5.75736 11.25 7C11.25 8.24264 10.2426 9.25 9 9.25C7.75736 9.25 6.75 8.24264 6.75 7Z" fill="#1E1852"/>
+            </svg>
+          </div>
+        </div>
+        <div class="login-btn__label-wrap">
+          <span class="login-btn__label">Steven PICARD</span>
+        </div>
+      </button>
+    </div>
+    <div class="display-spec-row">
+      <div class="spec-box">
+        <div class="spec-box__title">web.button · focus</div>
+        <div class="spec-box__row"><span class="spec-box__key">Background</span><span class="spec-box__val">none (ghost)</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Focus ring</span><span class="spec-box__val">2px solid <code>focus</code> #3470df</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Ring inset</span><span class="spec-box__val">-2px · border-radius 100px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon color</span><span class="spec-box__val"><code>primary</code> #1e1852</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Label color</span><span class="spec-box__val"><code>primary</code> #1e1852</span></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

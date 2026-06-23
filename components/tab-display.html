@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>web.tabs — welDS component display</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- welDS: Google Fonts (brand: all) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- welDS: foundation tokens -->
+  <link rel="stylesheet" href="../assets/welds/base.css" />
+  <link rel="stylesheet" href="../assets/welds/brands-all.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f0f5;
+      color: #1f1b4b;
+      min-height: 100vh;
+      padding: 48px 64px;
+    }
+
+    /* ── Page header ─────────────────────────────────────────────── */
+    .display-header { margin-bottom: 12px; }
+    .display-header__breadcrumb {
+      font-size: 12px;
+      color: #6f6e77;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    .display-header__breadcrumb a {
+      color: #6f6e77;
+      text-decoration: none;
+    }
+    .display-header__breadcrumb a:hover { text-decoration: underline; }
+    .display-header__title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #050033;
+      margin-bottom: 4px;
+    }
+    .display-header__meta { font-size: 13px; color: #6f6e77; }
+    .display-header__meta code {
+      background: #e8edff;
+      color: #1f1b4b;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 11px;
+      font-family: monospace;
+    }
+
+    /* ── Divider ─────────────────────────────────────────────────── */
+    .display-divider {
+      height: 1px;
+      background: #dadadd;
+      margin: 24px 0 36px;
+    }
+
+    /* ── Variant section ─────────────────────────────────────────── */
+    .display-section { margin-bottom: 52px; }
+    .display-section__label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6f6e77;
+      margin-bottom: 20px;
+    }
+    .display-section__label span {
+      background: #050033;
+      color: #f9f9ff;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* ── Canvas ──────────────────────────────────────────────────── */
+    .display-canvas {
+      background: #ffffff;
+      border: 1px solid #dadadd;
+      border-radius: 8px;
+      padding: 40px 48px;
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .display-canvas--full {
+      padding: 0;
+      overflow: visible;
+    }
+    /* edge-to-edge canvas for the tabs row */
+    .display-canvas--nav {
+      margin-left: -64px;
+      margin-right: -64px;
+      background: #ffffff;
+      border-top: 1px solid #dadadd;
+      border-bottom: 1px solid #dadadd;
+      border-radius: 0;
+      padding: 0 64px;
+      overflow: visible;
+    }
+
+    /* ── Spec row ────────────────────────────────────────────────── */
+    .display-spec-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .spec-box {
+      background: #fff;
+      border: 1px solid #dadadd;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-size: 12px;
+      color: #3e3d48;
+      line-height: 20px;
+      min-width: 220px;
+    }
+    .spec-box__title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6f6e77;
+      margin-bottom: 12px;
+    }
+    .spec-box__row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 4px 0;
+      border-bottom: 1px solid #f0f0f5;
+    }
+    .spec-box__row:last-child { border-bottom: none; }
+    .spec-box__key { color: #6f6e77; }
+    .spec-box__val { font-weight: 500; color: #050033; text-align: right; }
+    .spec-box__val code {
+      background: #e8edff;
+      border-radius: 3px;
+      padding: 0 4px;
+      font-size: 10px;
+      font-family: monospace;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       💠 web.tabs / web.tab-inline
+       Figma node 388:7192 · brand=all
+    ═══════════════════════════════════════════════════════════════ */
+
+    /* tabs container */
+    .wel-tabs {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--wel\/sem\/spacingstatic\/inline\/lg, 20px);
+      position: relative;
+    }
+    /* full-width bottom separator line */
+    .wel-tabs::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--wel\/sem\/color\/outline-low, #dadadd);
+    }
+
+    /* single tab-inline */
+    .wel-tab {
+      /* Figma: py=pinchVertical/sm=12px, gap=inline/2xs=4px */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--wel\/sem\/spacingstatic\/inline\/2xs, 4px);
+      padding: var(--wel\/sem\/spacingstatic\/pinchvertical\/sm, 12px) 0;
+      background: none;
+      border: none;
+      border-bottom: var(--wel\/sem\/borderwidth\/current, 4px) solid transparent;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+      /* prevent tab border from bleeding onto separator */
+      margin-bottom: -1px;
+    }
+    .wel-tab__label {
+      font-family: var(--wel\/sem\/fontfamilies\/label, 'Roboto'), sans-serif;
+      font-size: var(--wel\/sem\/fontsizes\/label\/lg, 16px);
+      line-height: var(--wel\/sem\/lineheights\/label\/lg, 24px);
+      letter-spacing: var(--wel\/sem\/letterspacing\/label, 0px);
+      color: var(--wel\/sem\/color\/on-surface-hi, #252339);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* states */
+    .wel-tab--active {
+      border-bottom-color: var(--wel\/sem\/color\/outline-accent, #068484);
+    }
+    .wel-tab--active .wel-tab__label {
+      font-weight: 500; /* label-strong-01 */
+    }
+    .wel-tab--default .wel-tab__label {
+      font-weight: 400; /* label-default-01 */
+    }
+    .wel-tab--hover {
+      border-bottom-color: var(--wel\/sem\/color\/hover\/accent, #007576);
+    }
+    .wel-tab--hover .wel-tab__label {
+      font-weight: 400;
+    }
+    .wel-tab--pressed {
+      border-bottom-color: var(--wel\/sem\/color\/pressed\/accent, #005858);
+    }
+    .wel-tab--pressed .wel-tab__label {
+      font-weight: 400;
+    }
+
+    /* live interactive tab behaviour */
+    .wel-tabs--interactive .wel-tab {
+      cursor: pointer;
+      transition: border-color 120ms ease;
+    }
+    .wel-tabs--interactive .wel-tab:hover:not(.wel-tab--active) {
+      border-bottom-color: var(--wel\/sem\/color\/hover\/accent, #007576);
+    }
+    .wel-tabs--interactive .wel-tab:active:not(.wel-tab--active) {
+      border-bottom-color: var(--wel\/sem\/color\/pressed\/accent, #005858);
+    }
+    .wel-tabs--interactive .wel-tab--active {
+      border-bottom-color: var(--wel\/sem\/color\/outline-accent, #068484);
+    }
+    .wel-tabs--interactive .wel-tab--active .wel-tab__label {
+      font-weight: 500;
+    }
+    .wel-tabs--interactive .wel-tab:not(.wel-tab--active) .wel-tab__label {
+      font-weight: 400;
+    }
+
+    /* state label under isolated tabs */
+    .state-demo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+    .state-label {
+      font-size: 11px;
+      color: #6f6e77;
+      margin-top: 8px;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body class="brand-all">
+
+  <!-- Page header -->
+  <div class="display-header">
+    <div class="display-header__breadcrumb">
+      <a href="component-library.html">welDS · Component display</a> / web.tabs
+    </div>
+    <h1 class="display-header__title">web.tabs</h1>
+    <p class="display-header__meta">
+      Figma node <code>388:7192</code> &nbsp;·&nbsp;
+      COMPONENT_SET &nbsp;·&nbsp;
+      brand <code>all</code>
+    </p>
+  </div>
+
+  <div class="display-divider"></div>
+
+  <!-- ── 1. Individual tab states ─────────────────────────────────── -->
+  <div class="display-section">
+    <div class="display-section__label">tab-inline states <span>isolated</span></div>
+
+    <div class="display-canvas">
+
+      <!-- active -->
+      <div class="state-demo">
+        <div class="wel-tabs">
+          <button class="wel-tab wel-tab--active" type="button">
+            <span class="wel-tab__label">Tab label</span>
+          </button>
+        </div>
+        <span class="state-label">active</span>
+      </div>
+
+      <!-- default -->
+      <div class="state-demo">
+        <div class="wel-tabs">
+          <div class="wel-tab wel-tab--default">
+            <span class="wel-tab__label">Tab label</span>
+          </div>
+        </div>
+        <span class="state-label">default</span>
+      </div>
+
+      <!-- hover -->
+      <div class="state-demo">
+        <div class="wel-tabs">
+          <button class="wel-tab wel-tab--hover" type="button">
+            <span class="wel-tab__label">Tab label</span>
+          </button>
+        </div>
+        <span class="state-label">hover</span>
+      </div>
+
+      <!-- pressed -->
+      <div class="state-demo">
+        <div class="wel-tabs">
+          <button class="wel-tab wel-tab--pressed" type="button">
+            <span class="wel-tab__label">Tab label</span>
+          </button>
+        </div>
+        <span class="state-label">pressed</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 2. Full tabs row (4 tabs, like Figma) ────────────────────── -->
+  <div class="display-section">
+    <div class="display-section__label">web.tabs — full row <span>Figma 388:7192</span></div>
+
+    <div class="display-canvas--nav">
+      <div class="wel-tabs" role="tablist">
+        <button class="wel-tab wel-tab--active" type="button" role="tab" aria-selected="true">
+          <span class="wel-tab__label">Tab label</span>
+        </button>
+        <button class="wel-tab wel-tab--default" type="button" role="tab" aria-selected="false">
+          <span class="wel-tab__label">Tab label</span>
+        </button>
+        <button class="wel-tab wel-tab--hover" type="button" role="tab" aria-selected="false">
+          <span class="wel-tab__label">Tab label</span>
+        </button>
+        <button class="wel-tab wel-tab--pressed" type="button" role="tab" aria-selected="false">
+          <span class="wel-tab__label">Tab label</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. Interactive demo ──────────────────────────────────────── -->
+  <div class="display-section">
+    <div class="display-section__label">Interactive demo <span>live</span></div>
+
+    <div class="display-canvas--nav">
+      <nav class="wel-tabs wel-tabs--interactive" role="tablist" id="tabs-demo">
+        <button class="wel-tab wel-tab--active" type="button" role="tab" aria-selected="true" data-tab="home">
+          <span class="wel-tab__label">Home</span>
+        </button>
+        <button class="wel-tab wel-tab--default" type="button" role="tab" aria-selected="false" data-tab="photos">
+          <span class="wel-tab__label">Photos</span>
+        </button>
+        <button class="wel-tab wel-tab--default" type="button" role="tab" aria-selected="false" data-tab="videos">
+          <span class="wel-tab__label">Videos</span>
+        </button>
+        <button class="wel-tab wel-tab--default" type="button" role="tab" aria-selected="false" data-tab="documents">
+          <span class="wel-tab__label">Documents</span>
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ── 4. Specs ─────────────────────────────────────────────────── -->
+  <div class="display-section">
+    <div class="display-section__label">Specs</div>
+
+    <div class="display-spec-row">
+      <div class="spec-box">
+        <div class="spec-box__title">Layout</div>
+        <div class="spec-box__row"><span class="spec-box__key">Tab gap</span><span class="spec-box__val"><code>inline/lg</code> = 20px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Tab padding V</span><span class="spec-box__val"><code>pinchVertical/sm</code> = 12px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Border width</span><span class="spec-box__val"><code>borderWidth/current</code> = 4px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Separator</span><span class="spec-box__val">1px full-width</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon gap</span><span class="spec-box__val"><code>inline/2xs</code> = 4px</span></div>
+      </div>
+      <div class="spec-box">
+        <div class="spec-box__title">Typography</div>
+        <div class="spec-box__row"><span class="spec-box__key">Active label</span><span class="spec-box__val">label-strong-01 · 500 · 16/24</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Default label</span><span class="spec-box__val">label-default-01 · 400 · 16/24</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Font</span><span class="spec-box__val">Roboto</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Text color</span><span class="spec-box__val"><code>on-surface-hi</code> #252339</span></div>
+      </div>
+      <div class="spec-box">
+        <div class="spec-box__title">Colours (brand: all)</div>
+        <div class="spec-box__row"><span class="spec-box__key">Active border</span><span class="spec-box__val"><code>outline-accent</code> #068484</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Hover border</span><span class="spec-box__val"><code>hover/accent</code> #007576</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Pressed border</span><span class="spec-box__val"><code>pressed/accent</code> #005858</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Separator</span><span class="spec-box__val"><code>outline-low</code> #dadadd</span></div>
+      </div>
+      <div class="spec-box">
+        <div class="spec-box__title">Component</div>
+        <div class="spec-box__row"><span class="spec-box__key">DS name</span><span class="spec-box__val">💠 web.tabs</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Tab item</span><span class="spec-box__val">💠 web.tab-inline</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Figma node</span><span class="spec-box__val"><code>388:7192</code></span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Brand</span><span class="spec-box__val">all</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tabsDemo = document.getElementById('tabs-demo');
+      if (!tabsDemo) return;
+      const tabs = tabsDemo.querySelectorAll('.wel-tab');
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          tabs.forEach(function (t) {
+            t.classList.remove('wel-tab--active');
+            t.classList.add('wel-tab--default');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.remove('wel-tab--default');
+          tab.classList.add('wel-tab--active');
+          tab.setAttribute('aria-selected', 'true');
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>mp.navigation bar-v2 — welDS component display</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- welDS: Google Fonts (brand: all) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- welDS: foundation tokens -->
+  <link rel="stylesheet" href="../assets/welds/base.css" />
+  <link rel="stylesheet" href="../assets/welds/brands-all.css" />
+
+  <style>
+    /* ── Page shell ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f0f5;
+      color: #1f1b4b;
+      min-height: 100vh;
+      padding: 48px 64px;
+    }
+
+    /* ── Page header ────────────────────────────────────────────── */
+    .display-header { margin-bottom: 12px; }
+    .display-header__breadcrumb {
+      font-size: 12px;
+      color: #6f6e77;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    .display-header__title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #050033;
+      margin-bottom: 4px;
+    }
+    .display-header__meta { font-size: 13px; color: #6f6e77; }
+    .display-header__meta code {
+      background: #e8edff;
+      color: #1f1b4b;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 11px;
+      font-family: monospace;
+    }
+
+    /* ── Divider ────────────────────────────────────────────────── */
+    .display-divider {
+      height: 1px;
+      background: #dadadd;
+      margin: 24px 0 36px;
+    }
+
+    /* ── Variant section ────────────────────────────────────────── */
+    .display-section { margin-bottom: 52px; }
+    .display-section__label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6f6e77;
+      margin-bottom: 20px;
+    }
+    .display-section__label span {
+      background: #050033;
+      color: #f9f9ff;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* ── Nav canvas: edge-to-edge, white card ───────────────────── */
+    .display-canvas--nav {
+      margin-left: -64px;
+      margin-right: -64px;
+      background: #ffffff;
+      border-top: 1px solid #dadadd;
+      border-bottom: 1px solid #dadadd;
+      overflow: visible;
+      position: relative;
+    }
+
+    /* ── Spec row ───────────────────────────────────────────────── */
+    .display-spec-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .spec-box {
+      background: #fff;
+      border: 1px solid #dadadd;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-size: 12px;
+      color: #3e3d48;
+      line-height: 20px;
+      min-width: 220px;
+    }
+    .spec-box__title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6f6e77;
+      margin-bottom: 12px;
+    }
+    .spec-box__row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 4px 0;
+      border-bottom: 1px solid #f0f0f5;
+    }
+    .spec-box__row:last-child { border-bottom: none; }
+    .spec-box__key { color: #6f6e77; }
+    .spec-box__val { font-weight: 500; color: #050033; text-align: right; }
+    .spec-box__val code {
+      background: #e8edff;
+      border-radius: 3px;
+      padding: 0 4px;
+      font-size: 10px;
+      font-family: monospace;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       mp.navigation bar-v2  (Figma 16:10071 · state=default)
+       All values directly from Figma — pixel perfect
+    ═══════════════════════════════════════════════════════════════ */
+
+    .mp-nav {
+      /* Figma: bg=surface-container-low, border-bottom=outline-low, h=80, px=64 */
+      width: 100%;
+      min-width: 1280px;
+      height: 80px;
+      background: var(--wel\/sem\/color\/surface-container-low, #ffffff);
+      border-bottom: 1px solid var(--wel\/sem\/color\/outline-low, #dadadd);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 64px;
+    }
+
+    /* ── Left: 💠 accor + wordmark ──────────────────────────────── */
+    .mp-nav__left {
+      /* Figma: gap=spacingStatic/inline/md=16px */
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    /* 💠 accor logo: 56×46px, overflow clip */
+    .mp-nav__accor {
+      position: relative;
+      width: 56px;
+      height: 46px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    /* monogramme: inset 12.71% 29.87% 37.48% 30.57% of 56×46 */
+    .mp-nav__monogramme {
+      position: absolute;
+      top: 12.71%;   /* 5.85px */
+      right: 29.87%; /* 16.73px */
+      bottom: 37.48%;/* 17.24px */
+      left: 30.57%;  /* 17.12px */
+    }
+    /* typogramme: inset 74.51% 10.91% 12.71% 10.91% of 56×46 */
+    .mp-nav__typogramme {
+      position: absolute;
+      top: 74.51%;   /* 34.27px */
+      right: 10.91%; /* 6.11px */
+      bottom: 12.71%;/* 5.85px */
+      left: 10.91%;  /* 6.11px */
+    }
+    .mp-nav__monogramme svg,
+    .mp-nav__typogramme svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* wordmark: display-04 = Montserrat Bold 32/40 0.5px #1e1852 */
+    .mp-nav__wordmark {
+      font-family: var(--wel\/sem\/fontFamilies\/display, 'Montserrat'), sans-serif;
+      font-size: var(--wel\/sem\/fontSizes\/display\/md, 32px);
+      font-weight: 700;
+      line-height: var(--wel\/sem\/lineHeights\/display\/md, 40px);
+      letter-spacing: var(--wel\/sem\/letterSpacing\/display\/condensed, 0.5px);
+      color: var(--wel\/sem\/color\/primary, #1e1852);
+      white-space: nowrap;
+    }
+
+    /* ── Right: tabs + icons + user ─────────────────────────────── */
+    .mp-nav__right {
+      /* Figma: gap=spacingStatic/inline/md=16px, h=full */
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 100%;
+      flex-shrink: 0;
+    }
+
+    /* 💠 web.tabs: gap=spacingStatic/inline/lg=20px, overflow clip */
+    .mp-nav__tabs {
+      display: flex;
+      gap: 20px;
+      height: 100%;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    /* Tab item (inactive) */
+    .mp-nav__tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      /* Figma: px=spacingStatic/inline/xs=8px, py=spacingStatic/pinchVertical/sm=12px */
+      padding: 12px 8px;
+      background: none;
+      border: none;
+      border-bottom: 4px solid transparent;
+      cursor: pointer;
+      font-family: var(--wel\/sem\/fontFamilies\/label, 'Roboto'), sans-serif;
+      font-size: var(--wel\/sem\/fontSizes\/label\/lg, 16px);
+      font-weight: 500; /* label-strong-01 */
+      line-height: var(--wel\/sem\/lineHeights\/label\/lg, 24px);
+      letter-spacing: var(--wel\/sem\/letterSpacing\/label, 0px);
+      color: var(--wel\/sem\/color\/on-surface-hi, #252339);
+      white-space: nowrap;
+    }
+    /* Active tab: border-bottom = borderWidth/current=4px, color=outline-accent=#068484 */
+    .mp-nav__tab--active {
+      border-bottom-color: var(--wel\/sem\/color\/outline-accent, #068484);
+    }
+
+    /* ── collection icon slot (favorite-24) ─────────────────────── */
+    .mp-nav__icon-slot {
+      /* Figma: gap=4px, h=full, items-center */
+      display: flex;
+      align-items: center;
+      height: 100%;
+      gap: 4px;
+    }
+    .mp-nav__icon-slot-inner {
+      /* Figma: px=8px py=12px, gap=4px, flex center */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 8px;
+      height: 100%;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--wel\/sem\/color\/on-surface-hi, #252339);
+      border-bottom: 4px solid transparent;
+    }
+    .mp-nav__icon-slot-inner:hover {
+      color: var(--wel\/sem\/color\/accent, #068484);
+    }
+
+    /* ── mp.cart-counter ────────────────────────────────────────── */
+    .mp-nav__cart {
+      /* Figma: w=58px, h=80px (full), flex center, relative */
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 58px;
+      height: 80px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--wel\/sem\/color\/on-surface-hi, #252339);
+      flex-shrink: 0;
+    }
+    .mp-nav__cart:hover {
+      color: var(--wel\/sem\/color\/accent, #068484);
+    }
+    /* 💠 web.icon-slot: overflow clip, w=24px */
+    .mp-nav__cart-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      width: 24px;
+      flex-shrink: 0;
+    }
+    /* 🧩 mp.notification-counter: absolute, 18×18, top=12, right=8, #068484, r=100px */
+    .mp-nav__cart-badge {
+      position: absolute;
+      top: 12px;
+      right: 8px;
+      width: 18px;
+      height: 18px;
+      border-radius: var(--wel\/sem\/borderRadius\/element\/full, 100px);
+      background: var(--wel\/sem\/color\/accent, #068484);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mp-nav__cart-badge-text {
+      /* caption-strong: Roboto Medium 12/16 white */
+      font-family: var(--wel\/sem\/fontFamilies\/caption, 'Roboto'), sans-serif;
+      font-size: var(--wel\/sem\/fontSizes\/caption, 12px);
+      font-weight: 500;
+      line-height: var(--wel\/sem\/lineHeights\/caption, 16px);
+      color: var(--wel\/sem\/color\/on-accent, #ffffff);
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .mp-nav__cart--empty .mp-nav__cart-badge { display: none; }
+
+    /* ── Tab: visited (400w, border still visible) ──────────────── */
+    .mp-nav__tab--visited {
+      font-weight: 400;
+    }
+
+    /* ── Icon tab: active (teal border, filled icon) ────────────── */
+    .mp-nav__icon-slot-inner--active {
+      border-bottom: 4px solid var(--wel\/sem\/color\/outline-accent, #068484);
+      cursor: pointer;
+    }
+    /* ── Icon tab: hover (darker teal border) ───────────────────── */
+    .mp-nav__icon-slot-inner--hover {
+      border-bottom: 4px solid var(--wel\/sem\/color\/hover\/accent, #007576);
+      cursor: pointer;
+    }
+
+    /* ── 💠 aem.login-connect ────────────────────────────────────── */
+    .mp-nav__login {
+      /* Figma: flex-col, gap=stack/2xs=4px, items-end */
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .mp-nav__user-btn {
+      /* Figma: 💠 web.button — px=insetsquish/md-h=16px, py=insetsquish/md-v=12px, r=100px */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: var(--wel\/sem\/borderRadius\/element\/interactive-high, 100px);
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: background 120ms ease, color 120ms ease;
+    }
+    .mp-nav__user-btn:hover {
+      background: var(--wel\/sem\/color\/primary, #1e1852);
+    }
+    .mp-nav__user-btn:active {
+      background: var(--wel\/sem\/color\/pressed\/primary, #544e85);
+    }
+    .mp-nav__user-btn:focus-visible {
+      outline: none;
+      background: none;
+    }
+    .mp-nav__user-btn:focus-visible::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border: 2px solid var(--wel\/sem\/color\/focus, #3470df);
+      border-radius: 100px;
+      pointer-events: none;
+    }
+    /* label + icon: white on filled bg */
+    .mp-nav__user-btn:hover .mp-nav__user-label,
+    .mp-nav__user-btn:active .mp-nav__user-label {
+      color: var(--wel\/sem\/color\/on-primary, #ffffff);
+    }
+    .mp-nav__user-btn:hover .mp-nav__account-body path,
+    .mp-nav__user-btn:active .mp-nav__account-body path {
+      fill: var(--wel\/sem\/color\/on-primary, #ffffff);
+    }
+
+    /* 💠 account-connected-24: 24×24, relative, contains ellipse + vector */
+    .mp-nav__account-icon {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    /* ellipse (connected dot): inset 8.33% 8.33% 66.67% 66.67% of 24×24 */
+    /* = top:2px right:2px → 6×8px area (top-right corner dot) */
+    .mp-nav__account-dot {
+      position: absolute;
+      top: 8.33%;    /* 2px */
+      right: 8.33%;  /* 2px */
+      bottom: 66.67%;/* 16px */
+      left: 66.67%;  /* 16px */
+    }
+    /* vector (body): inset 12.5% of 24×24 = 3px all sides → 18×18 */
+    .mp-nav__account-body {
+      position: absolute;
+      inset: 12.5%; /* 3px all sides */
+    }
+    .mp-nav__account-dot svg,
+    .mp-nav__account-body svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    /* label wrapper: px=4px */
+    .mp-nav__user-label-wrap {
+      display: flex;
+      align-items: flex-start;
+      padding: 0 4px;
+    }
+    /* label-default-01: Roboto Regular 400 16/24 #1e1852 */
+    .mp-nav__user-label {
+      font-family: var(--wel\/sem\/fontFamilies\/label, 'Roboto'), sans-serif;
+      font-size: var(--wel\/sem\/fontSizes\/label\/lg, 16px);
+      font-weight: 400;
+      line-height: var(--wel\/sem\/lineHeights\/label\/lg, 24px);
+      letter-spacing: var(--wel\/sem\/letterSpacing\/label, 0px);
+      color: var(--wel\/sem\/color\/primary, #1e1852);
+      white-space: nowrap;
+    }
+    /* ═══════════════════════════════════════════════════════════════
+       💠 web.popover — account panel
+       Figma node 262:8489 · 375×362px
+    ═══════════════════════════════════════════════════════════════ */
+    .mp-popover {
+      position: absolute;
+      top: 80px; /* below nav height */
+      right: 64px; /* aligned to nav right padding */
+      width: 375px;
+      background: var(--wel\/sem\/color\/surface, #ffffff);
+      border-radius: var(--radius\/sm, 6px);
+      box-shadow: 0px 8px 16px 0px var(--wel\/sem\/color\/shadow-default, rgba(0, 0, 0, 0.05));
+      padding: 20px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+    }
+    .mp-popover { display: none; }
+    .mp-popover.is-open { display: flex; }
+
+    /* close area: 40px tall, holds the absolute-positioned button */
+    .mp-popover__close-area {
+      height: 40px;
+      width: 100%;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .mp-popover__close-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      color: var(--wel\/sem\/color\/on-surface-hi, #252339);
+    }
+    .mp-popover__close-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    /* name section */
+    .mp-popover__name {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    .mp-popover__greeting {
+      font-family: 'Roboto', var(--wel\/sem\/fontFamilies\/title, sans-serif);
+      font-size: var(--wel\/sem\/fontSizes\/title\/sm, 18px);
+      font-weight: 500;
+      line-height: var(--wel\/sem\/lineHeights\/title\/sm, 24px);
+      color: var(--wel\/sem\/color\/on-surface-hi, #252339);
+    }
+    .mp-popover__header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 16px;
+      width: 100%;
+    }
+    .mp-popover__username {
+      font-family: 'Roboto', var(--wel\/sem\/fontFamilies\/title, sans-serif);
+      font-size: var(--wel\/sem\/fontSizes\/title\/md, 20px);
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--wel\/sem\/color\/on-surface-hi, #252339);
+    }
+
+    /* list section: separator + items + separator, all flex siblings with gap-16 */
+    .mp-popover__list-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+
+    /* separator */
+    .mp-popover__sep {
+      height: 1px;
+      background: var(--wel\/sem\/color\/outline-low, #dadadd);
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    /* list items */
+    .mp-popover__item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 24px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--wel\/sem\/color\/on-surface-hi, #252339);
+    }
+    .mp-popover__item-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mp-popover__item-label {
+      font-family: 'Roboto', sans-serif;
+      font-size: var(--wel\/sem\/fontSizes\/body\/md, 16px);
+      font-weight: 400;
+      line-height: var(--wel\/sem\/lineHeights\/body\/md, 24px);
+      color: var(--wel\/sem\/color\/on-surface-hi, #252339);
+      text-decoration: none;
+    }
+    .mp-popover__item:hover .mp-popover__item-label {
+      text-decoration: underline;
+    }
+
+    /* second actions */
+    .mp-popover__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 20px;
+    }
+    .mp-popover__action {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .mp-popover__action-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mp-popover__action-label {
+      font-family: 'Roboto', sans-serif;
+      font-size: var(--wel\/sem\/fontSizes\/link\/sm, 14px);
+      font-weight: 400;
+      line-height: var(--wel\/sem\/lineHeights\/link\/sm, 20px);
+      color: var(--wel-sem-color-on-surface-mid, #3E3D48);
+      text-decoration: none;
+    }
+    .mp-popover__action:hover .mp-popover__action-label {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="brand-all">
+
+  <!-- Page header -->
+  <div class="display-header">
+    <div class="display-header__breadcrumb">welDS · Component display</div>
+    <h1 class="display-header__title">mp.navigation bar-v2</h1>
+    <p class="display-header__meta">
+      Figma node <code>16:10071</code> &nbsp;·&nbsp;
+      COMPONENT_SET &nbsp;·&nbsp;
+      variant <code>state</code>: <code>default</code> &nbsp;·&nbsp;
+      brand <code>all</code>
+    </p>
+  </div>
+
+  <div class="display-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       state=default / logged-in
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="display-section">
+    <div class="display-section__label">Home · Current &nbsp;|&nbsp; Collection · Default <span>outline heart</span></div>
+
+    <div class="display-canvas--nav">
+      <nav class="mp-nav" aria-label="Main navigation">
+
+        <!-- Left: Accor logo + wordmark -->
+        <div class="mp-nav__left">
+          <div class="mp-nav__accor" aria-label="Accor" role="img">
+            <div class="mp-nav__monogramme">
+              <svg viewBox="0 0 22.1544 22.9087" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.1544 22.5631H16.6763L12.6522 14.5159C10.4492 15.6575 9.20085 18.3211 6.98317 20.0686C5.8523 20.9565 4.51582 21.7598 2.87092 22.2953C2.12191 22.5349 0.844171 22.8591 0.374199 22.9013C0.168587 22.9154 0.0364077 22.9154 0.00703446 22.845C-0.0223387 22.7886 0.0364083 22.7463 0.256707 22.6477C0.50638 22.5349 1.50507 22.1403 2.13659 21.7175C2.92967 21.1961 3.37027 20.6183 3.41433 20.1814C3.19403 19.4485 1.65193 17.8278 3.23809 14.8542C3.79618 13.7831 4.29552 13.0221 4.648 12.2469C5.04454 11.3591 5.33827 10.1048 5.42639 9.17463C5.42639 9.11826 5.44108 9.11826 5.47045 9.14645C6.23415 9.89338 9.21553 12.8248 8.77493 15.742C9.75894 15.3756 11.4773 14.2763 12.2703 13.6844C13.1075 13.0643 13.6509 12.4161 14.5321 12.402C15.3252 12.3879 15.3986 12.7543 16.0154 12.8388C16.177 12.8529 16.3973 12.8248 16.5148 12.7684C16.5588 12.7402 16.5441 12.6979 16.4854 12.6838C15.6189 12.4865 15.4133 11.8101 14.3118 11.8101C13.3131 11.8101 12.52 12.6838 11.9472 13.0502L9.1421 7.42708C7.96717 5.07353 8.31965 3.36826 10.9045 0L22.1544 22.5631Z" fill="#1E1852"/>
+              </svg>
+            </div>
+            <div class="mp-nav__typogramme">
+              <svg viewBox="0 0 43.7808 5.87684" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M43.7808 5.70772L41.8715 3.52329C42.8849 3.2978 43.487 2.74816 43.487 1.77574C43.487 0.690565 42.5177 0.140931 41.2987 0.140931H37.4802V5.70772H38.4936V3.60784H40.77L42.5177 5.70772H43.7808ZM38.4936 1.01471H41.3281C42.033 1.01471 42.4443 1.32475 42.4443 1.86029C42.4443 2.39583 42.0037 2.74816 41.3281 2.74816H38.4936V1.01471Z" fill="#1E1852"/>
+                <path d="M2.99607 0.155025L0 5.72181H1.14556L1.77708 4.48162H5.18437L5.81589 5.72181H6.99082L3.99476 0.155025H2.99607ZM2.23236 3.60784L3.49541 1.16973L4.75846 3.60784H2.23236Z" fill="#1E1852"/>
+                <path d="M12.3661 0.873774C13.3207 0.873774 14.0991 1.21201 14.5104 1.83211L15.3328 1.31066C14.76 0.53554 13.7467 0.014094 12.3661 0.014094C10.1484 0.014094 8.87071 1.40932 8.87071 2.94547C8.87071 4.48162 10.1484 5.87684 12.3661 5.87684C13.7467 5.87684 14.76 5.3413 15.3328 4.58027L14.5104 4.05882C14.1138 4.66483 13.3207 5.01716 12.3661 5.01716C10.8681 5.01716 9.91345 4.21385 9.91345 2.95956C9.89877 1.69118 10.8681 0.873774 12.3661 0.873774Z" fill="#1E1852"/>
+                <path d="M21.5746 0.873774C22.5292 0.873774 23.3076 1.21201 23.7189 1.83211L24.5413 1.31066C23.9685 0.53554 22.9552 0.014094 21.5746 0.014094C19.3569 0.014094 18.0792 1.40932 18.0792 2.94547C18.0792 4.48162 19.3569 5.87684 21.5746 5.87684C22.9552 5.87684 23.9685 5.3413 24.5413 4.58027L23.7189 4.05882C23.3223 4.66483 22.5292 5.01716 21.5746 5.01716C20.0766 5.01716 19.122 4.21385 19.122 2.95956C19.1073 1.69118 20.0766 0.873774 21.5746 0.873774Z" fill="#1E1852"/>
+                <path d="M30.7831 0C28.5654 0 27.2877 1.39522 27.2877 2.93137C27.2877 4.46752 28.5654 5.86274 30.7831 5.86274C33.0008 5.86274 34.2785 4.46752 34.2785 2.93137C34.2785 1.39522 33.0008 0 30.7831 0ZM30.7831 4.98897C29.2851 4.98897 28.3304 4.18566 28.3304 2.93137C28.3304 1.67708 29.2998 0.873774 30.7831 0.873774C32.2811 0.873774 33.2358 1.67708 33.2358 2.93137C33.2505 4.18566 32.2811 4.98897 30.7831 4.98897Z" fill="#1E1852"/>
+              </svg>
+            </div>
+          </div>
+          <span class="mp-nav__wordmark">Media Portal</span>
+        </div>
+
+        <!-- Right: web.tabs + collection + cart + login -->
+        <div class="mp-nav__right">
+
+          <!-- 💠 web.tabs (Home — active) -->
+          <div class="mp-nav__tabs" role="tablist">
+            <button class="mp-nav__tab mp-nav__tab--active" type="button" role="tab" aria-selected="true">Home</button>
+          </div>
+
+          <!-- 💠 web.icon-slot / favorite-24 (collection) -->
+          <div class="mp-nav__icon-slot">
+            <button class="mp-nav__icon-slot-inner" type="button" aria-label="Collections">
+              <!-- favorite-24 outline (welDS official) -->
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.4305 4.69007C17.6078 2.69382 14.7822 2.46237 12.7281 4.01501C12.4677 4.20788 12.217 4.43933 11.9855 4.69007C11.7541 4.43933 11.5033 4.20788 11.243 4.01501C9.18886 2.47201 6.36325 2.69382 4.54058 4.69007C2.48647 6.9467 2.48647 10.592 4.54058 12.8487L11.9855 21.0072L19.4305 12.8487C21.5232 10.5534 21.5232 6.90812 19.4305 4.69007ZM18.36 11.865L11.9855 18.847L5.61104 11.865C4.0584 10.1677 4.0584 7.37102 5.61104 5.67373C7.09617 4.05358 9.42995 4.05358 10.9054 5.67373L11.9759 6.85026L13.0463 5.67373C14.5315 4.05358 16.8653 4.05358 18.3407 5.67373V5.69301C19.8934 7.34209 19.9223 10.1291 18.3215 11.8746L18.36 11.865Z" fill="#1E1852"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- 🧩 mp.cart-counter -->
+          <button class="mp-nav__cart" type="button" aria-label="Cart">
+            <!-- 💠 web.icon-slot -->
+            <div class="mp-nav__cart-icon">
+              <!-- 💠 cart (24×24) -->
+              <svg width="24" height="24" viewBox="0 0 19.5 19.6547" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.6073 17.9404C7.6336 17.9404 7.65492 17.9191 7.65492 17.8928C7.65492 17.8665 7.6336 17.8452 7.6073 17.8452C7.581 17.8452 7.55968 17.8665 7.55968 17.8928C7.55968 17.9191 7.581 17.9404 7.6073 17.9404ZM5.84539 17.8928C5.84539 16.9197 6.63422 16.1309 7.6073 16.1309C8.58037 16.1309 9.3692 16.9197 9.3692 17.8928C9.3692 18.8659 8.58037 19.6547 7.6073 19.6547C6.63422 19.6547 5.84539 18.8659 5.84539 17.8928Z" fill="currentColor"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1785 17.9404C16.2048 17.9404 16.2261 17.9191 16.2261 17.8928C16.2261 17.8665 16.2048 17.8452 16.1785 17.8452C16.1522 17.8452 16.1309 17.8665 16.1309 17.8928C16.1309 17.9191 16.1522 17.9404 16.1785 17.9404ZM14.4166 17.8928C14.4166 16.9197 15.2054 16.1309 16.1785 16.1309C17.1516 16.1309 17.9404 16.9197 17.9404 17.8928C17.9404 18.8659 17.1516 19.6547 16.1785 19.6547C15.2054 19.6547 14.4166 18.8659 14.4166 17.8928Z" fill="currentColor"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0.75C0 0.335786 0.335786 0 0.75 0H4.02273C4.38267 0 4.69186 0.255707 4.7594 0.609254L5.46179 4.28561H18.75C18.9724 4.28561 19.1834 4.38434 19.3259 4.55511C19.4684 4.72589 19.5277 4.95111 19.4879 5.16994L18.1788 12.3612L18.1778 12.3666C18.0718 12.9257 17.7802 13.435 17.3455 13.8016C16.9121 14.1671 16.3647 14.3662 15.7978 14.3568H7.85858C7.29169 14.3662 6.74423 14.1671 6.31085 13.8016C5.87631 13.4351 5.58476 12.926 5.47867 12.3671L4.1112 5.20964C4.10612 5.18825 4.10196 5.16651 4.09875 5.14446L3.40245 1.5H0.75C0.335786 1.5 0 1.16421 0 0.75ZM5.74838 5.78561L6.95233 12.0872C6.99595 12.3173 7.11421 12.5169 7.27786 12.6549C7.44068 12.7922 7.63866 12.861 7.83676 12.857L7.85182 12.8568H15.8045L15.8196 12.857C16.0177 12.861 16.2157 12.7922 16.3785 12.6549C16.5416 12.5174 16.6596 12.3186 16.7036 12.0895L16.704 12.0872L17.8511 5.78561H5.74838Z" fill="currentColor"/>
+              </svg>
+            </div>
+            <!-- 🧩 mp.notification-counter -->
+            <span class="mp-nav__cart-badge" aria-hidden="true">
+              <span class="mp-nav__cart-badge-text">99</span>
+            </span>
+          </button>
+
+          <!-- 💠 aem.login-connect (logged in) -->
+          <div class="mp-nav__login">
+            <button class="mp-nav__user-btn" type="button" aria-label="User menu" aria-expanded="false" id="user-btn">
+              <!-- 💠 account-connected-24 (24×24) -->
+              <div class="mp-nav__account-icon" aria-hidden="true">
+                <!-- ellipse: connected dot at top-right -->
+                <div class="mp-nav__account-dot">
+                  <svg viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="3" cy="4" rx="3" ry="4" fill="#068484"/>
+                  </svg>
+                </div>
+                <!-- vector: user body shape -->
+                <div class="mp-nav__account-body">
+                  <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7788 0.437173C10.9036 0.153369 9.96973 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18C13.9706 18 18 13.9706 18 9C18 8.03027 17.8466 7.09636 17.5628 6.22121C17.0976 6.3935 16.5962 6.4911 16.073 6.49942C16.3495 7.28153 16.5 8.12319 16.5 9C16.5 11.1673 15.5807 13.12 14.1107 14.4892C13.9844 14.0735 13.8658 13.7296 13.7416 13.4525C13.5892 13.1127 13.3957 12.7968 13.0951 12.5732C12.7807 12.3393 12.4425 12.2753 12.1515 12.2549C11.97 12.2422 11.7454 12.245 11.5262 12.2477C11.4355 12.2489 11.3455 12.25 11.26 12.25H6.74002C6.65456 12.25 6.56477 12.2489 6.47407 12.2477C6.25483 12.245 6.03005 12.2422 5.84849 12.2549C5.55751 12.2753 5.21936 12.3393 4.90491 12.5732C4.60432 12.7968 4.41084 13.1127 4.25848 13.4525C4.13421 13.7296 4.01567 14.0735 3.88933 14.4892C2.41934 13.12 1.5 11.1674 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C9.87681 1.5 10.7185 1.65046 11.5006 1.92697C11.5089 1.40383 11.6065 0.902377 11.7788 0.437173ZM12.8298 15.4498C11.7088 16.1169 10.3991 16.5 9 16.5C7.60087 16.5 6.29122 16.1169 5.17024 15.4498L5.24017 15.2095C5.39911 14.6631 5.51968 14.306 5.62719 14.0662C5.73537 13.8249 5.79814 13.7782 5.80013 13.7768L5.80107 13.7762C5.80107 13.7762 5.80539 13.7741 5.8143 13.7714C5.83412 13.7655 5.87462 13.7568 5.95342 13.7513C6.07262 13.7429 6.19616 13.7446 6.37109 13.747C6.47336 13.7483 6.5932 13.75 6.74002 13.75H11.26C11.4068 13.75 11.5267 13.7483 11.629 13.747C11.8039 13.7446 11.9274 13.7429 12.0466 13.7513C12.1254 13.7568 12.1659 13.7655 12.1857 13.7714C12.1946 13.7741 12.199 13.7762 12.199 13.7762L12.1999 13.7768C12.2019 13.7782 12.2647 13.8249 12.3729 14.0662C12.4804 14.306 12.6009 14.6631 12.7599 15.2095L12.8298 15.4498Z" fill="#1E1852"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3.25C6.92893 3.25 5.25 4.92893 5.25 7C5.25 9.07107 6.92893 10.75 9 10.75C11.0711 10.75 12.75 9.07107 12.75 7C12.75 4.92893 11.0711 3.25 9 3.25ZM6.75 7C6.75 5.75736 7.75736 4.75 9 4.75C10.2426 4.75 11.25 5.75736 11.25 7C11.25 8.24264 10.2426 9.25 9 9.25C7.75736 9.25 6.75 8.24264 6.75 7Z" fill="#1E1852"/>
+                  </svg>
+                </div>
+              </div>
+              <!-- label wrapper: px=4px -->
+              <div class="mp-nav__user-label-wrap">
+                <span class="mp-nav__user-label">Steven PICARD</span>
+              </div>
+            </button>
+          </div>
+
+        </div>
+      </nav>
+
+      <!-- 💠 web.popover — account panel (node 262:8489) -->
+      <div class="mp-popover" id="account-popover" role="dialog" aria-label="Account menu">
+
+        <!-- close area (40px) — button is absolute at top-right -->
+        <div class="mp-popover__close-area">
+          <button class="mp-popover__close-btn" type="button" aria-label="Close" id="popover-close-btn">
+            <!-- close-24 icon (welDS) -->
+            <svg width="16" height="16" viewBox="0 0 15.5 15.5" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2803 1.28033C15.5732 0.987437 15.5732 0.512563 15.2803 0.21967C14.9874 -0.0732233 14.5126 -0.0732233 14.2197 0.21967L7.75 6.68934L1.28033 0.21967C0.987437 -0.0732233 0.512564 -0.0732233 0.219671 0.21967C-0.0732227 0.512563 -0.0732227 0.987437 0.219671 1.28033L6.68934 7.75L0.21967 14.2197C-0.0732233 14.5126 -0.0732234 14.9874 0.21967 15.2803C0.512562 15.5732 0.987437 15.5732 1.28033 15.2803L7.75 8.81066L14.2197 15.2803C14.5126 15.5732 14.9874 15.5732 15.2803 15.2803C15.5732 14.9874 15.5732 14.5126 15.2803 14.2197L8.81066 7.75L15.2803 1.28033Z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- name section -->
+        <div class="mp-popover__name">
+          <p class="mp-popover__greeting">Hello,</p>
+          <div class="mp-popover__header">
+            <p class="mp-popover__username">Steven PICARD</p>
+          </div>
+        </div>
+
+        <!-- list section: separator → items → separator, gap-16 between all -->
+        <div class="mp-popover__list-section">
+          <div class="mp-popover__sep" role="separator"></div>
+
+          <a href="#" class="mp-popover__item">
+            <span class="mp-popover__item-icon" aria-hidden="true">
+              <!-- favorite-24 (welDS official) -->
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.4305 4.69007C17.6078 2.69382 14.7822 2.46237 12.7281 4.01501C12.4677 4.20788 12.217 4.43933 11.9855 4.69007C11.7541 4.43933 11.5033 4.20788 11.243 4.01501C9.18886 2.47201 6.36325 2.69382 4.54058 4.69007C2.48647 6.9467 2.48647 10.592 4.54058 12.8487L11.9855 21.0072L19.4305 12.8487C21.5232 10.5534 21.5232 6.90812 19.4305 4.69007ZM18.36 11.865L11.9855 18.847L5.61104 11.865C4.0584 10.1677 4.0584 7.37102 5.61104 5.67373C7.09617 4.05358 9.42995 4.05358 10.9054 5.67373L11.9759 6.85026L13.0463 5.67373C14.5315 4.05358 16.8653 4.05358 18.3407 5.67373V5.69301C19.8934 7.34209 19.9223 10.1291 18.3215 11.8746L18.36 11.865Z" fill="#1E1852"/>
+              </svg>
+            </span>
+            <span class="mp-popover__item-label">Collections</span>
+          </a>
+
+          <a href="#" class="mp-popover__item">
+            <span class="mp-popover__item-icon" aria-hidden="true">
+              <!-- time-24 (welDS official) -->
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 12C19.5 16.1421 16.1421 19.5 12 19.5C7.85786 19.5 4.5 16.1421 4.5 12C4.5 7.85786 7.85786 4.5 12 4.5C16.1421 4.5 19.5 7.85786 19.5 12ZM12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21ZM12.75 7C12.75 6.58579 12.4142 6.25 12 6.25C11.5858 6.25 11.25 6.58579 11.25 7V12.4014L14.584 14.624C14.9286 14.8538 15.3943 14.7607 15.624 14.416C15.8538 14.0714 15.7607 13.6057 15.416 13.376L12.75 11.5986V7Z" fill="#1E1852"/>
+              </svg>
+            </span>
+            <span class="mp-popover__item-label">Download history</span>
+          </a>
+
+          <a href="#" class="mp-popover__item">
+            <span class="mp-popover__item-icon" aria-hidden="true">
+              <!-- filter-24 (welDS official) -->
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20.2286 15.3143H12.6891C12.3291 13.5554 10.776 12.2286 8.91429 12.2286C7.05257 12.2286 5.48914 13.5554 5.13943 15.3143H3.77143C3.34971 15.3143 3 15.664 3 16.0857C3 16.5074 3.34971 16.8571 3.77143 16.8571H5.13943C5.49943 18.616 7.05257 19.9429 8.91429 19.9429C10.776 19.9429 12.3394 18.616 12.6891 16.8571H20.2286C20.6503 16.8571 21 16.5074 21 16.0857C21 15.664 20.6503 15.3143 20.2286 15.3143ZM8.91429 18.4C7.63886 18.4 6.6 17.3611 6.6 16.0857C6.6 14.8103 7.63886 13.7714 8.91429 13.7714C10.1897 13.7714 11.2286 14.8103 11.2286 16.0857C11.2286 17.3611 10.1897 18.4 8.91429 18.4ZM3.77143 8.62857H11.3109C11.6709 10.3874 13.224 11.7143 15.0857 11.7143C16.9474 11.7143 18.5109 10.3874 18.8606 8.62857H20.2286C20.6503 8.62857 21 8.27886 21 7.85714C21 7.43543 20.6503 7.08571 20.2286 7.08571H18.8606C18.5006 5.32686 16.9474 4 15.0857 4C13.224 4 11.6606 5.32686 11.3109 7.08571H3.77143C3.34971 7.08571 3 7.43543 3 7.85714C3 8.27886 3.34971 8.62857 3.77143 8.62857ZM15.0857 5.54286C16.3611 5.54286 17.4 6.58171 17.4 7.85714C17.4 9.13257 16.3611 10.1714 15.0857 10.1714C13.8103 10.1714 12.7714 9.13257 12.7714 7.85714C12.7714 6.58171 13.8103 5.54286 15.0857 5.54286Z" fill="#1E1852"/>
+              </svg>
+            </span>
+            <span class="mp-popover__item-label">Saved filters</span>
+          </a>
+
+          <div class="mp-popover__sep" role="separator"></div>
+        </div>
+
+        <!-- second actions -->
+        <div class="mp-popover__actions">
+          <!-- left icon: globe / Languages (welDS, 20×20) -->
+          <a href="#" class="mp-popover__action">
+            <span class="mp-popover__action-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.2223 9.99999C17.2223 7.93046 16.3518 6.06424 14.957 4.74747M17.2223 9.99999C17.2223 12.0695 16.3518 13.9358 14.957 15.2525M17.2223 9.99999L2.77783 9.99999M2.77783 9.99999C2.77783 7.93046 3.6483 6.06424 5.04307 4.74747M2.77783 9.99999C2.77783 12.0695 3.64829 13.9357 5.04307 15.2525M5.04307 4.74747C6.33652 3.52636 8.08087 2.77777 10.0001 2.77777C11.9193 2.77777 13.6636 3.52636 14.957 4.74747M5.04307 4.74747C5.81998 5.18518 7.89905 6.0606 10.0001 6.0606C12.1011 6.0606 14.1801 5.18518 14.957 4.74747M5.04307 15.2525C6.33652 16.4736 8.08087 17.2222 10.0001 17.2222C11.9192 17.2222 13.6636 16.4736 14.957 15.2525M5.04307 15.2525C5.60112 14.8148 7.37379 13.9394 10.0001 13.9394C12.6263 13.9394 14.399 14.8148 14.957 15.2525" stroke="#3E3D48" stroke-linejoin="round"/>
+                <ellipse cx="9.99995" cy="9.99999" rx="2.77778" ry="7.22222" stroke="#3E3D48" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="mp-popover__action-label">Afficher en français</span>
+          </a>
+          <!-- right icon: external-18 (welDS, 20×20) -->
+          <a href="#" class="mp-popover__action">
+            <span class="mp-popover__action-label">Support</span>
+            <span class="mp-popover__action-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.95826 3.33331C3.61308 3.33331 3.33326 3.61313 3.33326 3.95831L3.33325 16.0416C3.33325 16.3868 3.61308 16.6666 3.95825 16.6666L16.0416 16.6666C16.3868 16.6666 16.6666 16.3868 16.6666 16.0416L16.6666 12.7083C16.6666 12.3631 16.3868 12.0833 16.0416 12.0833C15.6964 12.0833 15.4166 12.3631 15.4166 12.7083L15.4166 15.4166L4.58325 15.4166L4.58326 4.58331L7.29159 4.58331C7.63677 4.58331 7.91659 4.30349 7.91659 3.95831C7.91659 3.61314 7.63677 3.33331 7.29159 3.33331L3.95826 3.33331ZM10.4166 3.95831C10.4166 3.61314 10.6964 3.33331 11.0416 3.33331L16.0416 3.33332C16.3868 3.33332 16.6666 3.61314 16.6666 3.95832L16.6666 8.95831C16.6666 9.30349 16.3868 9.58331 16.0416 9.58331C15.6964 9.58331 15.4166 9.30349 15.4166 8.95831L15.4166 5.4672L11.2752 9.60859C11.0311 9.85267 10.6354 9.85267 10.3913 9.60859C10.1472 9.36451 10.1472 8.96878 10.3913 8.7247L14.5327 4.58331L11.0416 4.58331C10.6964 4.58331 10.4166 4.30349 10.4166 3.95831Z" fill="#3E3D48"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="display-spec-row">
+      <div class="spec-box">
+        <div class="spec-box__title">Layout</div>
+        <div class="spec-box__row"><span class="spec-box__key">Height</span><span class="spec-box__val">80px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Padding H</span><span class="spec-box__val">64px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Logo container</span><span class="spec-box__val">56 × 46px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Gap (left)</span><span class="spec-box__val"><code>inline/md</code> = 16px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Gap (right)</span><span class="spec-box__val"><code>inline/md</code> = 16px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Tab gap</span><span class="spec-box__val"><code>inline/lg</code> = 20px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Tab padding</span><span class="spec-box__val">12px 8px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Cart width</span><span class="spec-box__val">58px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Badge size</span><span class="spec-box__val">18 × 18px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Badge pos</span><span class="spec-box__val">top 12px / right 8px</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">User btn padding</span><span class="spec-box__val">12px 16px</span></div>
+      </div>
+      <div class="spec-box">
+        <div class="spec-box__title">Typography</div>
+        <div class="spec-box__row"><span class="spec-box__key">Wordmark</span><span class="spec-box__val">display-04 · Montserrat 700 · 32/40</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Tab active</span><span class="spec-box__val">label-strong-01 · Roboto 500 · 16/24</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Badge</span><span class="spec-box__val">caption-strong · Roboto 500 · 12/16</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">User label</span><span class="spec-box__val">label-default-01 · Roboto 400 · 16/24</span></div>
+      </div>
+      <div class="spec-box">
+        <div class="spec-box__title">Colours</div>
+        <div class="spec-box__row"><span class="spec-box__key">Background</span><span class="spec-box__val"><code>surface-container-low</code></span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Border</span><span class="spec-box__val"><code>outline-low</code> #dadadd</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Tab underline</span><span class="spec-box__val"><code>outline-accent</code> #068484</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Badge bg</span><span class="spec-box__val"><code>accent</code> #068484</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Wordmark</span><span class="spec-box__val"><code>primary</code> #1e1852</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">User label</span><span class="spec-box__val"><code>primary</code> #1e1852</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Tab label</span><span class="spec-box__val"><code>on-surface-hi</code> #252339</span></div>
+      </div>
+      <div class="spec-box">
+        <div class="spec-box__title">Components</div>
+        <div class="spec-box__row"><span class="spec-box__key">Tabs</span><span class="spec-box__val">💠 web.tabs</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Icon</span><span class="spec-box__val">💠 web.icon-slot / favorite-24</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Cart</span><span class="spec-box__val">🧩 mp.cart-counter</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">User</span><span class="spec-box__val">💠 aem.login-connect</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Btn</span><span class="spec-box__val">💠 web.button (ghost)</span></div>
+        <div class="spec-box__row"><span class="spec-box__key">Brand</span><span class="spec-box__val">all</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const popover = document.getElementById('account-popover');
+      const btn = document.getElementById('user-btn');
+      const closeBtn = document.getElementById('popover-close-btn');
+
+      function openPopover() {
+        popover.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      function closePopover() {
+        popover.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        popover.classList.contains('is-open') ? closePopover() : openPopover();
+      });
+
+      closeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closePopover();
+      });
+
+      document.addEventListener('click', function(e) {
+        if (popover.classList.contains('is-open') && !popover.contains(e.target)) {
+          closePopover();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

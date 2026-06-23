@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Media Portal — Component Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- welDS: Google Fonts (brand: all) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- welDS: foundation tokens -->
+  <link rel="stylesheet" href="../assets/welds/base.css" />
+  <link rel="stylesheet" href="../assets/welds/brands-all.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f0f5;
+      color: #1f1b4b;
+      min-height: 100vh;
+      padding: 48px 64px 80px;
+    }
+
+    /* ── Page header ─────────────────────────────────────────────── */
+    .display-header { margin-bottom: 12px; }
+    .display-header__breadcrumb {
+      font-size: 12px;
+      color: #6f6e77;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    .display-header__title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #050033;
+      margin-bottom: 4px;
+    }
+    .display-header__meta { font-size: 13px; color: #6f6e77; }
+    .display-header__meta code {
+      background: #e8edff;
+      color: #1f1b4b;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 11px;
+      font-family: monospace;
+    }
+
+    /* ── Divider ─────────────────────────────────────────────────── */
+    .display-divider {
+      height: 1px;
+      background: #dadadd;
+      margin: 24px 0 36px;
+    }
+
+    /* ── Section label ───────────────────────────────────────────── */
+    .display-section__label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6f6e77;
+      margin-bottom: 16px;
+    }
+    .display-section__label span {
+      background: #050033;
+      color: #f9f9ff;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* ── Toolbar: filter + search ────────────────────────────────── */
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-btn {
+      font-family: 'Roboto', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6f6e77;
+      background: #fff;
+      border: 1px solid #dadadd;
+      border-radius: 20px;
+      padding: 5px 14px;
+      cursor: pointer;
+      transition: background 100ms, color 100ms, border-color 100ms;
+      white-space: nowrap;
+    }
+    .filter-btn:hover {
+      background: #f0f0f5;
+      border-color: #b0afc0;
+      color: #3e3d48;
+    }
+    .filter-btn--active {
+      background: #050033;
+      border-color: #050033;
+      color: #ffffff;
+    }
+    .filter-btn--active:hover {
+      background: #1f1b4b;
+      border-color: #1f1b4b;
+      color: #ffffff;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #6f6e77;
+    }
+    .search-input {
+      font-family: 'Roboto', sans-serif;
+      font-size: 13px;
+      color: #050033;
+      background: #fff;
+      border: 1px solid #dadadd;
+      border-radius: 8px;
+      padding: 7px 14px 7px 34px;
+      width: 240px;
+      outline: none;
+      transition: border-color 100ms;
+    }
+    .search-input::placeholder { color: #b0afc0; }
+    .search-input:focus { border-color: #050033; }
+
+    /* ── Component table ─────────────────────────────────────────── */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #dadadd;
+    }
+
+    .comp-table thead tr {
+      background: #f7f7fb;
+      border-bottom: 1px solid #dadadd;
+    }
+
+    .comp-table th {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6f6e77;
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    .comp-table tbody tr {
+      border-bottom: 1px solid #f0f0f5;
+      transition: background 100ms ease;
+    }
+    .comp-table tbody tr:last-child { border-bottom: none; }
+    .comp-table tbody tr:hover { background: #f7f7fb; }
+    .comp-table tbody tr.is-hidden { display: none; }
+
+    .comp-table td {
+      padding: 16px;
+      vertical-align: middle;
+      font-size: 13px;
+      color: #3e3d48;
+    }
+
+    /* ── No results ──────────────────────────────────────────────── */
+    .no-results {
+      display: none;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #6f6e77;
+    }
+    .no-results.is-visible { display: table-row; }
+    .no-results td { border-bottom: none !important; }
+
+    /* ── Component name cell ─────────────────────────────────────── */
+    .comp-name {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .comp-name__label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #050033;
+    }
+    .comp-name__sub {
+      font-size: 12px;
+      color: #6f6e77;
+    }
+
+    /* ── Preview cell ────────────────────────────────────────────── */
+    .comp-preview {
+      width: 180px;
+      height: 100px;
+      border-radius: 6px;
+      border: 1px solid #e8e8ee;
+      background: #f7f7fb;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* nav-bar preview */
+    .prev-nav {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .prev-nav__bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      height: 30px;
+      border-bottom: 1px solid #dadadd;
+      background: #fff;
+      flex-shrink: 0;
+    }
+    .prev-nav__logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      color: #1e1852;
+      white-space: nowrap;
+    }
+    .prev-nav__right { display: flex; align-items: center; gap: 5px; }
+    .prev-nav__tab {
+      font-size: 7px;
+      color: #252339;
+      padding-bottom: 2px;
+      border-bottom: 2px solid #068484;
+    }
+    .prev-nav__userbtn {
+      font-size: 7px;
+      color: #1e1852;
+      border: 1px solid transparent;
+      border-radius: 20px;
+      padding: 2px 5px;
+      background: none;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .prev-nav__popover {
+      margin: 6px auto 0;
+      width: 100px;
+      background: #fff;
+      border-radius: 3px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      padding: 6px 8px;
+      flex-shrink: 0;
+    }
+    .prev-nav__pop-name { font-size: 6px; font-weight: 500; color: #252339; margin-bottom: 4px; }
+    .prev-nav__pop-sep { height: 1px; background: #dadadd; margin: 3px 0; }
+    .prev-nav__pop-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 0;
+      font-size: 6px;
+      color: #252339;
+    }
+    .prev-nav__pop-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 1px;
+      background: #dadadd;
+      flex-shrink: 0;
+    }
+
+    /* button-collection preview */
+    .prev-btn-coll {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      height: 100%;
+    }
+    .prev-heart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .prev-heart__label { font-size: 8px; color: #6f6e77; }
+
+    /* card-asset preview */
+    .prev-card {
+      width: 74px;
+      background: #fff;
+      border-radius: 4px;
+      border: 1px solid #dadadd;
+      overflow: hidden;
+    }
+    .prev-card__img {
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(135deg, #e0e0ee 0%, #c8c8dc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .prev-card__body { padding: 5px 5px 4px; }
+    .prev-card__title {
+      height: 5px;
+      background: #dadadd;
+      border-radius: 2px;
+      margin-bottom: 3px;
+      width: 80%;
+    }
+    .prev-card__meta {
+      height: 4px;
+      background: #ebebf0;
+      border-radius: 2px;
+      width: 55%;
+    }
+    .prev-card__footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 3px 5px;
+      border-top: 1px solid #f0f0f5;
+    }
+
+    /* list-asset preview */
+    .prev-list {
+      width: 100%;
+      padding: 0 10px;
+    }
+    .prev-list__row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f0f5;
+    }
+    .prev-list__row:last-child { border-bottom: none; }
+    .prev-list__icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      background: linear-gradient(135deg, #e0e0ee 0%, #c8c8dc 100%);
+      flex-shrink: 0;
+    }
+    .prev-list__text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+    .prev-list__title { height: 5px; background: #dadadd; border-radius: 2px; width: 70%; }
+    .prev-list__meta { height: 4px; background: #ebebf0; border-radius: 2px; width: 45%; }
+
+    /* login-connect preview */
+    .prev-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      height: 100%;
+    }
+    .prev-login__btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      border-radius: 20px;
+      border: none;
+      cursor: default;
+    }
+    .prev-login__btn--ghost { background: transparent; }
+    .prev-login__btn--filled { background: #1e1852; }
+    .prev-login__label--ghost { font-size: 7px; color: #1e1852; }
+    .prev-login__label--filled { font-size: 7px; color: #fff; }
+    .prev-login__badge {
+      font-size: 6px;
+      color: #6f6e77;
+      margin-top: 5px;
+      text-align: center;
+    }
+    .prev-login__col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+    /* ── Badges ──────────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .badge--custom { background: #e8edff; color: #1f1b4b; }
+    .badge--ds     { background: #e6f4f4; color: #005757; }
+    .badge--nav    { background: #fff3e0; color: #7c4a00; }
+
+    /* ── Figma node chip ─────────────────────────────────────────── */
+    .figma-chip {
+      font-family: monospace;
+      font-size: 11px;
+      background: #f0f0f5;
+      color: #3e3d48;
+      border-radius: 4px;
+      padding: 2px 7px;
+      white-space: nowrap;
+    }
+
+    /* ── Variants pills ──────────────────────────────────────────── */
+    .variants { display: flex; flex-wrap: wrap; gap: 6px; }
+    .variant-pill {
+      font-size: 11px;
+      color: #6f6e77;
+      background: #f0f0f5;
+      border-radius: 20px;
+      padding: 2px 9px;
+    }
+
+    /* ── Detail link ─────────────────────────────────────────────── */
+    .detail-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #050033;
+      text-decoration: none;
+      padding: 7px 14px;
+      border: 1px solid #dadadd;
+      border-radius: 6px;
+      background: #fff;
+      transition: background 100ms ease, border-color 100ms ease;
+      white-space: nowrap;
+    }
+    .detail-link:hover { background: #f0f0f5; border-color: #b0afc0; }
+    .detail-link svg { flex-shrink: 0; }
+  </style>
+</head>
+<body class="brand-all">
+
+  <!-- Page header -->
+  <div class="display-header">
+    <div class="display-header__breadcrumb">welDS · Component display</div>
+    <h1 class="display-header__title">Media Portal — Component Library</h1>
+    <p class="display-header__meta">
+      brand <code>all</code> &nbsp;·&nbsp;
+      <code>6</code> components documented
+    </p>
+  </div>
+
+  <div class="display-divider"></div>
+
+  <div class="display-section__label">All components <span>mp · aem · welDS</span></div>
+
+  <!-- Toolbar: filter + search -->
+  <div class="table-toolbar">
+    <div class="filter-group" role="group" aria-label="Filter by type">
+      <button class="filter-btn filter-btn--active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="Custom">Custom</button>
+      <button class="filter-btn" data-filter="welDS">welDS</button>
+      <button class="filter-btn" data-filter="Navigation">Navigation</button>
+    </div>
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.25"/>
+        <path d="M9.5 9.5L13 13" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+      </svg>
+      <input
+        type="text"
+        id="comp-search"
+        class="search-input"
+        placeholder="Search components..."
+        aria-label="Search components"
+        autocomplete="off"
+      />
+    </div>
+  </div>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th style="width:16%">Component</th>
+        <th style="width:16%">Preview</th>
+        <th style="width:10%">Type</th>
+        <th style="width:22%">Description</th>
+        <th style="width:10%">Figma node</th>
+        <th style="width:16%">Variants / States</th>
+        <th style="width:10%">Detail</th>
+      </tr>
+    </thead>
+    <tbody id="comp-tbody">
+
+      <!-- mp.navigation bar-v2 -->
+      <tr data-type="Navigation" data-name="mp.navigation bar-v2 web.popover account panel navigation bar tabs user button">
+        <td>
+          <div class="comp-name">
+            <span class="comp-name__label">mp.navigation bar-v2</span>
+            <span class="comp-name__sub">+ web.popover account panel</span>
+          </div>
+        </td>
+        <td>
+          <div class="comp-preview">
+            <div class="prev-nav">
+              <div class="prev-nav__bar">
+                <div class="prev-nav__logo">Media Portal</div>
+                <div class="prev-nav__right">
+                  <span class="prev-nav__tab">Home</span>
+                  <!-- heart 10px -->
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.4305 4.69C17.608 2.694 14.782 2.462 12.728 4.015C12.468 4.208 12.217 4.44 11.986 4.69C11.754 4.44 11.503 4.208 11.243 4.015C9.189 2.472 6.363 2.694 4.54 4.69C2.487 6.947 2.487 10.592 4.54 12.849L11.986 21.007L19.43 12.849C21.523 10.553 21.523 6.908 19.43 4.69ZM18.36 11.865L11.986 18.847L5.611 11.865C4.058 10.168 4.058 7.371 5.611 5.674C7.096 4.054 9.43 4.054 10.905 5.674L11.976 6.85L13.046 5.674C14.531 4.054 16.865 4.054 18.34 5.674V5.693C19.893 7.342 19.922 10.129 18.32 11.875Z" fill="#252339"/></svg>
+                  <!-- cart 10px -->
+                  <svg width="10" height="10" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 0.75C0 0.336 0.336 0 0.75 0h3.273c.36 0 .669.256.737.61l.702 3.676H18.75c.222 0 .433.1.576.27.142.17.201.396.162.615L18.18 12.36c-.106.56-.397 1.069-.832 1.436-.433.365-.98.565-1.547.555H7.858c-.567.01-1.115-.19-1.548-.555-.435-.367-.726-.876-.832-1.435L4.111 5.21A1.5 1.5 0 004.099 5.144L3.402 1.5H.75A.75.75 0 010 .75z" fill="#252339"/></svg>
+                  <span class="prev-nav__userbtn">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 12C19.5 16.142 16.142 19.5 12 19.5S4.5 16.142 4.5 12 7.858 4.5 12 4.5 19.5 7.858 19.5 12zm-7.5 9C16.97 21 21 16.97 21 12S16.97 3 12 3 3 7.03 3 12s4.03 9 9 9z" fill="#1E1852"/></svg>
+                    S.P.
+                  </span>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:center;">
+                <div class="prev-nav__popover">
+                  <div class="prev-nav__pop-name">Hello, Steven PICARD</div>
+                  <div class="prev-nav__pop-sep"></div>
+                  <div class="prev-nav__pop-item"><div class="prev-nav__pop-dot"></div>Collections</div>
+                  <div class="prev-nav__pop-item"><div class="prev-nav__pop-dot"></div>Download history</div>
+                  <div class="prev-nav__pop-item"><div class="prev-nav__pop-dot"></div>Saved filters</div>
+                  <div class="prev-nav__pop-sep"></div>
+                  <div class="prev-nav__pop-item"><div class="prev-nav__pop-dot"></div>Afficher en français</div>
+                  <div class="prev-nav__pop-item"><div class="prev-nav__pop-dot"></div>Support</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge badge--nav">Navigation</span></td>
+        <td>Barre de navigation principale — logo Accor, wordmark, tabs, collection, panier, bouton user + popover compte utilisateur.</td>
+        <td><span class="figma-chip">16:10071</span></td>
+        <td>
+          <div class="variants">
+            <span class="variant-pill">state=default</span>
+            <span class="variant-pill">btn · ghost</span>
+            <span class="variant-pill">popover 262:8489</span>
+          </div>
+        </td>
+        <td>
+          <a href="nav-bar-display.html" class="detail-link">
+            View
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </td>
+      </tr>
+
+      <!-- mp.button-collection -->
+      <tr data-type="Custom" data-name="mp.button-collection bouton ajout retrait collection coeur heart favorite">
+        <td>
+          <div class="comp-name">
+            <span class="comp-name__label">mp.button-collection</span>
+            <span class="comp-name__sub">Icône ajout / retrait</span>
+          </div>
+        </td>
+        <td>
+          <div class="comp-preview">
+            <div class="prev-btn-coll">
+              <div class="prev-heart">
+                <!-- outline heart -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M19.4305 4.69007C17.6078 2.69382 14.7822 2.46237 12.7281 4.01501C12.4677 4.20788 12.217 4.43933 11.9855 4.69007C11.7541 4.43933 11.5033 4.20788 11.243 4.01501C9.18886 2.47201 6.36325 2.69382 4.54058 4.69007C2.48647 6.9467 2.48647 10.592 4.54058 12.8487L11.9855 21.0072L19.4305 12.8487C21.5232 10.5534 21.5232 6.90812 19.4305 4.69007ZM18.36 11.865L11.9855 18.847L5.61104 11.865C4.0584 10.1677 4.0584 7.37102 5.61104 5.67373C7.09617 4.05358 9.42995 4.05358 10.9054 5.67373L11.9759 6.85026L13.0463 5.67373C14.5315 4.05358 16.8653 4.05358 18.3407 5.67373V5.69301C19.8934 7.34209 19.9223 10.1291 18.3215 11.8746L18.36 11.865Z" fill="#1E1852"/>
+                </svg>
+                <span class="prev-heart__label">not added</span>
+              </div>
+              <div class="prev-heart">
+                <!-- filled heart -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19.4305 4.69007C17.6078 2.69382 14.7822 2.46237 12.7281 4.01501C12.4677 4.20788 12.217 4.43933 11.9855 4.69007C11.7541 4.43933 11.5033 4.20788 11.243 4.01501C9.18886 2.47201 6.36325 2.69382 4.54058 4.69007C2.48647 6.9467 2.48647 10.592 4.54058 12.8487L11.9855 21.0072L19.4305 12.8487C21.5232 10.5534 21.5232 6.90812 19.4305 4.69007Z" fill="#1E1852"/>
+                </svg>
+                <span class="prev-heart__label">added</span>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge badge--custom">Custom</span></td>
+        <td>Bouton d'ajout ou retrait d'un asset d'une collection — icône cœur outline (not added) ou filled (added), avec démo interactive.</td>
+        <td><span class="figma-chip">75:3687</span></td>
+        <td>
+          <div class="variants">
+            <span class="variant-pill">not added</span>
+            <span class="variant-pill">added</span>
+            <span class="variant-pill">interactive</span>
+          </div>
+        </td>
+        <td>
+          <a href="button-collection-display.html" class="detail-link">
+            View
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </td>
+      </tr>
+
+      <!-- mp.card-asset -->
+      <tr data-type="Custom" data-name="mp.card-asset carte card asset media grille thumbnail">
+        <td>
+          <div class="comp-name">
+            <span class="comp-name__label">mp.card-asset</span>
+            <span class="comp-name__sub">Vue grille</span>
+          </div>
+        </td>
+        <td>
+          <div class="comp-preview">
+            <div style="display:flex;gap:10px;align-items:center;justify-content:center;width:100%;height:100%;">
+              <!-- card add -->
+              <div class="prev-card">
+                <div class="prev-card__img">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" fill="#c0bfd8"/><path d="M2 10l3-3 2 2 3-4 4 5" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="prev-card__body">
+                  <div class="prev-card__title"></div>
+                  <div class="prev-card__meta"></div>
+                </div>
+                <div class="prev-card__footer">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.4305 4.69C17.608 2.694 14.782 2.462 12.728 4.015C12.468 4.208 12.217 4.44 11.986 4.69C11.754 4.44 11.503 4.208 11.243 4.015C9.189 2.472 6.363 2.694 4.54 4.69C2.487 6.947 2.487 10.592 4.54 12.849L11.986 21.007L19.43 12.849C21.523 10.553 21.523 6.908 19.43 4.69ZM18.36 11.865L11.986 18.847L5.611 11.865C4.058 10.168 4.058 7.371 5.611 5.674C7.096 4.054 9.43 4.054 10.905 5.674L11.976 6.85L13.046 5.674C14.531 4.054 16.865 4.054 18.34 5.674V5.693C19.893 7.342 19.922 10.129 18.32 11.875Z" fill="#1E1852"/></svg>
+                </div>
+              </div>
+              <!-- card remove -->
+              <div class="prev-card">
+                <div class="prev-card__img">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" fill="#c0bfd8"/><path d="M2 10l3-3 2 2 3-4 4 5" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="prev-card__body">
+                  <div class="prev-card__title"></div>
+                  <div class="prev-card__meta"></div>
+                </div>
+                <div class="prev-card__footer">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M19.4305 4.69C17.608 2.694 14.782 2.462 12.728 4.015C12.468 4.208 12.217 4.44 11.986 4.69C11.754 4.44 11.503 4.208 11.243 4.015C9.189 2.472 6.363 2.694 4.54 4.69C2.487 6.947 2.487 10.592 4.54 12.849L11.986 21.007L19.43 12.849C21.523 10.553 21.523 6.908 19.43 4.69z" fill="#1E1852"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge badge--custom">Custom</span></td>
+        <td>Carte de présentation d'un asset média — thumbnail, titre, metadata, bouton ajout/retrait de collection.</td>
+        <td><span class="figma-chip">12:4044</span></td>
+        <td>
+          <div class="variants">
+            <span class="variant-pill">status=add</span>
+            <span class="variant-pill">status=remove</span>
+          </div>
+        </td>
+        <td>
+          <a href="card-asset-display.html" class="detail-link">
+            View
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </td>
+      </tr>
+
+      <!-- mp.list-asset -->
+      <tr data-type="Custom" data-name="mp.list-asset liste list asset media row ligne">
+        <td>
+          <div class="comp-name">
+            <span class="comp-name__label">mp.list-asset</span>
+            <span class="comp-name__sub">Vue liste</span>
+          </div>
+        </td>
+        <td>
+          <div class="comp-preview">
+            <div class="prev-list">
+              <div class="prev-list__row">
+                <div class="prev-list__icon"></div>
+                <div class="prev-list__text">
+                  <div class="prev-list__title"></div>
+                  <div class="prev-list__meta"></div>
+                </div>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.4305 4.69C17.608 2.694 14.782 2.462 12.728 4.015C12.468 4.208 12.217 4.44 11.986 4.69C11.754 4.44 11.503 4.208 11.243 4.015C9.189 2.472 6.363 2.694 4.54 4.69C2.487 6.947 2.487 10.592 4.54 12.849L11.986 21.007L19.43 12.849C21.523 10.553 21.523 6.908 19.43 4.69ZM18.36 11.865L11.986 18.847L5.611 11.865C4.058 10.168 4.058 7.371 5.611 5.674C7.096 4.054 9.43 4.054 10.905 5.674L11.976 6.85L13.046 5.674C14.531 4.054 16.865 4.054 18.34 5.674V5.693C19.893 7.342 19.922 10.129 18.32 11.875Z" fill="#1E1852"/></svg>
+              </div>
+              <div class="prev-list__row">
+                <div class="prev-list__icon"></div>
+                <div class="prev-list__text">
+                  <div class="prev-list__title" style="width:55%"></div>
+                  <div class="prev-list__meta" style="width:35%"></div>
+                </div>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M19.4305 4.69C17.608 2.694 14.782 2.462 12.728 4.015C12.468 4.208 12.217 4.44 11.986 4.69C11.754 4.44 11.503 4.208 11.243 4.015C9.189 2.472 6.363 2.694 4.54 4.69C2.487 6.947 2.487 10.592 4.54 12.849L11.986 21.007L19.43 12.849C21.523 10.553 21.523 6.908 19.43 4.69z" fill="#1E1852"/></svg>
+              </div>
+              <div class="prev-list__row">
+                <div class="prev-list__icon"></div>
+                <div class="prev-list__text">
+                  <div class="prev-list__title" style="width:80%"></div>
+                  <div class="prev-list__meta" style="width:50%"></div>
+                </div>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.4305 4.69C17.608 2.694 14.782 2.462 12.728 4.015C12.468 4.208 12.217 4.44 11.986 4.69C11.754 4.44 11.503 4.208 11.243 4.015C9.189 2.472 6.363 2.694 4.54 4.69C2.487 6.947 2.487 10.592 4.54 12.849L11.986 21.007L19.43 12.849C21.523 10.553 21.523 6.908 19.43 4.69ZM18.36 11.865L11.986 18.847L5.611 11.865C4.058 10.168 4.058 7.371 5.611 5.674C7.096 4.054 9.43 4.054 10.905 5.674L11.976 6.85L13.046 5.674C14.531 4.054 16.865 4.054 18.34 5.674V5.693C19.893 7.342 19.922 10.129 18.32 11.875Z" fill="#1E1852"/></svg>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge badge--custom">Custom</span></td>
+        <td>Ligne de liste pour un asset média — icône type, titre, metadata en ligne, bouton ajout/retrait de collection.</td>
+        <td><span class="figma-chip">19:1081</span></td>
+        <td>
+          <div class="variants">
+            <span class="variant-pill">status=add</span>
+            <span class="variant-pill">status=remove</span>
+          </div>
+        </td>
+        <td>
+          <a href="list-asset-display.html" class="detail-link">
+            View
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </td>
+      </tr>
+
+      <!-- aem.login-connect -->
+      <tr data-type="welDS" data-name="aem.login-connect web.button bouton login user utilisateur connected ghost filled">
+        <td>
+          <div class="comp-name">
+            <span class="comp-name__label">aem.login-connect</span>
+            <span class="comp-name__sub">web.button (ghost / filled)</span>
+          </div>
+        </td>
+        <td>
+          <div class="comp-preview">
+            <div class="prev-login">
+              <div class="prev-login__col">
+                <div class="prev-login__btn prev-login__btn--ghost">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 12C19.5 16.142 16.142 19.5 12 19.5S4.5 16.142 4.5 12 7.858 4.5 12 4.5 19.5 7.858 19.5 12zm-7.5 9C16.97 21 21 16.97 21 12S16.97 3 12 3 3 7.03 3 12s4.03 9 9 9z" fill="#1E1852"/></svg>
+                  <span class="prev-login__label--ghost">S. PICARD</span>
+                </div>
+                <span class="prev-login__badge">default</span>
+              </div>
+              <div class="prev-login__col">
+                <div class="prev-login__btn prev-login__btn--filled">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 12C19.5 16.142 16.142 19.5 12 19.5S4.5 16.142 4.5 12 7.858 4.5 12 4.5 19.5 7.858 19.5 12zm-7.5 9C16.97 21 21 16.97 21 12S16.97 3 12 3 3 7.03 3 12s4.03 9 9 9z" fill="#ffffff"/></svg>
+                  <span class="prev-login__label--filled">S. PICARD</span>
+                </div>
+                <span class="prev-login__badge">hover</span>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge badge--ds">welDS</span></td>
+        <td>Bouton utilisateur connecté — icône account-connected-24, nom d'utilisateur, états interactifs ghost/filled.</td>
+        <td><span class="figma-chip">388:2019</span></td>
+        <td>
+          <div class="variants">
+            <span class="variant-pill">default</span>
+            <span class="variant-pill">hover</span>
+            <span class="variant-pill">pressed</span>
+            <span class="variant-pill">focus</span>
+          </div>
+        </td>
+        <td>
+          <a href="login-button-display.html" class="detail-link">
+            View
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </td>
+      </tr>
+
+      <!-- web.tabs -->
+      <tr data-type="welDS" data-name="web.tabs tab-inline tabs navigation tablist active hover pressed">
+        <td>
+          <div class="comp-name">
+            <span class="comp-name__label">web.tabs</span>
+            <span class="comp-name__sub">web.tab-inline</span>
+          </div>
+        </td>
+        <td>
+          <div class="comp-preview">
+            <div style="width:100%;height:100%;display:flex;align-items:flex-end;padding:0 14px 0;">
+              <div style="display:flex;align-items:flex-start;gap:16px;position:relative;width:100%;">
+                <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#dadadd;"></div>
+                <div style="padding:10px 0;border-bottom:4px solid #068484;position:relative;z-index:1;margin-bottom:-1px;">
+                  <span style="font-size:11px;font-weight:500;color:#252339;white-space:nowrap;">Home</span>
+                </div>
+                <div style="padding:10px 0;border-bottom:4px solid transparent;position:relative;z-index:1;margin-bottom:-1px;">
+                  <span style="font-size:11px;font-weight:400;color:#252339;white-space:nowrap;">Photos</span>
+                </div>
+                <div style="padding:10px 0;border-bottom:4px solid #007576;position:relative;z-index:1;margin-bottom:-1px;">
+                  <span style="font-size:11px;font-weight:400;color:#252339;white-space:nowrap;">Videos</span>
+                </div>
+                <div style="padding:10px 0;border-bottom:4px solid transparent;position:relative;z-index:1;margin-bottom:-1px;">
+                  <span style="font-size:11px;font-weight:400;color:#252339;white-space:nowrap;">Docs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge badge--ds">welDS</span></td>
+        <td>Tabs de navigation horizontaux — état active (teal 4px), default, hover, pressed. Séparateur full-width outline-low.</td>
+        <td><span class="figma-chip">388:7192</span></td>
+        <td>
+          <div class="variants">
+            <span class="variant-pill">active</span>
+            <span class="variant-pill">default</span>
+            <span class="variant-pill">hover</span>
+            <span class="variant-pill">pressed</span>
+          </div>
+        </td>
+        <td>
+          <a href="tab-display.html" class="detail-link">
+            View
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </td>
+      </tr>
+
+      <!-- no results row -->
+      <tr class="no-results" id="no-results">
+        <td colspan="7">No components match your search.</td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <script>
+    (function () {
+      const rows = Array.from(document.querySelectorAll('#comp-tbody tr[data-type]'));
+      const noResults = document.getElementById('no-results');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const searchInput = document.getElementById('comp-search');
+
+      let activeFilter = 'all';
+      let searchQuery = '';
+
+      function applyFilters() {
+        let visible = 0;
+        rows.forEach(function (row) {
+          const type = row.dataset.type;
+          const name = row.dataset.name.toLowerCase();
+          const matchesType = activeFilter === 'all' || type === activeFilter;
+          const matchesSearch = searchQuery === '' || name.includes(searchQuery);
+          if (matchesType && matchesSearch) {
+            row.classList.remove('is-hidden');
+            visible++;
+          } else {
+            row.classList.add('is-hidden');
+          }
+        });
+        noResults.classList.toggle('is-visible', visible === 0);
+      }
+
+      filterBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          filterBtns.forEach(function (b) { b.classList.remove('filter-btn--active'); });
+          btn.classList.add('filter-btn--active');
+          activeFilter = btn.dataset.filter;
+          applyFilters();
+        });
+      });
+
+      searchInput.addEventListener('input', function () {
+        searchQuery = searchInput.value.trim().toLowerCase();
+        applyFilters();
+      });
+    })();
+  </script>
+
+</body>
+</html>
